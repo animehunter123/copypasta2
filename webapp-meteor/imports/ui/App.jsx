@@ -151,6 +151,17 @@ export const App = () => {
     }
   };
 
+  // Delete all content
+  const handleDeleteAll = async () => {
+    try {
+      await Meteor.call('items.removeAll');
+      await loadItems();  // Reload items after deletion
+      showToast('All items deleted successfully');
+    } catch (error) {
+      showToast('Failed to delete all items', 'error');
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!contentInput.trim() && !fileInput) {
@@ -313,10 +324,7 @@ export const App = () => {
         <div className="nav-group">
           <button
             className="danger-btn"
-            onClick={() => {
-              handleDeleteAll();
-              showToast('All items deleted successfully');
-            }}
+            onClick={handleDeleteAll}
             title="Delete All Items"
           >
             <span className="material-symbols-rounded">delete_forever</span>
