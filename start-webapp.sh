@@ -9,11 +9,15 @@ command -v npm >/dev/null 2>&1 || { echo >&2 "npm is required but it's not insta
 # Ensure that meteorjs is installed or exit with a message to the user
 command -v meteor >/dev/null 2>&1 || { echo >&2 "meteorjs is required but it's not installed.  Aborting."; exit 1; }
 
+# Change into the webapp folder which has ./node_modules which are used for this webapp
+cd ./webapp
+
 # Ensure that node_modules is installed, if not installs and creates the directory
 if [ ! -d "./node_modules" ]; then
     echo "Installing node_modules"
     npm install
 fi
+
 
 # Create the ./data directory if it doesn't exist
 mkdir -p ./data 
