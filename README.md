@@ -1,6 +1,6 @@
 * Description
 
-Just a webapp to emulate the copypasta, but in vanilla js.
+Just a todo cards webapp to emulate the copypasta, but in vanilla js. (Maybe Reactivize or Meteorize Later?)
 
 * Todo
 
