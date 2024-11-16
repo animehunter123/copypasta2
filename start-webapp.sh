@@ -6,6 +6,9 @@ command -v node >/dev/null 2>&1 || { echo >&2 "Node.js is required but it's not 
 # Ensure that npm is installed or exit with a message to the user
 command -v npm >/dev/null 2>&1 || { echo >&2 "npm is required but it's not installed.  Aborting."; exit 1; }
 
+# Ensure that meteorjs is installed or exit with a message to the user
+command -v meteor >/dev/null 2>&1 || { echo >&2 "meteorjs is required but it's not installed.  Aborting."; exit 1; }
+
 # Ensure that node_modules is installed, if not installs and creates the directory
 if [ ! -d "./node_modules" ]; then
     echo "Installing node_modules"
