@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File & Code Manager</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/javascript.min.js"></script>
+    <script>
+        // Theme management
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Initialize theme from localStorage
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            
+            // Initialize filter functionality
+            initializeFilters();
+        });
+
+        // Filter management
+        function initializeFilters() {
+            const fileFilter = document.getElementById('fileFilter');
+            const noteFilter = document.getElementById('noteFilter');
+            
+            function updateFilters(clickedFilter) {
+                const wasActive = clickedFilter.classList.contains('active');
+                
+                // Remove active class from all filters
+                [fileFilter, noteFilter].forEach(filter => {
+                    filter.classList.remove('active');
+                });
+                
+                // If the clicked filter wasn't active, make it active
+                if (!wasActive) {
+                    clickedFilter.classList.add('active');
+                }
+                
+                // Apply filters to content
+                applyFilters();
+            }
+            
+            function applyFilters() {
+                const cards = document.querySelectorAll('.card');
+                const activeFilter = document.querySelector('.stat.active');
+                
+                cards.forEach(card => {
+                    if (!activeFilter) {
+                        // Show all if no filter is active
+                        card.style.display = '';
+                        return;
+                    }
+                    
+                    const isFile = card.classList.contains('file-card');
+                    const isNote = card.classList.contains('note-card');
+                    
+                    if ((activeFilter === fileFilter && isFile) ||
+                        (activeFilter === noteFilter && isNote)) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+            
+            fileFilter.addEventListener('click', () => updateFilters(fileFilter));
+            noteFilter.addEventListener('click', () => updateFilters(noteFilter));
+        }
+    </script>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-content">
+            <h1>File & Code Manager</h1>
+            <div class="nav-stats">
+                <div id="fileFilter" class="stat" role="button" tabindex="0">
+                    <span id="fileCount">0</span>
+                    <label>Files</label>
+                </div>
+                <div id="noteFilter" class="stat" role="button" tabindex="0">
+                    <span id="noteCount">0</span>
+                    <label>Notes</label>
+                </div>
+                <div class="stat">
+                    <span id="totalSize">0 B</span>
+                    <label>Total Size</label>
+                </div>
+            </div>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <button class="theme-toggle" onclick="toggleTheme()">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                    </svg>
+                    <span>Theme</span>
+                </button>
+                <button id="openModalBtn" class="btn primary">Upload Content</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content Grid -->
+    <main class="container">
+        <div id="contentGrid" class="content-grid"></div>
+    </main>
+
+    <!-- Upload Modal -->
+    <div id="fileModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Upload Content</h2>
+            
+            <!-- File Upload Area -->
+            <div class="file-upload-area">
+                <label for="fileInput" class="file-label">Choose Files</label>
+                <input type="file" id="fileInput" multiple>
+                <p class="modal-hint">Drag and drop files here or click to select</p>
+            </div>
+
+            <!-- Text Area with Language Detection -->
+            <div class="text-area-container">
+                <textarea id="contentInput" class="content-textarea" 
+                    placeholder="Or paste/type your code or text here..."></textarea>
+                <div id="languageIndicator" class="language-indicator"></div>
+            </div>
+
+            <button id="saveBtn" class="btn primary">Save</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
