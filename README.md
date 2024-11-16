@@ -1,3 +1,5 @@
+THIS IS v1.0 BEFORE REWRITING EVERYTHING
+
 # Description
 
 Just a todo cards webapp to emulate the copypasta, but in vanilla js. (Maybe Reactivize or Meteorize Later?)
