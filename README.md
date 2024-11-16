@@ -14,3 +14,4 @@ Just a todo cards webapp to emulate the copypasta, but in vanilla js. (Maybe Rea
 * need meteorjs reactivity instead of vanilla js
 * make bash script for node ./server.js
 * need 14 day autodelete
+* need autofocus on uploadmodal, as well as initialpageload
