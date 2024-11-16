@@ -17,3 +17,4 @@ Just a todo cards webapp to emulate the copypasta, but in vanilla js. (Maybe Rea
 * need autofocus on uploadmodal, as well as initialpageload, then autofocus on modaltext area, then on CLOSE focus back to upload button for keyboard nativity
 * need top page cards to have a navigate to url button
 * need to test if code is autodetected in textarea
+* low pri -- make the filename revert to the non uuid one
