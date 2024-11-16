@@ -21,6 +21,7 @@ export const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [editingItem, setEditingItem] = useState(null);
   const [editContent, setEditContent] = useState('');
+  const [toasts, setToasts] = useState([]);
 
   // Load items
   const loadItems = async () => {
@@ -90,6 +91,66 @@ export const App = () => {
     }
   }, [contentInput]);
 
+  // Show a toast notification
+  const showToast = (message, type = 'success') => {
+    const id = Date.now();
+    setToasts(prev => [...prev, { id, message, type }]);
+    setTimeout(() => {
+      setToasts(prev => prev.map(toast => 
+        toast.id === id ? { ...toast, removing: true } : toast
+      ));
+      setTimeout(() => {
+        setToasts(prev => prev.filter(toast => toast.id !== id));
+      }, 300);
+    }, 3000);
+  };
+
+  // Copy content to clipboard
+  const handleCopy = async (item) => {
+    try {
+      await navigator.clipboard.writeText(item.content);
+      showToast('Content copied to clipboard');
+    } catch (error) {
+      showToast('Failed to copy content', 'error');
+    }
+  };
+
+  // Download content
+  const handleDownload = (item) => {
+    try {
+      const blob = new Blob([item.content], { type: 'text/plain' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = item.fileName || 'note.txt';
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      showToast('Content download started');
+    } catch (error) {
+      showToast('Failed to download content', 'error');
+    }
+  };
+
+  // Edit content
+  const handleEdit = (item) => {
+    setEditingItem(item);
+    setEditContent(item.content);
+    setEditModalOpen(true);
+  };
+
+  // Delete content
+  const handleDelete = async (item) => {
+    try {
+      await Meteor.call('items.remove', item.id);
+      await loadItems();  // Reload items after successful deletion
+      showToast('Item deleted successfully');
+    } catch (error) {
+      showToast('Failed to delete item', 'error');
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!contentInput.trim() && !fileInput) {
@@ -142,55 +203,6 @@ export const App = () => {
       console.error('Error submitting:', error);
       alert('Error uploading content: ' + error.message);
     }
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      await Meteor.callAsync('items.remove', id);
-      loadItems(); // Reload items after delete
-    } catch (error) {
-      console.error('Error deleting:', error);
-    }
-  };
-
-  const handleDeleteAll = async () => {
-    try {
-      await Meteor.callAsync('items.removeAll');
-      loadItems(); // Reload items after delete all
-    } catch (error) {
-      console.error('Error deleting all:', error);
-    }
-  };
-
-  const handleDownload = (item) => {
-    const blob = new Blob([item.content], { type: 'text/plain' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = item.fileName || `${item.type}-${item.id}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
-  };
-
-  const handleNavigate = (item) => {
-    try {
-      const url = item.content.trim();
-      if (url.startsWith('http://') || url.startsWith('https://')) {
-        window.open(url, '_blank');
-      } else {
-        alert('Invalid URL. URLs must start with http:// or https://');
-      }
-    } catch (error) {
-      console.error('Error navigating to URL:', error);
-    }
-  };
-
-  const handleEdit = (item) => {
-    setEditingItem(item);
-    setEditContent(item.content);
-    setEditModalOpen(true);
   };
 
   const handleSaveEdit = async () => {
@@ -301,7 +313,10 @@ export const App = () => {
         <div className="nav-group">
           <button
             className="danger-btn"
-            onClick={handleDeleteAll}
+            onClick={() => {
+              handleDeleteAll();
+              showToast('All items deleted successfully');
+            }}
             title="Delete All Items"
           >
             <span className="material-symbols-rounded">delete_forever</span>
@@ -325,6 +340,18 @@ export const App = () => {
           </button>
         </div>
       </nav>
+
+      {/* Toast Container */}
+      <div className="toast-container">
+        {toasts.map(toast => (
+          <div key={toast.id} className={`toast ${toast.type} ${toast.removing ? 'removing' : ''}`}>
+            <span className="material-symbols-rounded">
+              {toast.type === 'success' ? 'check_circle' : 'error'}
+            </span>
+            {toast.message}
+          </div>
+        ))}
+      </div>
 
       {modalOpen && (
         <div className="modal-overlay">

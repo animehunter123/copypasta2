@@ -105,18 +105,29 @@ export const Storage = {
 
   async removeItem(itemId) {
     console.log('Removing item:', itemId);
-    // Try to remove from both directories
-    const filePath = path.join(FILES_DIR, itemId);
-    const notePath = path.join(NOTES_DIR, itemId);
-
-    if (fs.existsSync(filePath)) {
-      console.log('Deleting file:', filePath);
-      fs.unlinkSync(filePath);
+    
+    // Get all items to find the one we want to delete
+    const items = await this.getAllItems();
+    const item = items.find(i => i._id === itemId || i.id === itemId);
+    
+    if (!item) {
+      console.error('Item not found:', itemId);
+      return false;
     }
-    if (fs.existsSync(notePath)) {
-      console.log('Deleting note:', notePath);
-      fs.unlinkSync(notePath);
+    
+    // Determine the correct path based on item type
+    const itemPath = item.type === 'file' 
+      ? path.join(FILES_DIR, item.id)
+      : path.join(NOTES_DIR, item.id);
+    
+    if (fs.existsSync(itemPath)) {
+      console.log('Deleting item:', itemPath);
+      fs.unlinkSync(itemPath);
+      return true;
     }
+    
+    console.error('Item file not found:', itemPath);
+    return false;
   },
 
   async cleanExpired() {
