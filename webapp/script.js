@@ -1,3 +1,5 @@
+// This is where all of our javascript code to make the frontend look nice, as well as the backend for the ./data directory saving to work properly.
+
 // DOM Elements
 const modal = document.getElementById('fileModal');
 const openModalBtn = document.getElementById('openModalBtn');

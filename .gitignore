@@ -9,10 +9,10 @@ package-lock.json
 *.swp
 *.swo
 
-# Project specific
+# Project specific for our UPLOAD and DOWNLOADS
 data/
 
-# OS generated files
+# OS generated files (JUST IN CASE YOUR FOLDER HAS EXTRA USELESS STUFF)
 .DS_Store
 .DS_Store?
 ._*
