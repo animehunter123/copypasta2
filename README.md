@@ -11,6 +11,10 @@ Just a todo cards webapp to emulate the copypasta, but in vanilla js. (Maybe Rea
 
 # Todo
 
+* need meteorjs to allow ANY TYPE OF FILE UPLOAD
+* the totalsize has a border css which doesnt match the others
+* the copybutton isnt working
+
 * need meteorjs reactivity instead of vanilla js (i opted for non mongo for file uploads because its just easier to pull it from the container)
 * make bash script for node ./server.js
 * need 14 day autodelete
