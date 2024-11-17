@@ -66,10 +66,129 @@
   --navigate-50: #f3e8ff;
   --navigate-500: #9333ea;
   --navigate-600: #7e22ce;
+  
+  /* Base colors */
+  --white: #ffffff;
+  --black: #000000;
+
+  /* Gray scale */
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+
+  /* Success (Copy) - Green */
+  --success-50: #ecfdf5;
+  --success-500: #10b981;
+  --success-600: #059669;
+
+  /* Warning (Edit) - Orange */
+  --warning-50: #fff7ed;
+  --warning-500: #f97316;
+  --warning-600: #ea580c;
+
+  /* Info (Navigate) - Blue */
+  --info-50: #eff6ff;
+  --info-500: #3b82f6;
+  --info-600: #2563eb;
+
+  /* Download - Purple */
+  --download-50: #faf5ff;
+  --download-500: #9333ea;
+  --download-600: #7e22ce;
+
+  /* Error (Delete) - Red */
+  --error-50: #fef2f2;
+  --error-500: #ef4444;
+  --error-600: #dc2626;
 }
 
 /* Dark theme */
 [data-theme="dark"] {
+  /* Dark theme colors */
+  --surface: #1a1b1e;
+  --card-bg: #2a2b2e;
+  --card-hover: #32333a;
+  --text-color: #e5e7eb;
+  --text-color-secondary: #9ca3af;
+  --border-color: #374151;
+
+  /* Card styles in dark mode */
+  .content-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .content-card:hover {
+    background: var(--card-hover);
+  }
+
+  .card-content {
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  pre {
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  .card-footer {
+    border-top-color: var(--border-color);
+  }
+
+  /* Button backgrounds - making them slightly more transparent */
+  .card-btn.copy {
+    color: #34d399;
+    background: rgba(52, 211, 153, 0.15);
+  }
+
+  .card-btn.edit {
+    color: #f97316;
+    background: rgba(249, 115, 22, 0.15);
+  }
+
+  .card-btn.navigate {
+    color: #3b82f6;
+    background: rgba(59, 130, 246, 0.15);
+  }
+
+  .card-btn.download {
+    color: #9333ea;
+    background: rgba(147, 51, 234, 0.15);
+  }
+
+  .card-btn.delete {
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.15);
+  }
+
+  /* Button hover effects - slightly more visible */
+  .card-btn.copy:hover {
+    background: rgba(52, 211, 153, 0.25);
+  }
+
+  .card-btn.edit:hover {
+    background: rgba(249, 115, 22, 0.25);
+  }
+
+  .card-btn.navigate:hover {
+    background: rgba(59, 130, 246, 0.25);
+  }
+
+  .card-btn.download:hover {
+    background: rgba(147, 51, 234, 0.25);
+  }
+
+  .card-btn.delete:hover {
+    background: rgba(239, 68, 68, 0.25);
+  }
+
   /* Dark theme primary colors - More vibrant */
   --primary-50: #1a365d;
   --primary-100: #1e4976;
@@ -111,25 +230,63 @@
   --success-500: #48bb78;
   
   /* Dark theme semantic colors */
-  --surface: var(--gray-100);
-  --surface-hover: var(--gray-200);
-  --surface-active: var(--gray-300);
   --on-surface: var(--gray-700);
   --on-surface-medium: var(--gray-600);
   --on-surface-disabled: var(--gray-400);
-  
-  --text-color: var(--gray-700);
-  --text-color-secondary: var(--gray-500);
   
   /* Dark theme shadows - More subtle */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
   --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.4);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.4);
-}
+  
+  /* Dark theme button colors */
+  .card-btn.copy {
+    color: #34d399;
+    background: rgba(52, 211, 153, 0.2);
+  }
 
-/* Dark mode specific overrides */
-[data-theme="dark"] {
+  .card-btn.edit {
+    color: #f97316;
+    background: rgba(249, 115, 22, 0.2);
+  }
+
+  .card-btn.navigate {
+    color: #3b82f6;
+    background: rgba(59, 130, 246, 0.2);
+  }
+
+  .card-btn.download {
+    color: #9333ea;
+    background: rgba(147, 51, 234, 0.2);
+  }
+
+  .card-btn.delete {
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.2);
+  }
+
+  /* Dark theme hover effects */
+  .card-btn.copy:hover {
+    background: rgba(52, 211, 153, 0.3);
+  }
+
+  .card-btn.edit:hover {
+    background: rgba(249, 115, 22, 0.3);
+  }
+
+  .card-btn.navigate:hover {
+    background: rgba(59, 130, 246, 0.3);
+  }
+
+  .card-btn.download:hover {
+    background: rgba(147, 51, 234, 0.3);
+  }
+
+  .card-btn.delete:hover {
+    background: rgba(239, 68, 68, 0.3);
+  }
+  
   /* Override all text colors in cards */
   .card * {
     color: var(--text-color);
@@ -519,47 +676,67 @@ body {
   align-items: center;
   justify-content: center;
   border: none;
-  background: transparent;
   cursor: pointer;
-  color: var(--text-color-secondary);
   transition: all 0.2s ease;
 }
 
-.card-btn:hover {
-  background: var(--gray-100);
+.card-btn.copy { 
+  color: var(--success-500);
+  background: var(--success-50);
+}
+
+.card-btn.edit { 
+  color: var(--warning-500);
+  background: var(--warning-50);
+}
+
+.card-btn.navigate { 
+  color: var(--info-500);
+  background: var(--info-50);
+}
+
+.card-btn.download { 
+  color: var(--download-500);
+  background: var(--download-50);
+}
+
+.card-btn.delete { 
+  color: var(--error-500);
+  background: var(--error-50);
 }
 
 .card-btn.copy:hover {
   color: var(--success-600);
-  background: var(--success-50);
+  background: color-mix(in srgb, var(--success-50) 80%, var(--success-500));
 }
 
 .card-btn.edit:hover {
   color: var(--warning-600);
-  background: var(--warning-50);
+  background: color-mix(in srgb, var(--warning-50) 80%, var(--warning-500));
+}
+
+.card-btn.navigate:hover {
+  color: var(--info-600);
+  background: color-mix(in srgb, var(--info-50) 80%, var(--info-500));
 }
 
 .card-btn.download:hover {
-  color: var(--info-600);
-  background: var(--info-50);
+  color: var(--download-600);
+  background: color-mix(in srgb, var(--download-50) 80%, var(--download-500));
 }
 
 .card-btn.delete:hover {
   color: var(--error-600);
-  background: var(--error-50);
+  background: color-mix(in srgb, var(--error-50) 80%, var(--error-500));
 }
 
-.card-btn.navigate:hover {
-  color: var(--navigate-600);
-  background: var(--navigate-50);
+[data-theme="dark"] .card-btn {
+  opacity: 0.9;
 }
 
-/* Default colors for buttons */
-.card-btn.copy { color: var(--success-500); }
-.card-btn.edit { color: var(--warning-500); }
-.card-btn.download { color: var(--info-500); }
-.card-btn.delete { color: var(--error-500); }
-.card-btn.navigate { color: var(--navigate-500); }
+[data-theme="dark"] .card-btn:hover {
+  opacity: 1;
+}
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
@@ -666,88 +843,6 @@ body {
   transition: all 0.2s;
   color: var(--text-color);
   background: var(--surface);
-}
-
-.card-btn.copy {
-  color: #3b82f6;
-  background: #dbeafe;
-}
-
-.card-btn.copy:hover {
-  background: #bfdbfe;
-}
-
-.card-btn.edit {
-  color: #10b981;
-  background: #d1fae5;
-}
-
-.card-btn.edit:hover {
-  background: #a7f3d0;
-}
-
-.card-btn.delete {
-  color: #ef4444;
-  background: #fee2e2;
-}
-
-.card-btn.delete:hover {
-  background: #fecaca;
-}
-
-.card-btn.download {
-  color: #8b5cf6;
-  background: #e5e7ff;
-}
-
-.card-btn.download:hover {
-  background: #ddd6fe;
-}
-
-.card-btn.navigate {
-  color: var(--navigate-500);
-  background: var(--navigate-50);
-}
-
-.card-btn.navigate:hover {
-  color: var(--navigate-600);
-  background: var(--navigate-50);
-}
-
-[data-theme="dark"] .card-btn.copy {
-  color: #60a5fa;
-  background: rgba(59, 130, 246, 0.2);
-}
-
-[data-theme="dark"] .card-btn.copy:hover {
-  background: rgba(59, 130, 246, 0.3);
-}
-
-[data-theme="dark"] .card-btn.edit {
-  color: #34d399;
-  background: rgba(16, 185, 129, 0.2);
-}
-
-[data-theme="dark"] .card-btn.edit:hover {
-  background: rgba(16, 185, 129, 0.3);
-}
-
-[data-theme="dark"] .card-btn.delete {
-  color: #f87171;
-  background: rgba(239, 68, 68, 0.2);
-}
-
-[data-theme="dark"] .card-btn.delete:hover {
-  background: rgba(239, 68, 68, 0.3);
-}
-
-[data-theme="dark"] .card-btn.download {
-  color: #a78bfa;
-  background: rgba(139, 92, 246, 0.2);
-}
-
-[data-theme="dark"] .card-btn.download:hover {
-  background: rgba(139, 92, 246, 0.3);
 }
 
 .card-content {
