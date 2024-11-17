@@ -1,0 +1,20 @@
+I wanted to make the app offline a bit (this is only for development testing, do not use this in production)
+
+Sources for the fonts
+1. Inter: https://github.com/rsms/inter/releases
+2. Fira Code: https://github.com/tonsky/FiraCode/releases
+
+3. Material Symbols: https://fonts.google.com/icons
+
+... this one was harder
+... the CSS is this:
+https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded
+... and inside of it was the CDN for the woff2 file
+like: https://fonts.gstatic.com/s/materialsymbolsrounded/v218/syl0-zNym6YjUruM-QrEh7-nyTnjDwKNJ_190FjpZIvDmUSVOK7BDB_Qb9vUSzq3wzLK-P0J-V_Zs-QtQth3-jOcbTCVpeRL2w5rwZu2rIelXxc.woff2
+like: https://fonts.gstatic.com/s/materialsymbolsrounded/v75/kmKmhrvDvUvUZzI1lFbQ5V0dK2gZlWq7D1Yg9ZqRZQ.woff2
+
+You will know woff files are ok via:
+$ file MaterialIcons-Round.woff2 
+MaterialIcons-Round.woff2: Web Open Font Format (Version 2), TrueType, length 150392, version 1.0
+
+Then adjust the new CSS file for our font definitions, and adjust the main css to import it!
