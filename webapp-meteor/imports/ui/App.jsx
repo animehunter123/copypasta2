@@ -318,69 +318,146 @@ export default function App() {
     
     // Common language patterns
     const patterns = {
-      python: {
-        keywords: ['def ', 'class ', 'import ', 'from ', 'if __name__', 'print(', 'return ', '@'],
-        extensions: ['.py', '.pyw']
-      },
       javascript: {
-        keywords: ['function', 'const ', 'let ', 'var ', '=>', 'return ', 'module.exports', 'export '],
+        keywords: [
+          'function', 'const ', 'let ', 'var ', '=>', 'return ',
+          'module.exports', 'export ', 'console.log', 'import ',
+          'class ', 'new ', 'this.', 'async ', 'await ',
+          'Promise', 'setTimeout', 'document.', 'window.',
+          '.addEventListener', '.then(', '.catch('
+        ],
         extensions: ['.js', '.jsx', '.ts', '.tsx']
       },
+      python: {
+        keywords: [
+          'def ', 'class ', 'import ', 'from ', 'if __name__',
+          'print(', 'return ', '@', 'self.', 'async def',
+          'raise ', 'except:', 'try:', 'with ', 'as ',
+          'lambda ', 'yield ', '__init__'
+        ],
+        extensions: ['.py', '.pyw']
+      },
       html: {
-        keywords: ['<html', '</html>', '<div', '<body', '<!DOCTYPE'],
+        keywords: [
+          '<html', '</html>', '<div', '<body', '<!DOCTYPE',
+          '<script', '<style', '<link', '<meta', '<head',
+          '<title', '<p>', '<span', '<a href', '<img'
+        ],
         extensions: ['.html', '.htm']
       },
       css: {
-        keywords: ['@media', '@import', '@keyframes', '{', 'margin:', 'padding:'],
+        keywords: [
+          '@media', '@import', '@keyframes', '{', 'margin:',
+          'padding:', 'display:', 'color:', 'background:',
+          'font-', 'border:', '.class', '#id', ':hover',
+          'flex', 'grid'
+        ],
         extensions: ['.css', '.scss', '.sass']
       },
       cpp: {
-        keywords: ['#include', 'int main', 'std::', 'cout', 'cin', 'void'],
+        keywords: [
+          '#include', 'int main', 'std::', 'cout', 'cin',
+          'void', 'template<', 'namespace', 'class ', 'public:',
+          'private:', 'protected:', 'vector<', 'string'
+        ],
         extensions: ['.cpp', '.hpp', '.cc', '.h']
       },
       rust: {
-        keywords: ['fn ', 'pub ', 'use ', 'mod ', 'impl ', 'struct ', 'enum '],
+        keywords: [
+          'fn ', 'pub ', 'use ', 'mod ', 'impl ', 'struct ',
+          'enum ', 'let mut', 'match ', 'Option<', 'Result<',
+          'async ', 'await', '-> '
+        ],
         extensions: ['.rs']
       },
       go: {
-        keywords: ['package ', 'func ', 'import (', 'type ', 'struct {'],
+        keywords: [
+          'package ', 'func ', 'import (', 'type ', 'struct {',
+          'interface {', 'go ', 'chan ', 'defer ', 'select ',
+          'var ', 'const '
+        ],
         extensions: ['.go']
       },
       java: {
-        keywords: ['public class', 'private ', 'protected ', 'package ', 'import java'],
+        keywords: [
+          'public class', 'private ', 'protected ', 'package ',
+          'import java', 'extends ', 'implements ', '@Override',
+          'System.out', 'new ', 'void ', 'static '
+        ],
         extensions: ['.java']
       },
       php: {
-        keywords: ['<?php', '<?=', 'namespace ', 'use '],
+        keywords: [
+          '<?php', '<?=', 'namespace ', 'use ', 'function',
+          'public function', 'private function', '$this->',
+          'echo ', 'require ', 'include '
+        ],
         extensions: ['.php']
       },
       ruby: {
-        keywords: ['def ', 'class ', 'require ', 'module ', 'attr_'],
+        keywords: [
+          'def ', 'class ', 'require ', 'module ', 'attr_',
+          'initialize', 'end', 'puts ', 'yield ', 'super',
+          'include ', 'extend '
+        ],
         extensions: ['.rb']
       },
       sql: {
-        keywords: ['SELECT ', 'INSERT ', 'UPDATE ', 'DELETE ', 'CREATE TABLE'],
+        keywords: [
+          'SELECT ', 'INSERT ', 'UPDATE ', 'DELETE ', 'CREATE TABLE',
+          'ALTER TABLE', 'DROP TABLE', 'WHERE ', 'JOIN ', 'GROUP BY',
+          'ORDER BY', 'HAVING '
+        ],
         extensions: ['.sql']
       },
       markdown: {
-        keywords: ['# ', '## ', '### ', '```', '---', '- [ ]'],
+        keywords: [
+          '# ', '## ', '### ', '```', '---', '- [ ]',
+          '* ', '> ', '[', '](', '**', '__', '|'
+        ],
         extensions: ['.md', '.markdown']
       },
       json: {
-        keywords: ['{', '[', '":', '}', ']'],
+        keywords: [
+          '{', '[', '":', '}', ']', 'null', 'true', 'false'
+        ],
         extensions: ['.json']
       },
       yaml: {
-        keywords: ['---', 'apiVersion:', 'kind:', '- name:'],
+        keywords: [
+          '---', 'apiVersion:', 'kind:', '- name:', 'spec:',
+          'metadata:', 'containers:', 'volumes:', 'env:'
+        ],
         extensions: ['.yml', '.yaml']
       }
     };
 
     // Check content against patterns
     for (const [lang, pattern] of Object.entries(patterns)) {
-      if (pattern.keywords.some(keyword => content.includes(keyword))) {
+      // Look for multiple matches to increase confidence
+      const matches = pattern.keywords.filter(keyword => 
+        content.toLowerCase().includes(keyword.toLowerCase())
+      );
+      
+      // If we find multiple matches (more confident) or a very specific match
+      if (matches.length >= 2 || 
+          pattern.keywords.some(k => k.length > 10 && content.toLowerCase().includes(k.toLowerCase()))) {
         return lang;
       }
+    }
+
+    // If no strong matches found, try to detect based on common patterns
+    if (content.includes('console.log') || content.includes('function') || content.includes('=>')) {
+      return 'javascript';
+    }
+    if (content.includes('def ') || content.includes('print(')) {
+      return 'python';
+    }
+    if (content.startsWith('<') || content.includes('</')) {
+      return 'html';
+    }
+    if (content.includes('{') && content.includes(':')) {
+      return content.includes('"') ? 'json' : 'css';
     }
 
     return 'plaintext';
