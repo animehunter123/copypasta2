@@ -1,8 +1,13 @@
 # Dependencies
 node_modules/
 package-lock.json
-.meteor
 garbage
+
+# Meteor Specific, basically you need a minimum of ./meteor/packages versions release and platforms, but not the ./meteor/local folder because it contains the app itself
+# .meteor
+.meteor/local
+.meteor/.gitignore
+.meteor/dev_bundle
 
 # Editor
 .vscode/
