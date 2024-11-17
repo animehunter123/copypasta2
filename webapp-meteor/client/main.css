@@ -61,6 +61,11 @@
   --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  
+  /* Navigate color (purple) */
+  --navigate-50: #f3e8ff;
+  --navigate-500: #9333ea;
+  --navigate-600: #7e22ce;
 }
 
 /* Dark theme */
@@ -495,6 +500,67 @@ body {
   background: var(--primary-600);
 }
 
+/* Navigate button styles */
+.card-btn.navigate {
+  color: var(--navigate-500);
+}
+
+.card-btn.navigate:hover {
+  color: var(--navigate-600);
+  background: var(--navigate-50);
+}
+
+/* Card action buttons */
+.card-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--text-color-secondary);
+  transition: all 0.2s ease;
+}
+
+.card-btn:hover {
+  background: var(--gray-100);
+}
+
+.card-btn.copy:hover {
+  color: var(--success-600);
+  background: var(--success-50);
+}
+
+.card-btn.edit:hover {
+  color: var(--warning-600);
+  background: var(--warning-50);
+}
+
+.card-btn.download:hover {
+  color: var(--info-600);
+  background: var(--info-50);
+}
+
+.card-btn.delete:hover {
+  color: var(--error-600);
+  background: var(--error-50);
+}
+
+.card-btn.navigate:hover {
+  color: var(--navigate-600);
+  background: var(--navigate-50);
+}
+
+/* Default colors for buttons */
+.card-btn.copy { color: var(--success-500); }
+.card-btn.edit { color: var(--warning-500); }
+.card-btn.download { color: var(--info-500); }
+.card-btn.delete { color: var(--error-500); }
+.card-btn.navigate { color: var(--navigate-500); }
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .btn-text {
@@ -636,6 +702,16 @@ body {
 
 .card-btn.download:hover {
   background: #ddd6fe;
+}
+
+.card-btn.navigate {
+  color: var(--navigate-500);
+  background: var(--navigate-50);
+}
+
+.card-btn.navigate:hover {
+  color: var(--navigate-600);
+  background: var(--navigate-50);
 }
 
 [data-theme="dark"] .card-btn.copy {

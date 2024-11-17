@@ -309,6 +309,20 @@ export const App = () => {
     return true;
   });
 
+  const handleNavigate = (content) => {
+    try {
+      // First try to find a URL in the content
+      const urlMatch = content.match(/\b(https?:\/\/[^\s]+)\b/);
+      const url = urlMatch ? urlMatch[0] : content.trim();
+      
+      // If it doesn't start with http(s), prepend https://
+      const finalUrl = url.startsWith('http') ? url : `https://${url}`;
+      window.open(finalUrl, '_blank', 'noopener,noreferrer');
+    } catch (error) {
+      showToast('Failed to open URL', 'error');
+    }
+  };
+
   const renderCard = (item) => {
     const daysRemaining = getDaysRemaining(item.expiresAt);
     const isExpiring = daysRemaining <= 3;
@@ -335,6 +349,15 @@ export const App = () => {
             <span>{item.fileName || 'Note'}</span>
           </div>
           <div className="card-actions">
+            {item.type === 'note' && (
+              <button
+                className="card-btn navigate"
+                onClick={() => handleNavigate(item.content)}
+                title="Navigate to URL"
+              >
+                <span className="material-symbols-rounded">open_in_new</span>
+              </button>
+            )}
             {item.isText && (
               <button
                 className="card-btn copy"
@@ -561,6 +584,7 @@ export const App = () => {
                 value={editContent}
                 onChange={(e) => setEditContent(e.target.value)}
                 placeholder="Edit content here..."
+                autoFocus
               />
               <div className="modal-footer">
                 <button type="button" className="secondary-btn" onClick={() => {
