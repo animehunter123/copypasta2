@@ -384,24 +384,32 @@ export const App = () => {
       <nav className="navbar">
         <div className="nav-group">
           <h1 className="title">CopyPasta</h1>
-          <button
-            className={`filter-btn ${filter === 'all' ? 'active' : ''}`}
-            onClick={() => setFilter('all')}
-          >
-            All ({items.length})
-          </button>
-          <button
-            className={`filter-btn ${filter === 'files' ? 'active' : ''}`}
-            onClick={() => setFilter('files')}
-          >
-            Files ({items.filter(i => i.type === 'file').length})
-          </button>
-          <button
-            className={`filter-btn ${filter === 'notes' ? 'active' : ''}`}
-            onClick={() => setFilter('notes')}
-          >
-            Notes ({items.filter(i => i.type === 'note').length})
-          </button>
+          <div className="filter-dropdown">
+            <button className="filter-dropdown-btn">
+              {filter === 'all' ? 'All' : filter === 'files' ? 'Files' : 'Notes'}
+              <span className="material-symbols-rounded">expand_more</span>
+            </button>
+            <div className="filter-dropdown-content">
+              <button
+                className={`filter-option ${filter === 'all' ? 'active' : ''}`}
+                onClick={() => setFilter('all')}
+              >
+                All ({items.length})
+              </button>
+              <button
+                className={`filter-option ${filter === 'files' ? 'active' : ''}`}
+                onClick={() => setFilter('files')}
+              >
+                Files ({items.filter(i => i.type === 'file').length})
+              </button>
+              <button
+                className={`filter-option ${filter === 'notes' ? 'active' : ''}`}
+                onClick={() => setFilter('notes')}
+              >
+                Notes ({items.filter(i => i.type === 'note').length})
+              </button>
+            </div>
+          </div>
           <span className="size-badge">
             Total Size: {formatSize(items.reduce((acc, item) => acc + item.originalSize, 0))}
           </span>
@@ -414,7 +422,7 @@ export const App = () => {
             title="Delete All Items"
           >
             <span className="material-symbols-rounded">delete_forever</span>
-            Delete All
+            <span className="btn-text">Delete All</span>
           </button>
           <button
             className="theme-btn"
@@ -430,7 +438,7 @@ export const App = () => {
             onClick={() => setModalOpen(true)}
           >
             <span className="material-symbols-rounded">add</span>
-            New Item
+            <span className="btn-text">New Item</span>
           </button>
         </div>
       </nav>

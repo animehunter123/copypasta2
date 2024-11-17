@@ -211,12 +211,16 @@ body {
   background-color: var(--surface);
   border-bottom: 1px solid var(--gray-200);
   margin-bottom: 2rem;
+  flex-wrap: wrap;
+  box-shadow: var(--shadow);
+  border-radius: var(--radius);
 }
 
 .nav-group {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .title {
@@ -225,13 +229,14 @@ body {
   margin: 0;
   margin-right: 1rem;
   color: var(--text-color);
+  white-space: nowrap;
 }
 
 .filter-btn {
   background: none;
   border: none;
   padding: 0.5rem 1rem;
-  border-radius: var(--radius);
+  border-radius: var(--radius-sm);
   color: var(--text-color-secondary);
   cursor: pointer;
   font-size: 0.875rem;
@@ -239,6 +244,7 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  white-space: nowrap;
 }
 
 .filter-btn:hover {
@@ -247,15 +253,16 @@ body {
 
 .filter-btn.active {
   background-color: var(--primary-100);
-  color: var(--primary-700);
+  color: var(--primary-600);
 }
 
 .size-badge {
   font-size: 0.875rem;
   color: var(--text-color-secondary);
   padding: 0.25rem 0.75rem;
-  border-radius: var(--radius);
-  background-color: var(--gray-100);
+  border-radius: var(--radius-sm);
+  background-color: var(--gray-200);
+  white-space: nowrap;
 }
 
 .danger-btn {
@@ -270,6 +277,8 @@ body {
   cursor: pointer;
   font-size: 0.875rem;
   transition: all 0.2s;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .danger-btn:hover {
@@ -280,28 +289,28 @@ body {
   font-size: 1.25rem;
 }
 
-/* Buttons */
-.icon-btn {
-  padding: 0.5rem;
-  border: none;
-  border-radius: var(--radius);
-  background: none;
-  color: var(--gray-600);
-  cursor: pointer;
-  transition: all 0.2s;
+.theme-btn {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius);
+  border: none;
+  background: var(--gray-100);
+  color: var(--text-color);
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
-.icon-btn:hover {
-  background-color: var(--surface-hover);
-  color: var(--gray-900);
+.theme-btn:hover {
+  background: var(--gray-200);
 }
 
-.icon-btn.delete:hover {
-  color: var(--error-500);
-  background-color: var(--error-50);
+.theme-btn .material-symbols-rounded {
+  font-size: 1.25rem;
 }
 
 .primary-btn {
@@ -317,6 +326,8 @@ body {
   align-items: center;
   gap: 0.5rem;
   transition: all 0.2s;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .primary-btn:hover {
@@ -347,26 +358,159 @@ body {
   border-color: var(--gray-400);
 }
 
+/* Filter dropdown styles */
+.filter-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.filter-dropdown-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  color: var(--text-color);
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+}
+
+.filter-dropdown-btn:hover {
+  background: var(--surface-hover);
+}
+
+.filter-dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 160px;
+  background: var(--surface);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  z-index: 1000;
+  margin-top: 0.25rem;
+}
+
+.filter-dropdown:hover .filter-dropdown-content {
+  display: block;
+}
+
+.filter-option {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border: none;
+  background: none;
+  color: var(--text-color);
+  text-align: left;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+}
+
+.filter-option:hover {
+  background: var(--surface-hover);
+}
+
+.filter-option.active {
+  background: var(--primary-100);
+  color: var(--primary-600);
+}
+
+.size-badge {
+  padding: 0.25rem 0.75rem;
+  background: var(--gray-200);
+  color: var(--text-color-secondary);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+/* Button styles */
+.danger-btn,
+.theme-btn,
+.primary-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.danger-btn {
+  background: var(--error-100);
+  color: var(--error-700);
+}
+
+.danger-btn:hover {
+  background: var(--error-200);
+}
+
 .theme-btn {
+  background: var(--gray-100);
+  color: var(--text-color);
+  padding: 0.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: var(--radius);
-  border: none;
-  background: var(--gray-100);
-  color: var(--text-color);
-  cursor: pointer;
-  transition: all 0.2s;
 }
 
 .theme-btn:hover {
   background: var(--gray-200);
 }
 
-.theme-btn .material-symbols-rounded {
-  font-size: 1.25rem;
+.primary-btn {
+  background: var(--primary-500);
+  color: white;
+  padding: 0.5rem 1rem;
+}
+
+.primary-btn:hover {
+  background: var(--primary-600);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .btn-text {
+    display: none;
+  }
+  
+  .danger-btn,
+  .primary-btn {
+    padding: 0.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    justify-content: center;
+  }
+  
+  .size-badge {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 0.75rem;
+    gap: 0.5rem;
+  }
+  
+  .nav-group {
+    gap: 0.5rem;
+  }
+  
+  .title {
+    font-size: 1.25rem;
+  }
 }
 
 /* Content Grid */
