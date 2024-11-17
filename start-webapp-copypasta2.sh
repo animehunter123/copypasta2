@@ -38,4 +38,4 @@ echo "Web application will soon run on port 3000"
 export COPYPASTA_DATA_DIR="$SCRIPT_DIR/data"
 echo "PWD directory: $PWD"
 echo "Data directory: $COPYPASTA_DATA_DIR"
-meteor --port 3000 # This is the new MeteorJS webapp with explicit port
+meteor --port 3000 --allow-superuser # This is the new MeteorJS webapp with explicit port and superuser access (for development only!!!)
