@@ -16,13 +16,13 @@ Just a todo cards webapp to emulate the copypasta, written in non-reactive Vanil
 * the totalsize has a border css which doesnt match the others
 * the copybutton isnt working
 * the card LINES need to be MAX LIMITED to like 5 lines or something
-
-* need meteorjs reactivity instead of vanilla js (i opted for non mongo for file uploads because its just easier to pull it from the container)
-* make bash script for node ./server.js
 * need 14 day autodelete
 * need autofocus on uploadmodal, as well as initialpageload, then autofocus on modaltext area, then on CLOSE focus back to upload button for keyboard nativity
+
 * need top page cards to have a navigate to url button
 * need to test if code is autodetected in textarea
 * need to move CDNs into code, so that it works offline 
 * low pri -- make the filename revert to the non uuid one
 * low pri -- i was lazy, and i need to Set up proper Meteor publications and subscriptions for real-time reactivity
+
+* final step --- clean code and dockerize with docker-compose.yaml
