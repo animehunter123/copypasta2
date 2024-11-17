@@ -285,6 +285,93 @@ export const App = () => {
     return true;
   });
 
+  const renderCard = (item) => {
+    const daysRemaining = getDaysRemaining(item.expiresAt);
+    const isExpiring = daysRemaining <= 3;
+
+    const handleCardDoubleClick = (e) => {
+      // Don't trigger if clicking on action buttons
+      if (e.target.closest('.card-actions')) {
+        return;
+      }
+      handleEdit(item);
+    };
+
+    return (
+      <div 
+        key={item.id} 
+        className={`content-card ${isExpiring ? 'expiring' : ''}`}
+        onDoubleClick={handleCardDoubleClick}
+      >
+        <div className="card-header">
+          <div className="card-type">
+            <span className="material-symbols-rounded">
+              {item.type === 'file' ? 'description' : 'note'}
+            </span>
+            <span>{item.fileName || 'Note'}</span>
+          </div>
+          <div className="card-actions">
+            <button
+              className="card-btn copy"
+              onClick={() => handleCopy(item)}
+              title="Copy content"
+            >
+              <span className="material-symbols-rounded">content_copy</span>
+            </button>
+            <button
+              className="card-btn edit"
+              onClick={() => handleEdit(item)}
+              title="Edit content"
+            >
+              <span className="material-symbols-rounded">edit</span>
+            </button>
+            <button
+              className="card-btn download"
+              onClick={() => handleDownload(item)}
+              title="Download content"
+            >
+              <span className="material-symbols-rounded">download</span>
+            </button>
+            <button
+              className="card-btn delete"
+              onClick={() => handleDelete(item)}
+              title="Delete content"
+            >
+              <span className="material-symbols-rounded">delete</span>
+            </button>
+          </div>
+        </div>
+        {item.type === 'file' ? (
+          <div className="card-content file-content">
+            <div className="filename">
+              <span className="material-symbols-rounded">description</span>
+              {item.fileName}
+            </div>
+          </div>
+        ) : (
+          <pre className="card-content">
+            <code className={`language-${item.language}`}>
+              {item.content.length > MAX_PREVIEW_LENGTH
+                ? item.content.slice(0, MAX_PREVIEW_LENGTH) + '...'
+                : item.content}
+            </code>
+          </pre>
+        )}
+        <div className="card-footer">
+          <div className="card-info">
+            <span>{formatSize(item.originalSize)}</span>
+            {isExpiring && (
+              <div className="expiration-warning">
+                <span className="material-symbols-rounded">timer</span>
+                <span>Expires in {daysRemaining} days</span>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   if (isLoading) {
     return (
       <div className="loading">
@@ -444,80 +531,7 @@ export const App = () => {
       )}
 
       <div className="content-grid">
-        {filteredItems.map((item) => {
-          const daysRemaining = getDaysRemaining(item.expiresAt);
-          const isExpiringSoon = daysRemaining <= 3;
-
-          return (
-            <div key={item.id} className={`content-card ${isExpiringSoon ? 'expiring' : ''}`}>
-              <div className="card-header">
-                <div className="card-type">
-                  <span className="material-symbols-rounded">
-                    {item.type === 'file' ? 'description' : 'note'}
-                  </span>
-                  <span>{item.fileName || 'Note'}</span>
-                </div>
-                <div className="card-actions">
-                  <button
-                    className="card-btn copy"
-                    onClick={() => handleCopy(item)}
-                    title="Copy content"
-                  >
-                    <span className="material-symbols-rounded">content_copy</span>
-                  </button>
-                  <button
-                    className="card-btn edit"
-                    onClick={() => handleEdit(item)}
-                    title="Edit content"
-                  >
-                    <span className="material-symbols-rounded">edit</span>
-                  </button>
-                  <button
-                    className="card-btn download"
-                    onClick={() => handleDownload(item)}
-                    title="Download content"
-                  >
-                    <span className="material-symbols-rounded">download</span>
-                  </button>
-                  <button
-                    className="card-btn delete"
-                    onClick={() => handleDelete(item)}
-                    title="Delete content"
-                  >
-                    <span className="material-symbols-rounded">delete</span>
-                  </button>
-                </div>
-              </div>
-              {item.type === 'file' ? (
-                <div className="card-content file-content">
-                  <div className="filename">
-                    <span className="material-symbols-rounded">description</span>
-                    {item.fileName}
-                  </div>
-                </div>
-              ) : (
-                <pre className="card-content">
-                  <code className={`language-${item.language}`}>
-                    {item.content.length > MAX_PREVIEW_LENGTH
-                      ? item.content.slice(0, MAX_PREVIEW_LENGTH) + '...'
-                      : item.content}
-                  </code>
-                </pre>
-              )}
-              <div className="card-footer">
-                <div className="card-info">
-                  <span>{formatSize(item.originalSize)}</span>
-                  {isExpiringSoon && (
-                    <div className="expiration-warning">
-                      <span className="material-symbols-rounded">timer</span>
-                      <span>Expires in {daysRemaining} days</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          );
-        })}
+        {filteredItems.map(renderCard)}
       </div>
     </div>
   );

@@ -388,11 +388,16 @@ body {
   min-width: 300px;
   min-height: 200px;
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  cursor: pointer;
 }
 
 .content-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-lg);
+}
+
+.card-actions {
+  cursor: default;
 }
 
 .card-header {
