@@ -26,6 +26,8 @@ export const App = () => {
   // Refs for focus management
   const newItemButtonRef = useRef(null);
   const textareaRef = useRef(null);
+  const modalRef = useRef(null);
+  const editModalRef = useRef(null);
 
   // Subscribe to items and get them reactively
   const { items, isLoading } = useTracker(() => {
@@ -431,6 +433,17 @@ export const App = () => {
     );
   };
 
+  // Handle click outside modal
+  const handleClickOutside = (event, modalRef, closeModal) => {
+    if (modalRef.current && !modalRef.current.contains(event.target)) {
+      closeModal();
+      // Return focus to New Item button
+      if (newItemButtonRef.current) {
+        newItemButtonRef.current.focus();
+      }
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="loading">
@@ -520,8 +533,8 @@ export const App = () => {
       </div>
 
       {modalOpen && (
-        <div className="modal-overlay">
-          <div className="modal">
+        <div className="modal-overlay" onClick={(e) => handleClickOutside(e, modalRef, () => setModalOpen(false))}>
+          <div className="modal" ref={modalRef}>
             <div className="modal-header">
               <h2>Add Content</h2>
               <button className="close-button" onClick={() => setModalOpen(false)}>
@@ -567,8 +580,12 @@ export const App = () => {
       )}
 
       {editModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal">
+        <div className="modal-overlay" onClick={(e) => handleClickOutside(e, editModalRef, () => {
+          setEditModalOpen(false);
+          setEditingItem(null);
+          setEditContent('');
+        })}>
+          <div className="modal" ref={editModalRef}>
             <div className="modal-header">
               <h2>Edit Content</h2>
               <button className="close-button" onClick={() => {
