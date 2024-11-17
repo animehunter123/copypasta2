@@ -570,6 +570,21 @@ body {
   color: var(--error-600);
 }
 
+.file-info {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-color-secondary);
+}
+
+.file-type {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  background-color: var(--surface-hover);
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
 /* Modal */
 .modal-overlay {
   position: fixed;

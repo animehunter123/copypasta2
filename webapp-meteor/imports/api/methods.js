@@ -7,12 +7,18 @@ Meteor.methods({
     check(fileData, {
       content: String,
       fileName: String,
+      fileType: String,
       language: String,
       originalSize: Number,
       createdAt: Date,
       expiresAt: Date,
-      type: String
+      type: String,
+      isText: Boolean
     });
+
+    if (fileData.originalSize > 50 * 1024 * 1024) { // 50MB
+      throw new Meteor.Error('file-too-large', 'File size must be under 50MB');
+    }
 
     return await Storage.saveFile(fileData);
   },

@@ -118,7 +118,20 @@ export const App = () => {
   // Download content
   const handleDownload = (item) => {
     try {
-      const blob = new Blob([item.content], { type: 'text/plain' });
+      let content = item.content;
+      let type = 'text/plain';
+      
+      if (!item.isText) {
+        content = atob(item.content); // Decode base64
+        const buffer = new Uint8Array(content.length);
+        for (let i = 0; i < content.length; i++) {
+          buffer[i] = content.charCodeAt(i);
+        }
+        content = buffer;
+        type = item.fileType;
+      }
+
+      const blob = new Blob([content], { type });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -129,6 +142,7 @@ export const App = () => {
       document.body.removeChild(a);
       showToast('Content download started');
     } catch (error) {
+      console.error('Download error:', error);
       showToast('Failed to download content', 'error');
     }
   };
@@ -177,22 +191,38 @@ export const App = () => {
         const reader = new FileReader();
         reader.onload = async (e) => {
           const content = e.target.result;
+          const isText = fileInput.type.startsWith('text/') || 
+                        ['application/json', 'application/javascript', 'application/xml'].includes(fileInput.type);
+          
           const data = {
-            content,
+            content: isText ? content : btoa(content), // Base64 encode binary files
             fileName: fileInput.name,
-            language: detectLanguage(content),
-            originalSize: content.length,
+            fileType: fileInput.type || 'application/octet-stream',
+            language: isText ? detectLanguage(content) : 'binary',
+            originalSize: fileInput.size,
             createdAt: now,
             expiresAt: expiresAt,
-            type: 'file'
+            type: 'file',
+            isText: isText
           };
+          
+          if (fileInput.size > 50 * 1024 * 1024) { // 50MB limit
+            throw new Error('File size must be under 50MB');
+          }
+          
           await Meteor.callAsync('files.insert', data);
           setModalOpen(false);
           setContentInput('');
           setFileInput(null);
           loadItems(); // Reload items after insert
         };
-        reader.readAsText(fileInput);
+        
+        if (fileInput.type.startsWith('text/') || 
+            ['application/json', 'application/javascript', 'application/xml'].includes(fileInput.type)) {
+          reader.readAsText(fileInput);
+        } else {
+          reader.readAsArrayBuffer(fileInput);
+        }
       }
 
       if (contentInput.trim()) {
@@ -311,20 +341,24 @@ export const App = () => {
             <span>{item.fileName || 'Note'}</span>
           </div>
           <div className="card-actions">
-            <button
-              className="card-btn copy"
-              onClick={() => handleCopy(item)}
-              title="Copy content"
-            >
-              <span className="material-symbols-rounded">content_copy</span>
-            </button>
-            <button
-              className="card-btn edit"
-              onClick={() => handleEdit(item)}
-              title="Edit content"
-            >
-              <span className="material-symbols-rounded">edit</span>
-            </button>
+            {(item.isText !== false) && (
+              <button
+                className="card-btn copy"
+                onClick={() => handleCopy(item)}
+                title="Copy content"
+              >
+                <span className="material-symbols-rounded">content_copy</span>
+              </button>
+            )}
+            {(item.isText !== false) && (
+              <button
+                className="card-btn edit"
+                onClick={() => handleEdit(item)}
+                title="Edit content"
+              >
+                <span className="material-symbols-rounded">edit</span>
+              </button>
+            )}
             <button
               className="card-btn download"
               onClick={() => handleDownload(item)}
@@ -346,6 +380,9 @@ export const App = () => {
             <div className="filename">
               <span className="material-symbols-rounded">description</span>
               {item.fileName}
+              <div className="file-info">
+                <span className="file-type">{item.fileType}</span>
+              </div>
             </div>
           </div>
         ) : (
@@ -463,7 +500,7 @@ export const App = () => {
                   <input
                     type="file"
                     onChange={(e) => setFileInput(e.target.files[0])}
-                    accept=".txt,.js,.jsx,.css,.html,.json,.md"
+                    accept="*"
                   />
                   <span className="material-symbols-rounded">upload_file</span>
                   <span>{fileInput ? fileInput.name : 'Click to upload a file'}</span>
