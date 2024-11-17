@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTracker } from 'meteor/react-meteor-data';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';
@@ -22,6 +22,10 @@ export const App = () => {
   const [editingItem, setEditingItem] = useState(null);
   const [editContent, setEditContent] = useState('');
   const [toasts, setToasts] = useState([]);
+
+  // Refs for focus management
+  const newItemButtonRef = useRef(null);
+  const textareaRef = useRef(null);
 
   // Subscribe to items and get them reactively
   const { items, isLoading } = useTracker(() => {
@@ -81,6 +85,28 @@ export const App = () => {
       setPreviewContent('');
     }
   }, [contentInput]);
+
+  // Focus the New Item button on mount
+  useEffect(() => {
+    newItemButtonRef.current?.focus();
+  }, []);
+
+  // Handle keyboard shortcuts
+  const handleNewItemKeyPress = (e) => {
+    if (e.key === ' ' || e.key === 'Enter') {
+      e.preventDefault();
+      setModalOpen(true);
+    }
+  };
+
+  // Focus textarea when modal opens
+  useEffect(() => {
+    if (modalOpen) {
+      setTimeout(() => textareaRef.current?.focus(), 100);
+    } else {
+      newItemButtonRef.current?.focus();
+    }
+  }, [modalOpen]);
 
   // Show a toast notification
   const showToast = (message, type = 'success') => {
@@ -439,8 +465,12 @@ export const App = () => {
             </span>
           </button>
           <button
+            autofocus
             className="primary-btn"
             onClick={() => setModalOpen(true)}
+            ref={newItemButtonRef}
+            onKeyDown={handleNewItemKeyPress}
+            aria-label="Create New Item"
           >
             <span className="material-symbols-rounded">add</span>
             <span className="btn-text">New Item</span>
@@ -487,6 +517,7 @@ export const App = () => {
               </div>
 
               <textarea
+                ref={textareaRef}
                 value={contentInput}
                 onChange={(e) => setContentInput(e.target.value)}
                 placeholder="Enter text content..."
