@@ -1,6 +1,6 @@
 # Description
 
-Just a todo cards webapp to emulate the copypasta, but in vanilla js. (Maybe Reactivize or Meteorize Later?)
+Just a todo cards webapp to emulate the copypasta, written in non-reactive VanillaJS, and also in reactive MeteorJS.
 
 # How to run...
 
