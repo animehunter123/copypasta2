@@ -1,12 +1,13 @@
 #!/bin/bash
 
 # This is my main script to start the app. Open to suggestions to improve it.
+printf "This script will launch the meteorjs webpage on a Ubuntu Host.\nPlease remember to have already run: 'sudo apt install -y nodejs npm && npx meteor'"
 
 # Get the absolute path of the script directory
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Ensure that nodejs is installed or exit with a message to the user
-command -v node >/dev/null 2>&1 || { echo >&2 "Node.js is required but it's not installed. (You ubuntu should already have: 'apt install -y nodejs npm && npx meteor') Aborting."; exit 1; }
+command -v node >/dev/null 2>&1 || { echo >&2 "Node.js is required but it's not installed. Aborting."; exit 1; }
 
 # Ensure that npm is installed or exit with a message to the user
 command -v npm >/dev/null 2>&1 || { echo >&2 "npm is required but it's not installed.  Aborting."; exit 1; }
