@@ -36,5 +36,6 @@ echo "Web application will soon run on port 3000"
 
 # Export data directory path and start Meteor
 export COPYPASTA_DATA_DIR="$SCRIPT_DIR/data"
-echo "Using data directory: $COPYPASTA_DATA_DIR"
+echo "PWD directory: $PWD"
+echo "Data directory: $COPYPASTA_DATA_DIR"
 meteor --port 3000 # This is the new MeteorJS webapp with explicit port
