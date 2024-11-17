@@ -10,6 +10,7 @@
   "dependencies": {
     "@babel/runtime": "^7.20.7",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "@monaco-editor/react": "^4.6.0",
     "highlight.js": "^11.7.0",
     "meteor-node-stubs": "^1.2.5",
     "react": "^18.2.0",

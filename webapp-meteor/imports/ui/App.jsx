@@ -4,23 +4,24 @@ import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';
 import 'highlight.js/styles/github-dark.css';
 import { Items } from '../api/collections';
+import Editor from "@monaco-editor/react";
 
 // Constants
 const EXPIRATION_DAYS = 14;
 const MAX_PREVIEW_LENGTH = 500;
 
-export const App = () => {
+export default function App() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [fileInput, setFileInput] = useState(null);
   const [contentInput, setContentInput] = useState('');
-  const [language, setLanguage] = useState('');
+  const [language, setLanguage] = useState('plaintext');
+  const [editModalContent, setEditModalContent] = useState({ content: '', language: 'plaintext' });
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark');
   const [filter, setFilter] = useState('all');
   const [previewLanguage, setPreviewLanguage] = useState('text');
   const [previewContent, setPreviewContent] = useState('');
   const [editingItem, setEditingItem] = useState(null);
-  const [editContent, setEditContent] = useState('');
   const [toasts, setToasts] = useState([]);
 
   // Refs for focus management
@@ -28,6 +29,7 @@ export const App = () => {
   const textareaRef = useRef(null);
   const modalRef = useRef(null);
   const editModalRef = useRef(null);
+  const editorRef = useRef(null);
 
   // Subscribe to items and get them reactively
   const { items, isLoading } = useTracker(() => {
@@ -82,8 +84,8 @@ export const App = () => {
       setPreviewLanguage(detectedLanguage);
       setPreviewContent(contentInput);
     } else {
-      setLanguage('text');
-      setPreviewLanguage('text');
+      setLanguage('plaintext');
+      setPreviewLanguage('plaintext');
       setPreviewContent('');
     }
   }, [contentInput]);
@@ -110,7 +112,7 @@ export const App = () => {
   // Focus textarea when modal opens
   useEffect(() => {
     if (modalOpen) {
-      setTimeout(() => textareaRef.current?.focus(), 100);
+      setTimeout(() => editorRef.current?.focus(), 100);
     } else {
       newItemButtonRef.current?.focus();
     }
@@ -171,8 +173,25 @@ export const App = () => {
 
   // Edit content
   const handleEdit = (item) => {
+    let content = item.content;
+    
+    // If it's a file, we need to ensure the content is a string
+    if (item.type === 'file' && typeof content !== 'string') {
+      try {
+        // Try to convert ArrayBuffer to string if needed
+        content = new TextDecoder().decode(content);
+      } catch (error) {
+        console.error('Error decoding file content:', error);
+        content = String(content); // Fallback to basic string conversion
+      }
+    }
+
+    const detectedLang = detectLanguage(content);
+    setEditModalContent({ 
+      content: content, 
+      language: detectedLang 
+    });
     setEditingItem(item);
-    setEditContent(item.content);
     setEditModalOpen(true);
   };
 
@@ -262,18 +281,18 @@ export const App = () => {
   };
 
   const handleSaveEdit = async () => {
-    if (!editingItem || !editContent.trim()) return;
+    if (!editingItem || !editModalContent.content.trim()) return;
 
     try {
       const data = {
         id: editingItem.id,
-        content: editContent,
-        language: detectLanguage(editContent)
+        content: editModalContent.content,
+        language: editModalContent.language
       };
       await Meteor.callAsync('items.edit', data);
       setEditModalOpen(false);
       setEditingItem(null);
-      setEditContent('');
+      setEditModalContent({ content: '', language: 'plaintext' });
     } catch (error) {
       console.error('Error saving edit:', error);
       alert('Error saving edit: ' + error.message);
@@ -295,34 +314,113 @@ export const App = () => {
   };
 
   const detectLanguage = (content) => {
-    if (!content) return 'text';
-    const result = hljs.highlightAuto(content);
-    return result.language || 'text';
-  };
+    if (!content) return 'plaintext';
+    
+    // Common language patterns
+    const patterns = {
+      python: {
+        keywords: ['def ', 'class ', 'import ', 'from ', 'if __name__', 'print(', 'return ', '@'],
+        extensions: ['.py', '.pyw']
+      },
+      javascript: {
+        keywords: ['function', 'const ', 'let ', 'var ', '=>', 'return ', 'module.exports', 'export '],
+        extensions: ['.js', '.jsx', '.ts', '.tsx']
+      },
+      html: {
+        keywords: ['<html', '</html>', '<div', '<body', '<!DOCTYPE'],
+        extensions: ['.html', '.htm']
+      },
+      css: {
+        keywords: ['@media', '@import', '@keyframes', '{', 'margin:', 'padding:'],
+        extensions: ['.css', '.scss', '.sass']
+      },
+      cpp: {
+        keywords: ['#include', 'int main', 'std::', 'cout', 'cin', 'void'],
+        extensions: ['.cpp', '.hpp', '.cc', '.h']
+      },
+      rust: {
+        keywords: ['fn ', 'pub ', 'use ', 'mod ', 'impl ', 'struct ', 'enum '],
+        extensions: ['.rs']
+      },
+      go: {
+        keywords: ['package ', 'func ', 'import (', 'type ', 'struct {'],
+        extensions: ['.go']
+      },
+      java: {
+        keywords: ['public class', 'private ', 'protected ', 'package ', 'import java'],
+        extensions: ['.java']
+      },
+      php: {
+        keywords: ['<?php', '<?=', 'namespace ', 'use '],
+        extensions: ['.php']
+      },
+      ruby: {
+        keywords: ['def ', 'class ', 'require ', 'module ', 'attr_'],
+        extensions: ['.rb']
+      },
+      sql: {
+        keywords: ['SELECT ', 'INSERT ', 'UPDATE ', 'DELETE ', 'CREATE TABLE'],
+        extensions: ['.sql']
+      },
+      markdown: {
+        keywords: ['# ', '## ', '### ', '```', '---', '- [ ]'],
+        extensions: ['.md', '.markdown']
+      },
+      json: {
+        keywords: ['{', '[', '":', '}', ']'],
+        extensions: ['.json']
+      },
+      yaml: {
+        keywords: ['---', 'apiVersion:', 'kind:', '- name:'],
+        extensions: ['.yml', '.yaml']
+      }
+    };
 
-  const toggleTheme = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
-  };
-
-  const filteredItems = items.filter(item => {
-    if (filter === 'all') return true;
-    if (filter === 'files') return item.type === 'file';
-    if (filter === 'notes') return item.type === 'note';
-    return true;
-  });
-
-  const handleNavigate = (content) => {
-    try {
-      // First try to find a URL in the content
-      const urlMatch = content.match(/\b(https?:\/\/[^\s]+)\b/);
-      const url = urlMatch ? urlMatch[0] : content.trim();
-      
-      // If it doesn't start with http(s), prepend https://
-      const finalUrl = url.startsWith('http') ? url : `https://${url}`;
-      window.open(finalUrl, '_blank', 'noopener,noreferrer');
-    } catch (error) {
-      showToast('Failed to open URL', 'error');
+    // Check content against patterns
+    for (const [lang, pattern] of Object.entries(patterns)) {
+      if (pattern.keywords.some(keyword => content.includes(keyword))) {
+        return lang;
+      }
     }
+
+    return 'plaintext';
+  };
+
+  const handleEditorDidMount = (editor, monaco) => {
+    editorRef.current = editor;
+    editor.focus();
+    
+    // Add keyboard shortcuts
+    editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
+      if (editModalOpen) {
+        handleSaveEdit();
+      } else {
+        handleSubmit();
+      }
+    });
+  };
+
+  const handleEditorChange = (value) => {
+    if (editModalOpen) {
+      setEditModalContent(prev => ({ 
+        ...prev, 
+        content: value,
+        language: detectLanguage(value)
+      }));
+    } else {
+      setContentInput(value);
+      setLanguage(detectLanguage(value));
+    }
+  };
+
+  const handleDoubleClick = (item) => {
+    const detectedLang = detectLanguage(item.content);
+    setEditModalContent({ 
+      content: item.content, 
+      language: detectedLang 
+    });
+    setEditingItem(item);
+    setEditModalOpen(true);
   };
 
   const renderCard = (item) => {
@@ -499,7 +597,7 @@ export const App = () => {
           </button>
           <button
             className="theme-btn"
-            onClick={toggleTheme}
+            onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
             title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
           >
             <span className="material-symbols-rounded">
@@ -558,12 +656,38 @@ export const App = () => {
                 <span>or paste content</span>
               </div>
 
-              <textarea
-                ref={textareaRef}
-                value={contentInput}
-                onChange={(e) => setContentInput(e.target.value)}
-                placeholder="Enter text content..."
-              />
+              <div className="editor-container">
+                <Editor
+                  height="300px"
+                  defaultLanguage="plaintext"
+                  language={language}
+                  value={contentInput}
+                  theme={theme === 'dark' ? 'vs-dark' : 'light'}
+                  onChange={handleEditorChange}
+                  onMount={handleEditorDidMount}
+                  options={{
+                    minimap: { enabled: false },
+                    fontSize: 14,
+                    fontFamily: "'Fira Code', monospace",
+                    fontLigatures: true,
+                    lineNumbers: 'on',
+                    roundedSelection: true,
+                    scrollBeyondLastLine: false,
+                    automaticLayout: true,
+                    wordWrap: 'on',
+                    quickSuggestions: true,
+                    suggestOnTriggerCharacters: true,
+                    acceptSuggestionOnEnter: "on",
+                    tabCompletion: "on",
+                    contextmenu: true,
+                    scrollbar: {
+                      useShadows: false,
+                      verticalScrollbarSize: 10,
+                      horizontalScrollbarSize: 10
+                    }
+                  }}
+                />
+              </div>
 
               <div className="modal-footer">
                 <button type="button" className="secondary-btn" onClick={() => setModalOpen(false)}>
@@ -583,46 +707,99 @@ export const App = () => {
         <div className="modal-overlay" onClick={(e) => handleClickOutside(e, editModalRef, () => {
           setEditModalOpen(false);
           setEditingItem(null);
-          setEditContent('');
+          setEditModalContent({ content: '', language: 'plaintext' });
         })}>
-          <div className="modal" ref={editModalRef}>
+          <div className="modal edit-modal" ref={editModalRef}>
             <div className="modal-header">
-              <h2>Edit Content</h2>
-              <button className="close-button" onClick={() => {
+              <div className="modal-title">
+                <h2>Edit Content</h2>
+                {editModalContent.language !== 'plaintext' && (
+                  <span className="language-badge">
+                    {editModalContent.language.toUpperCase()}
+                  </span>
+                )}
+              </div>
+              <button className="close-btn" onClick={() => {
                 setEditModalOpen(false);
                 setEditingItem(null);
-                setEditContent('');
+                setEditModalContent({ content: '', language: 'plaintext' });
               }}>
                 <span className="material-symbols-rounded">close</span>
               </button>
             </div>
-            <form className="modal-content" onSubmit={handleSaveEdit}>
-              <textarea
-                value={editContent}
-                onChange={(e) => setEditContent(e.target.value)}
-                placeholder="Edit content here..."
-                autoFocus
-              />
-              <div className="modal-footer">
-                <button type="button" className="secondary-btn" onClick={() => {
+            
+            <div className="editor-container">
+              {editModalContent.content !== undefined && (
+                <Editor
+                  height="100%"
+                  defaultLanguage={editModalContent.language}
+                  language={editModalContent.language}
+                  value={String(editModalContent.content)}
+                  theme={theme === 'dark' ? 'vs-dark' : 'light'}
+                  onChange={(value) => setEditModalContent(prev => ({
+                    ...prev,
+                    content: value,
+                    language: detectLanguage(value)
+                  }))}
+                  onMount={handleEditorDidMount}
+                  options={{
+                    minimap: { enabled: false },
+                    fontSize: 14,
+                    fontFamily: "'Fira Code', monospace",
+                    fontLigatures: true,
+                    lineNumbers: 'on',
+                    roundedSelection: true,
+                    scrollBeyondLastLine: false,
+                    automaticLayout: true,
+                    wordWrap: 'on',
+                    quickSuggestions: true,
+                    suggestOnTriggerCharacters: true,
+                    acceptSuggestionOnEnter: "on",
+                    tabCompletion: "on",
+                    contextmenu: true,
+                    padding: { top: 16, bottom: 16 },
+                    scrollbar: {
+                      useShadows: false,
+                      verticalScrollbarSize: 10,
+                      horizontalScrollbarSize: 10
+                    }
+                  }}
+                />
+              )}
+            </div>
+
+            <div className="modal-footer">
+              <button 
+                type="button" 
+                className="secondary-btn" 
+                onClick={() => {
                   setEditModalOpen(false);
                   setEditingItem(null);
-                  setEditContent('');
-                }}>
-                  Cancel
-                </button>
-                <button type="submit" className="primary-btn" disabled={!editContent.trim()}>
-                  Save Changes
-                </button>
-              </div>
-            </form>
+                  setEditModalContent({ content: '', language: 'plaintext' });
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="primary-btn"
+                onClick={handleSaveEdit}
+              >
+                Save Changes
+              </button>
+            </div>
           </div>
         </div>
       )}
 
       <div className="content-grid">
-        {filteredItems.map(renderCard)}
+        {items.filter(item => {
+          if (filter === 'all') return true;
+          if (filter === 'files') return item.type === 'file';
+          if (filter === 'notes') return item.type === 'note';
+          return true;
+        }).map(renderCard)}
       </div>
     </div>
   );
-};
+}

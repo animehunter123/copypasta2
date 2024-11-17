@@ -1303,85 +1303,88 @@ textarea:focus {
 
 /* Edit modal */
 .edit-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  width: 90vw;
+  max-width: 1200px;
+  height: 90vh;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
+  flex-direction: column;
+  padding: 0;
+  background: var(--surface);
 }
 
-.edit-modal-content {
-  background-color: var(--surface);
-  border-radius: var(--radius);
-  padding: 1.5rem;
-  width: 90%;
-  max-width: 600px;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: var(--shadow-lg);
-  border: 1px solid var(--gray-200);
-}
-
-.edit-modal-header {
+.edit-modal .modal-header {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border-color);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
 }
 
-.edit-modal-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--text-color);
-}
-
-.edit-modal-close {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: none;
-  border: none;
-  color: var(--text-color-secondary);
-  cursor: pointer;
-  padding: 0.5rem;
+.edit-modal .modal-title {
   display: flex;
   align-items: center;
-  justify-content: center;
-  border-radius: var(--radius);
-  transition: all 0.2s;
+  gap: 12px;
 }
 
-.edit-modal-close:hover {
-  background: var(--surface-hover);
-  color: var(--text-color);
+.edit-modal .editor-container {
+  flex: 1;
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid var(--border-color);
+  min-height: 0; /* Important for flex container */
 }
 
-.edit-textarea {
-  width: 100%;
-  min-height: 200px;
-  padding: 1rem;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--gray-300);
-  background-color: var(--surface);
-  color: var(--text-color);
-  font-family: var(--font-mono);
-  margin-bottom: 1rem;
-  resize: vertical;
-}
-
-.edit-textarea:focus {
-  outline: none;
-  border-color: var(--primary-500);
-  box-shadow: 0 0 0 3px var(--primary-100);
-}
-
-.edit-modal-actions {
+.edit-modal .modal-footer {
+  padding: 16px 24px;
   display: flex;
   justify-content: flex-end;
-  gap: 1rem;
+  gap: 12px;
+  background: var(--surface);
+}
+
+/* Editor container */
+.editor-container {
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 1rem 0;
+  background: var(--surface);
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Monaco editor customization */
+.monaco-editor {
+  padding: 8px 0;
+  flex: 1;
+}
+
+.monaco-editor .margin,
+.monaco-editor .monaco-editor-background {
+  background-color: var(--surface) !important;
+}
+
+[data-theme="dark"] .monaco-editor {
+  background-color: var(--surface) !important;
+}
+
+[data-theme="light"] .monaco-editor {
+  background-color: var(--surface) !important;
+}
+
+/* Language badge */
+.language-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  background: var(--accent-color);
+  color: var(--surface);
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  margin-left: 8px;
 }
