@@ -11,7 +11,5 @@ Just a todo cards webapp to emulate the copypasta, written in non-reactive Vanil
 
 # Todo
 * make a Dockerfile(uses ubuntu2404 with apt install nodejs/npm/meteorjs)/docker-compose.yaml
-* OPTIONAL: need to test if code is autodetected in textarea > Monaco Editor Does this but its really hard.... man... ugh...
-* OPTIONAL: Make the text area allow CONTROL + ENTER to save and close the card, and autofocus back on the new card button
-
-* final step --- clean code and dockerize with docker-compose.yaml
+* Would like the Monaco TextArea to be modern font looking, its kinda meh atm
+* OPTIONAL: Make the text area allow CONTROL + ENTER to save and close the card, and autofocus back on the new card button > this is still not working!
