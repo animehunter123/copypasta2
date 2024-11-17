@@ -726,6 +726,45 @@ body {
   border-top: 1px solid var(--gray-100);
 }
 
+.card-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--text-color-secondary);
+  font-size: 0.875rem;
+}
+
+.info-group {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.info-group .material-symbols-rounded {
+  font-size: 1.125rem;
+}
+
+.info-group.expiration {
+  color: var(--gray-600);
+}
+
+.info-group.expiration.expiring {
+  color: var(--error-600);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .expiring .card-footer {
   color: var(--error-600);
 }

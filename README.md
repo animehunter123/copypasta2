@@ -10,8 +10,6 @@ Just a todo cards webapp to emulate the copypasta, written in non-reactive Vanil
 * Open a web browser to localhost:3000, and upload a file or a note, and it will save those to ./data/files or ./data/notes
 
 # Todo
-* BUG FOUND THE REACTIVITY IS BROKEN WITH 2 borwsers again
-* BUG FOUND: Some Ub2404 hosts say this when starting the bash: 'run: You're not in a Meteor project directory.'
 * need meteorjs to allow ANY TYPE OF FILE UPLOAD (currently it is only TEXTUPLOAD, not pdf/zip) IT ALSO NEEDS MAX LIMIT of 50MB, and MAX TIME FOR 14 days, and each card should say timeleft until autodelete
 * the totalsize has a border css which doesnt match the others
 * the copybutton isnt working

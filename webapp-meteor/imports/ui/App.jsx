@@ -358,13 +358,18 @@ export const App = () => {
         )}
         <div className="card-footer">
           <div className="card-info">
-            <span>{formatSize(item.originalSize)}</span>
-            {isExpiring && (
-              <div className="expiration-warning">
-                <span className="material-symbols-rounded">timer</span>
-                <span>Expires in {daysRemaining} days</span>
-              </div>
-            )}
+            <div className="info-group">
+              <span className="material-symbols-rounded">folder</span>
+              <span>{formatSize(item.originalSize)}</span>
+            </div>
+            <div className={`info-group expiration ${isExpiring ? 'expiring' : ''}`}>
+              <span className="material-symbols-rounded">timer</span>
+              <span>
+                {daysRemaining > 0 
+                  ? `${daysRemaining} day${daysRemaining === 1 ? '' : 's'} left`
+                  : 'Expiring soon'}
+              </span>
+            </div>
           </div>
         </div>
       </div>
