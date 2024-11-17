@@ -88,7 +88,13 @@ export const App = () => {
 
   // Focus the New Item button on mount
   useEffect(() => {
-    newItemButtonRef.current?.focus();
+    // Use a small timeout to ensure the button is mounted
+    const timeoutId = setTimeout(() => {
+      if (newItemButtonRef.current) {
+        newItemButtonRef.current.focus();
+      }
+    }, 0);
+    return () => clearTimeout(timeoutId);
   }, []);
 
   // Handle keyboard shortcuts
@@ -465,7 +471,7 @@ export const App = () => {
             </span>
           </button>
           <button
-            autofocus
+            autoFocus
             className="primary-btn"
             onClick={() => setModalOpen(true)}
             ref={newItemButtonRef}
