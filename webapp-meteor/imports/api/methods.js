@@ -1,59 +1,151 @@
 import { Meteor } from 'meteor/meteor';
-import { check } from 'meteor/check';
+import { check, Match } from 'meteor/check';
 import { Storage } from './storage';
+import { Items } from './collections';
+import path from 'path';
+import fs from 'fs';
+
+// Use data directory from environment variable
+const DATA_DIR = process.env.COPYPASTA_DATA_DIR;
+if (!DATA_DIR) {
+  throw new Error('COPYPASTA_DATA_DIR environment variable not set');
+}
+
+const NOTES_DIR = path.join(DATA_DIR, 'notes');
+const FILES_DIR = path.join(DATA_DIR, 'files');
 
 Meteor.methods({
   async 'files.insert'(fileData) {
-    check(fileData, {
-      content: String,
-      fileName: String,
-      fileType: String,
-      language: String,
-      originalSize: Number,
-      createdAt: Date,
-      expiresAt: Date,
-      type: String,
-      isText: Boolean
-    });
+    try {
+      check(fileData, {
+        content: Match.Any, // Allow any type of content (string or ArrayBuffer)
+        fileName: String,
+        fileType: String,
+        language: String,
+        originalSize: Number,
+        createdAt: Date,
+        expiresAt: Date,
+        type: String,
+        isText: Boolean
+      });
 
-    if (fileData.originalSize > 50 * 1024 * 1024) { // 50MB
-      throw new Meteor.Error('file-too-large', 'File size must be under 50MB');
+      if (fileData.originalSize > 50 * 1024 * 1024) { // 50MB
+        throw new Meteor.Error('file-too-large', 'File size must be under 50MB');
+      }
+
+      // Convert ArrayBuffer to Buffer for binary files
+      if (!fileData.isText && fileData.content instanceof Uint8Array) {
+        fileData.content = Buffer.from(fileData.content);
+      }
+
+      return await Storage.saveFile(fileData);
+    } catch (error) {
+      console.error('Error in files.insert:', error);
+      throw new Meteor.Error('insert-failed', error.message);
     }
-
-    return await Storage.saveFile(fileData);
   },
 
   async 'notes.insert'(noteData) {
-    check(noteData, {
-      content: String,
-      language: String,
-      originalSize: Number,
-      createdAt: Date,
-      expiresAt: Date,
-      type: String
-    });
+    try {
+      check(noteData, {
+        content: String,
+        language: String,
+        originalSize: Number,
+        createdAt: Date,
+        expiresAt: Date,
+        type: String
+      });
 
-    return await Storage.saveNote(noteData);
+      return await Storage.saveNote(noteData);
+    } catch (error) {
+      console.error('Error in notes.insert:', error);
+      throw new Meteor.Error('insert-failed', error.message);
+    }
+  },
+
+  async 'items.edit'(data) {
+    try {
+      check(data, {
+        id: String,
+        content: String,
+        language: String
+      });
+
+      // Find the existing item
+      const item = await Items.findOneAsync({ id: data.id });
+      if (!item) {
+        throw new Meteor.Error('not-found', 'Item not found');
+      }
+
+      // Update the content and language
+      const filePath = path.join(
+        item.type === 'note' ? NOTES_DIR : FILES_DIR,
+        item.id
+      );
+
+      // Update the file content
+      fs.writeFileSync(filePath, data.content, 'utf8');
+
+      // Update MongoDB
+      const updated = await Items.updateAsync(
+        { id: data.id },
+        {
+          $set: {
+            content: data.content,
+            language: data.language
+          }
+        }
+      );
+
+      if (!updated) {
+        throw new Error('Failed to update item in MongoDB');
+      }
+
+      return true;
+    } catch (error) {
+      console.error('Error in items.edit:', error);
+      throw new Meteor.Error('edit-failed', error.message);
+    }
   },
 
   async 'items.remove'(itemId) {
-    check(itemId, String);
-    return await Storage.removeItem(itemId);
+    try {
+      check(itemId, String);
+      return await Storage.removeItem(itemId);
+    } catch (error) {
+      console.error('Error in items.remove:', error);
+      throw new Meteor.Error('remove-failed', error.message);
+    }
   },
 
   async 'items.removeAll'() {
-    const items = await Storage.getAllItems();
-    for (const item of items) {
-      await Storage.removeItem(item.id);
+    try {
+      const items = await Storage.getAllItems();
+      for (const item of items) {
+        await Storage.removeItem(item.id);
+      }
+      return true;
+    } catch (error) {
+      console.error('Error in items.removeAll:', error);
+      throw new Meteor.Error('remove-all-failed', error.message);
     }
-    return true;
   },
 
   async 'items.getAll'() {
-    return await Storage.getAllItems();
+    try {
+      return await Storage.getAllItems();
+    } catch (error) {
+      console.error('Error in items.getAll:', error);
+      throw new Meteor.Error('get-all-failed', error.message);
+    }
   },
 
   async 'items.cleanExpired'() {
-    await Storage.cleanExpired();
+    try {
+      return await Storage.cleanExpired();
+    } catch (error) {
+      console.error('Error in items.cleanExpired:', error);
+      throw new Meteor.Error('clean-expired-failed', error.message);
+    }
   }
 });

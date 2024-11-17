@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import fs from 'fs';
 import path from 'path';
+import { Items } from './collections';
 
 // Use data directory from environment variable
 const DATA_DIR = process.env.COPYPASTA_DATA_DIR;
@@ -28,117 +29,140 @@ console.log('Files Dir:', FILES_DIR);
 
 export const Storage = {
   async saveFile(fileData) {
-    const timestamp = Date.now();
-    const fileName = `${timestamp}-${fileData.fileName}`;
-    const filePath = path.join(FILES_DIR, fileName);
-    console.log('Saving file to:', filePath);
+    try {
+      const timestamp = Date.now();
+      const fileName = `${timestamp}-${fileData.fileName}`;
+      const filePath = path.join(FILES_DIR, fileName);
+      console.log('Saving file to:', filePath);
 
-    const data = {
-      id: fileName,
-      content: fileData.content,
-      fileName: fileData.fileName,
-      language: fileData.language,
-      originalSize: fileData.originalSize,
-      createdAt: fileData.createdAt,
-      expiresAt: fileData.expiresAt,
-      type: 'file'
-    };
+      const data = {
+        id: fileName,
+        content: fileData.content,
+        fileName: fileData.fileName,
+        language: fileData.language,
+        originalSize: fileData.originalSize,
+        createdAt: fileData.createdAt,
+        expiresAt: fileData.expiresAt,
+        type: fileData.type,
+        isText: fileData.isText
+      };
 
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-    return data;
+      // Write content to file
+      if (fileData.isText) {
+        fs.writeFileSync(filePath, fileData.content, 'utf8');
+      } else {
+        // For binary files, write the buffer directly
+        fs.writeFileSync(filePath, fileData.content);
+      }
+
+      // Insert into MongoDB using async method
+      const insertedId = await Items.insertAsync(data);
+      if (!insertedId) {
+        throw new Error('Failed to insert item into MongoDB');
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Error in saveFile:', error);
+      throw new Meteor.Error('save-file-failed', error.message);
+    }
   },
 
   async saveNote(noteData) {
-    const timestamp = Date.now();
-    const noteId = `${timestamp}.json`;
-    const notePath = path.join(NOTES_DIR, noteId);
-    console.log('Saving note to:', notePath);
+    try {
+      const timestamp = Date.now();
+      const fileName = `${timestamp}-note.txt`;
+      const filePath = path.join(NOTES_DIR, fileName);
+      console.log('Saving note to:', filePath);
 
-    const data = {
-      id: noteId,
-      content: noteData.content,
-      language: noteData.language,
-      originalSize: noteData.originalSize,
-      createdAt: noteData.createdAt,
-      expiresAt: noteData.expiresAt,
-      type: 'note'
-    };
+      const data = {
+        id: fileName,
+        content: noteData.content,
+        fileName: 'note.txt',
+        language: noteData.language,
+        originalSize: noteData.originalSize,
+        createdAt: noteData.createdAt,
+        expiresAt: noteData.expiresAt,
+        type: noteData.type,
+        isText: true
+      };
 
-    fs.writeFileSync(notePath, JSON.stringify(data, null, 2));
-    return data;
+      // Write content to file
+      fs.writeFileSync(filePath, noteData.content, 'utf8');
+
+      // Insert into MongoDB using async method
+      const insertedId = await Items.insertAsync(data);
+      if (!insertedId) {
+        throw new Error('Failed to insert note into MongoDB');
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Error in saveNote:', error);
+      throw new Meteor.Error('save-note-failed', error.message);
+    }
   },
 
   async getAllItems() {
-    console.log('Loading items from:', DATA_DIR);
-    const items = [];
-
-    // Get files
-    if (fs.existsSync(FILES_DIR)) {
-      const files = fs.readdirSync(FILES_DIR);
-      console.log('Found files:', files);
-      for (const file of files) {
-        try {
-          const content = fs.readFileSync(path.join(FILES_DIR, file), 'utf8');
-          items.push(JSON.parse(content));
-        } catch (error) {
-          console.error(`Error reading file ${file}:`, error);
-        }
-      }
+    try {
+      return await Items.find({}, { sort: { createdAt: -1 } }).fetchAsync();
+    } catch (error) {
+      console.error('Error in getAllItems:', error);
+      throw new Meteor.Error('get-items-failed', error.message);
     }
-
-    // Get notes
-    if (fs.existsSync(NOTES_DIR)) {
-      const notes = fs.readdirSync(NOTES_DIR);
-      console.log('Found notes:', notes);
-      for (const note of notes) {
-        try {
-          const content = fs.readFileSync(path.join(NOTES_DIR, note), 'utf8');
-          items.push(JSON.parse(content));
-        } catch (error) {
-          console.error(`Error reading note ${note}:`, error);
-        }
-      }
-    }
-
-    return items;
   },
 
   async removeItem(itemId) {
-    console.log('Removing item:', itemId);
-    
-    // Get all items to find the one we want to delete
-    const items = await this.getAllItems();
-    const item = items.find(i => i._id === itemId || i.id === itemId);
-    
-    if (!item) {
-      console.error('Item not found:', itemId);
-      return false;
-    }
-    
-    // Determine the correct path based on item type
-    const itemPath = item.type === 'file' 
-      ? path.join(FILES_DIR, item.id)
-      : path.join(NOTES_DIR, item.id);
-    
-    if (fs.existsSync(itemPath)) {
-      console.log('Deleting item:', itemPath);
-      fs.unlinkSync(itemPath);
+    try {
+      // Find the item first using async method
+      const item = await Items.findOneAsync({ id: itemId });
+      if (!item) {
+        throw new Meteor.Error('not-found', 'Item not found');
+      }
+
+      // Remove from filesystem
+      const filePath = path.join(item.type === 'note' ? NOTES_DIR : FILES_DIR, item.id);
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
+
+      // Remove from MongoDB using async method
+      const removed = await Items.removeAsync({ id: itemId });
+      if (!removed) {
+        throw new Error('Failed to remove item from MongoDB');
+      }
+
       return true;
+    } catch (error) {
+      console.error('Error in removeItem:', error);
+      throw new Meteor.Error('remove-item-failed', error.message);
     }
-    
-    console.error('Item file not found:', itemPath);
-    return false;
   },
 
   async cleanExpired() {
-    console.log('Cleaning expired items');
-    const now = new Date();
-    const items = await this.getAllItems();
-    
-    for (const item of items) {
-      if (new Date(item.expiresAt) < now) {
-        await this.removeItem(item.id);
+    try {
+      const now = new Date();
+      
+      // Find expired items using async method
+      const expiredItems = await Items.find({
+        expiresAt: { $lt: now }
+      }).fetchAsync();
+
+      // Remove each expired item
+      let removedCount = 0;
+      for (const item of expiredItems) {
+        const filePath = path.join(item.type === 'note' ? NOTES_DIR : FILES_DIR, item.id);
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath);
+        }
+        await Items.removeAsync({ id: item.id });
+        removedCount++;
       }
+
+      return removedCount;
+    } catch (error) {
+      console.error('Error in cleanExpired:', error);
+      throw new Meteor.Error('clean-expired-failed', error.message);
     }
   }
 };

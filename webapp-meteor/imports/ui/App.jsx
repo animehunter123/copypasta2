@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useTracker } from 'meteor/react-meteor-data';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';
 import 'highlight.js/styles/github-dark.css';
+import { Items } from '../api/collections';
 
 // Constants
 const EXPIRATION_DAYS = 14;
@@ -17,29 +19,18 @@ export const App = () => {
   const [filter, setFilter] = useState('all');
   const [previewLanguage, setPreviewLanguage] = useState('text');
   const [previewContent, setPreviewContent] = useState('');
-  const [items, setItems] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [editingItem, setEditingItem] = useState(null);
   const [editContent, setEditContent] = useState('');
   const [toasts, setToasts] = useState([]);
 
-  // Load items
-  const loadItems = async () => {
-    try {
-      const allItems = await Meteor.callAsync('items.getAll');
-      setItems(allItems.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
-      setIsLoading(false);
-    } catch (error) {
-      console.error('Error loading items:', error);
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadItems();
-    // Reload items every minute
-    const interval = setInterval(loadItems, 60 * 1000);
-    return () => clearInterval(interval);
+  // Subscribe to items and get them reactively
+  const { items, isLoading } = useTracker(() => {
+    const handle = Meteor.subscribe('items');
+    
+    return {
+      items: Items.find({}, { sort: { createdAt: -1 } }).fetch(),
+      isLoading: !handle.ready()
+    };
   }, []);
 
   // Stats calculation
@@ -122,11 +113,8 @@ export const App = () => {
       let type = 'text/plain';
       
       if (!item.isText) {
-        content = atob(item.content); // Decode base64
-        const buffer = new Uint8Array(content.length);
-        for (let i = 0; i < content.length; i++) {
-          buffer[i] = content.charCodeAt(i);
-        }
+        // For binary files, create a Uint8Array directly from the content
+        const buffer = new Uint8Array(item.content);
         content = buffer;
         type = item.fileType;
       }
@@ -157,8 +145,7 @@ export const App = () => {
   // Delete content
   const handleDelete = async (item) => {
     try {
-      await Meteor.call('items.remove', item.id);
-      await loadItems();  // Reload items after successful deletion
+      await Meteor.callAsync('items.remove', item.id);
       showToast('Item deleted successfully');
     } catch (error) {
       showToast('Failed to delete item', 'error');
@@ -168,8 +155,7 @@ export const App = () => {
   // Delete all content
   const handleDeleteAll = async () => {
     try {
-      await Meteor.call('items.removeAll');
-      await loadItems();  // Reload items after deletion
+      await Meteor.callAsync('items.removeAll');
       showToast('All items deleted successfully');
     } catch (error) {
       showToast('Failed to delete all items', 'error');
@@ -178,24 +164,21 @@ export const App = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!contentInput.trim() && !fileInput) {
-      alert('Please provide either text content or a file');
-      return;
-    }
-
-    const now = new Date();
-    const expiresAt = new Date(now.getTime() + (EXPIRATION_DAYS * 24 * 60 * 60 * 1000));
-
+    
     try {
+      const now = new Date();
+      const expiresAt = new Date(now.getTime() + EXPIRATION_DAYS * 24 * 60 * 60 * 1000);
+
       if (fileInput) {
         const reader = new FileReader();
+        
         reader.onload = async (e) => {
           const content = e.target.result;
           const isText = fileInput.type.startsWith('text/') || 
                         ['application/json', 'application/javascript', 'application/xml'].includes(fileInput.type);
           
           const data = {
-            content: isText ? content : btoa(content), // Base64 encode binary files
+            content: isText ? content : new Uint8Array(content),
             fileName: fileInput.name,
             fileType: fileInput.type || 'application/octet-stream',
             language: isText ? detectLanguage(content) : 'binary',
@@ -214,7 +197,6 @@ export const App = () => {
           setModalOpen(false);
           setContentInput('');
           setFileInput(null);
-          loadItems(); // Reload items after insert
         };
         
         if (fileInput.type.startsWith('text/') || 
@@ -238,7 +220,6 @@ export const App = () => {
         setModalOpen(false);
         setContentInput('');
         setFileInput(null);
-        loadItems(); // Reload items after insert
       }
     } catch (error) {
       console.error('Error submitting:', error);
@@ -250,34 +231,15 @@ export const App = () => {
     if (!editingItem || !editContent.trim()) return;
 
     try {
-      const now = new Date();
       const data = {
+        id: editingItem.id,
         content: editContent,
-        language: detectLanguage(editContent),
-        originalSize: editContent.length,
-        createdAt: now,
-        expiresAt: new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000),
-        type: editingItem.type
+        language: detectLanguage(editContent)
       };
-
-      if (editingItem.type === 'file') {
-        data.fileName = editingItem.fileName;
-      }
-
-      // Remove the old item
-      await Meteor.callAsync('items.remove', editingItem.id);
-
-      // Save the updated item
-      if (editingItem.type === 'file') {
-        await Meteor.callAsync('files.insert', data);
-      } else {
-        await Meteor.callAsync('notes.insert', data);
-      }
-
+      await Meteor.callAsync('items.edit', data);
       setEditModalOpen(false);
       setEditingItem(null);
       setEditContent('');
-      loadItems();
     } catch (error) {
       console.error('Error saving edit:', error);
       alert('Error saving edit: ' + error.message);
@@ -341,7 +303,7 @@ export const App = () => {
             <span>{item.fileName || 'Note'}</span>
           </div>
           <div className="card-actions">
-            {(item.isText !== false) && (
+            {item.isText && (
               <button
                 className="card-btn copy"
                 onClick={() => handleCopy(item)}
@@ -350,7 +312,7 @@ export const App = () => {
                 <span className="material-symbols-rounded">content_copy</span>
               </button>
             )}
-            {(item.isText !== false) && (
+            {item.isText && (
               <button
                 className="card-btn edit"
                 onClick={() => handleEdit(item)}
