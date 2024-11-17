@@ -11,6 +11,6 @@ Just a todo cards webapp to emulate the copypasta, written in non-reactive Vanil
 
 # Todo
 * make a Dockerfile(uses ubuntu2404 with apt install nodejs/npm/meteorjs)/docker-compose.yaml
-* OPTIONAL: need to test if code is autodetected in textarea
+* OPTIONAL: need to test if code is autodetected in textarea > Monaco Editor Does this but its really hard.... man... ugh...
 
 * final step --- clean code and dockerize with docker-compose.yaml
