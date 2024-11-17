@@ -11,8 +11,6 @@ Just a todo cards webapp to emulate the copypasta, written in non-reactive Vanil
 
 # Todo
 * make a Dockerfile(uses ubuntu2404 with apt install nodejs/npm/meteorjs)/docker-compose.yaml
-* need to test if code is autodetected in textarea
-* low pri -- make the filename revert to the non uuid one
-* low pri -- i was lazy, and i need to Set up proper Meteor publications and subscriptions for real-time reactivity
+* OPTIONAL: need to test if code is autodetected in textarea
 
 * final step --- clean code and dockerize with docker-compose.yaml
