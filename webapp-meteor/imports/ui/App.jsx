@@ -906,13 +906,28 @@ export default function App() {
               </button>
             </div>
             
-            <div className="editor-container">
-              {editModalContent.content !== undefined && (
+            <div className="modal-content">
+              {editingItem?.type === 'file' ? (
+                <>
+                  <div className="editor-wrapper">
+                    <Editor
+                      height="400px"
+                      defaultLanguage={editingItem.language || 'plaintext'}
+                      value={String(editingItem.content || '')}
+                      theme={theme === 'dark' ? 'vs-dark' : 'light'}
+                      options={{
+                        readOnly: true,
+                        renderValidationDecorations: 'off',
+                      }}
+                    />
+                    <div className="editor-message">Cannot edit in read-only editor</div>
+                  </div>
+                </>
+              ) : (
                 <Editor
-                  height="100%"
-                  defaultLanguage={editModalContent.language}
-                  language={editModalContent.language}
-                  value={String(editModalContent.content)}
+                  height="400px"
+                  defaultLanguage={editingItem?.language || 'plaintext'}
+                  value={String(editModalContent?.content || '')}
                   theme={theme === 'dark' ? 'vs-dark' : 'light'}
                   onChange={(value) => setEditModalContent(prev => ({
                     ...prev,
@@ -935,7 +950,6 @@ export default function App() {
                     acceptSuggestionOnEnter: "on",
                     tabCompletion: "on",
                     contextmenu: true,
-                    padding: { top: 16, bottom: 16 },
                     scrollbar: {
                       useShadows: false,
                       verticalScrollbarSize: 10,
@@ -958,13 +972,36 @@ export default function App() {
               >
                 Cancel
               </button>
-              <button
-                type="button"
-                className="primary-btn"
-                onClick={handleSaveEdit}
-              >
-                Save Changes
-              </button>
+              {editingItem?.type === 'file' ? (
+                <button
+                  type="button"
+                  className="primary-btn"
+                  onClick={() => {
+                    const blob = new Blob([editingItem.content], { type: 'text/plain' });
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = editingItem.fileName || 'download.txt';
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                    setEditModalOpen(false);
+                  }}
+                >
+                  <span className="material-symbols-rounded">download</span>
+                  Download File
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="primary-btn"
+                  onClick={handleSaveEdit}
+                >
+                  <span className="material-symbols-rounded">save</span>
+                  Save Changes
+                </button>
+              )}
             </div>
           </div>
         </div>

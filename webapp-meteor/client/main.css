@@ -1429,3 +1429,31 @@ textarea:focus {
   color: var(--text-secondary);
   opacity: 0.8;
 }
+
+.editor-wrapper {
+  position: relative;
+}
+
+.editor-message {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: var(--surface);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  opacity: 0.8;
+}
+
+.modal-actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.modal-actions .btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
