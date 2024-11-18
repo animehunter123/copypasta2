@@ -12,6 +12,12 @@ Just a todo cards webapp to emulate the copypasta, written in non-reactive Vanil
 * Open a web browser to localhost:3000, and upload a file or a note, and it will save those to ./data/files or ./data/notes
 
 # Todo
+* Bug: If the filename is too long, it will be truncated (needs to be, example "SamplePhotoUploaded.png")
+* Bug: Thisprivuserimg rdme need to fix fixd
+* FR: Show remaining filesystem size in the "Total Size"
+
 * make a Dockerfile(uses ubuntu2404 with apt install nodejs/npm/meteorjs)/docker-compose.yaml
+
 * Would like the Monaco TextArea to be modern font looking, its kinda meh atm
+
 * OPTIONAL: Make the text area allow CONTROL + ENTER to save and close the card, and autofocus back on the new card button > this is still not working!
