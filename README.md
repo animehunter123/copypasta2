@@ -2,7 +2,7 @@
 
 Just a todo cards webapp to emulate the copypasta, written in non-reactive VanillaJS, and also in reactive MeteorJS (with Monaco Code Editor).
 
-<img width="964" alt="Sample of MeteorJS CopyPasta" src="https://private-user-images.githubusercontent.com/42163211/386965137-224f056d-1f04-46e5-b10e-5fa168d624ac.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MzE4NTI2MDEsIm5iZiI6MTczMTg1MjMwMSwicGF0aCI6Ii80MjE2MzIxMS8zODY5NjUxMzctMjI0ZjA1NmQtMWYwNC00NmU1LWIxMGUtNWZhMTY4ZDYyNGFjLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDExMTclMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQxMTE3VDE0MDUwMVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTNmNDRiZDRiZTFlYzY4NDU4MzFiZjQ5ZWI0OWQwMDkzYzU4YjAxZWI3ZGJlYjZkNmQ1MzY5ZTU0NmRhODJjZmUmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.uz4BOq7ztphccmnjpz-JpM8oXDd-9BrxZ1pfSvrRAlE">
+<img width="964" alt="Sample of MeteorJS CopyPasta" src="https://github-production-user-asset-6210df.s3.amazonaws.com/42163211/387186855-9c5f0701-3cfc-4a43-aab0-0fb6129e9db8.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20241118%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20241118T110036Z&X-Amz-Expires=300&X-Amz-Signature=0548424ff937afc095d5468f6c5970604f8c9658eb0e318fe6527b78fba889cd&X-Amz-SignedHeaders=host">
 
 # How to run...
 
