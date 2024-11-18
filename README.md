@@ -11,6 +11,4 @@ Just a example todo cards webapp to emulate the copypasta, written in non-reacti
 
 # Todo
 * REQ: make a Dockerfile(uses ubuntu2404 with apt install nodejs/npm/meteorjs)/docker-compose.yaml
-* FR: Show remaining filesystem size in the "Total Size"
 * FR: Make the Monaco TextArea to be modern font looking, its kinda meh atm, nerdfont fira would be cool
-* FR: Make the text area allow CONTROL + ENTER to save and close the card, and autofocus back on the new card button > this is still not working!

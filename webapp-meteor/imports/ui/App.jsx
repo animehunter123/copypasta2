@@ -491,16 +491,60 @@ export default function App() {
     return 'plaintext';
   };
 
-  const handleEditorDidMount = (editor, monaco) => {
+  const handleEditorMount = (editor, monaco) => {
     editorRef.current = editor;
+    // Restore autofocus
     editor.focus();
     
-    // Add keyboard shortcuts
+    // Add command for Ctrl+Enter
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
-      if (editModalOpen) {
-        handleSaveEdit();
+      if (editModalOpen && editingItem) {
+        // For edit modal
+        const updatedContent = editor.getValue();
+        Meteor.call('items.edit', {
+          id: editingItem.id,
+          content: updatedContent,
+          language: detectLanguage(updatedContent)
+        }, (error) => {
+          if (error) {
+            console.error('Error updating item:', error);
+          } else {
+            setEditModalOpen(false);
+            setEditingItem(null);
+            // Focus back on new card button
+            if (newItemButtonRef.current) {
+              newItemButtonRef.current.focus();
+            }
+          }
+        });
       } else {
-        handleSubmit();
+        // For new card modal
+        const content = editor.getValue();
+        if (!content.trim()) return;
+        
+        const now = new Date();
+        const expiresAt = new Date();
+        expiresAt.setDate(now.getDate() + 14); // 14 days expiration
+
+        Meteor.call('notes.insert', {
+          content: content,
+          language: detectLanguage(content),
+          originalSize: new TextEncoder().encode(content).length,
+          createdAt: now,
+          expiresAt: expiresAt,
+          type: 'note'
+        }, (error) => {
+          if (error) {
+            console.error('Error inserting note:', error);
+          } else {
+            setModalOpen(false);
+            setContentInput('');
+            // Focus back on new card button
+            if (newItemButtonRef.current) {
+              newItemButtonRef.current.focus();
+            }
+          }
+        });
       }
     });
   };
@@ -796,7 +840,7 @@ export default function App() {
                   value={contentInput}
                   theme={theme === 'dark' ? 'vs-dark' : 'light'}
                   onChange={handleEditorChange}
-                  onMount={handleEditorDidMount}
+                  onMount={handleEditorMount}
                   options={{
                     minimap: { enabled: false },
                     fontSize: 14,
@@ -875,7 +919,7 @@ export default function App() {
                     content: value,
                     language: detectLanguage(value)
                   }))}
-                  onMount={handleEditorDidMount}
+                  onMount={handleEditorMount}
                   options={{
                     minimap: { enabled: false },
                     fontSize: 14,
