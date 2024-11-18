@@ -1391,3 +1391,17 @@ textarea:focus {
   letter-spacing: 0.5px;
   margin-left: 8px;
 }
+
+/* Modal hint text */
+.modal-hint {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+  font-style: italic;
+}
+
+/* Dark theme support */
+[data-theme="dark"] .modal-hint {
+  color: var(--text-secondary);
+  opacity: 0.8;
+}

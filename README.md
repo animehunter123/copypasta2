@@ -10,7 +10,6 @@ Just a example todo cards webapp to emulate the copypasta, written in non-reacti
 * Open a web browser to localhost:3000, and upload a file or a note, and it will save those to ./data/files or ./data/notes
 
 # Todo
-* FR: Make both modals mention that PRESSING F1 will open the command palette of MONACO `(like in vscode)`.
 * REQ: make a Dockerfile(uses ubuntu2404 with apt install nodejs/npm/meteorjs)/docker-compose.yaml
 * FR: Show remaining filesystem size in the "Total Size"
 * FR: Make the Monaco TextArea to be modern font looking, its kinda meh atm, nerdfont fira would be cool
