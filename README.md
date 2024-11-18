@@ -14,4 +14,3 @@ As a bonus, the code editor allows pressing "F1" in the browser for a Command Pa
 # Todo
 * REQ: make a Dockerfile(uses ubuntu2404 with apt install nodejs/npm/meteorjs)/docker-compose.yaml
 * FR: Make the Monaco TextArea to be modern font looking, its kinda meh atm, nerdfont fira would be cool
-* BUG: Is my server app using too much CPU? Not sure...
