@@ -791,7 +791,14 @@ export default function App() {
       )}
 
       {editModalOpen && (
-        <div className="modal-overlay" onClick={handleClickOutside}>
+        <div className="modal-overlay" onClick={(e) => {
+          // Only close if clicking the overlay itself, not the modal content
+          if (e.target === e.currentTarget) {
+            setEditModalOpen(false);
+            setEditingItem(null);
+            setEditModalContent({ content: '', language: 'plaintext' });
+          }
+        }}>
           <div className="modal edit-modal" ref={editModalRef}>
             <div className="modal-header">
               <div className="modal-title">
