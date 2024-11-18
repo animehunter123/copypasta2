@@ -147,5 +147,32 @@ Meteor.methods({
       console.error('Error in items.cleanExpired:', error);
       throw new Meteor.Error('clean-expired-failed', error.message);
     }
+  },
+
+  'system.getDiskSpace'() {
+    if (!Meteor.isServer) return;
+    
+    try {
+      const fs = require('fs');
+      const path = require('path');
+      // Go up one directory from PWD to get to the project root where data directory is
+      const projectRoot = path.resolve(process.env.PWD, '..');
+      const dataPath = path.join(projectRoot, 'data');
+      
+      // Create data directory if it doesn't exist
+      if (!fs.existsSync(dataPath)) {
+        fs.mkdirSync(dataPath, { recursive: true });
+      }
+      
+      const stats = fs.statfsSync(dataPath);
+      return {
+        total: stats.blocks * stats.bsize,
+        free: stats.bfree * stats.bsize,
+        available: stats.bavail * stats.bsize
+      };
+    } catch (error) {
+      console.error('Error getting disk space:', error);
+      throw new Meteor.Error('disk-space-failed', error.message);
+    }
   }
 });

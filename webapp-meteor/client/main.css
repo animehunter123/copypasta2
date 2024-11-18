@@ -976,6 +976,30 @@ body {
   color: var(--error-600);
 }
 
+.disk-space {
+  opacity: 0.8;
+  font-size: 0.9em;
+  color: var(--text-secondary);
+}
+
+[data-theme="dark"] .disk-space {
+  color: var(--text-secondary);
+}
+
+.stats {
+  display: flex;
+  gap: 1rem;
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.stats .expired {
+  color: var(--error);
+}
+
 /* Modal */
 .modal-overlay {
   position: fixed;

@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTracker } from 'meteor/react-meteor-data';
+import { Meteor } from 'meteor/meteor';
+import { ReactiveVar } from 'meteor/reactive-var';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';
 import 'highlight.js/styles/github-dark.css';
@@ -9,6 +11,9 @@ import Editor from "@monaco-editor/react";
 // Constants
 const EXPIRATION_DAYS = 14;
 const MAX_PREVIEW_LENGTH = 500;
+
+// Create a reactive variable for disk space
+const diskSpaceVar = new ReactiveVar(null);
 
 export default function App() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -42,10 +47,33 @@ export default function App() {
   }, []);
 
   // Stats calculation
-  const stats = {
-    files: items.filter(item => item.type === 'file').length,
-    notes: items.filter(item => item.type === 'note').length,
-    totalSize: items.reduce((acc, item) => acc + (item.originalSize || 0), 0)
+  const stats = useTracker(() => {
+    const totalSize = Items.find({}).fetch().reduce((acc, item) => acc + (item.originalSize || 0), 0);
+    const totalItems = Items.find({}).count();
+    const expiredItems = Items.find({ expiresAt: { $lt: new Date() } }).count();
+
+    // Get disk space info
+    Meteor.call('system.getDiskSpace', (err, result) => {
+      if (!err && result) {
+        diskSpaceVar.set(result);
+      }
+    });
+
+    const diskSpace = diskSpaceVar.get();
+    
+    return {
+      totalSize,
+      totalItems,
+      expiredItems,
+      diskSpace
+    };
+  }, []);
+
+  const formatBytes = (bytes) => {
+    if (!bytes) return '0 B';
+    const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(1024));
+    return `${(bytes / Math.pow(1024, i)).toFixed(1)} ${sizes[i]}`;
   };
 
   useEffect(() => {
@@ -680,7 +708,12 @@ export default function App() {
             </div>
           </div>
           <span className="size-badge">
-            Total Size: {formatSize(items.reduce((acc, item) => acc + item.originalSize, 0))}
+            Total Size: {formatBytes(stats.totalSize)}
+            {stats.diskSpace && 
+              <span className="disk-space">
+                {` / ${formatBytes(stats.diskSpace.total)}`}
+              </span>
+            }
           </span>
         </div>
 
@@ -900,6 +933,21 @@ export default function App() {
           if (filter === 'notes') return item.type === 'note';
           return true;
         }).map(renderCard)}
+      </div>
+      <div className="stats">
+        <span>Total Size: {formatBytes(stats.totalSize)}
+          {stats.diskSpace && 
+            <span className="disk-space">
+              {` / ${formatBytes(stats.diskSpace.total)}`}
+            </span>
+          }
+        </span>
+        <span>Items: {stats.totalItems}</span>
+        {stats.expiredItems > 0 && (
+          <span className="expired">
+            Expired: {stats.expiredItems}
+          </span>
+        )}
       </div>
     </div>
   );
