@@ -119,6 +119,12 @@
   --text-color-secondary: #9ca3af;
   --border-color: #374151;
 
+  /* Hide file-info and file-type borders in dark mode */
+  .file-info, .file-type {
+    border-color: transparent;
+    background: transparent;
+  }
+
   /* Card styles in dark mode */
   .content-card {
     background: var(--card-bg);
@@ -899,15 +905,21 @@ body {
   margin-top: 0.5rem;
   font-size: 0.875rem;
   color: var(--text-color-secondary);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 0.25rem 0.5rem;
 }
 
 .file-type {
   display: inline-block;
   padding: 0.25rem 0.5rem;
-  background-color: var(--surface-hover);
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
   border-radius: var(--radius);
   font-family: var(--font-mono);
   font-size: 0.75rem;
+  color: var(--text-color-secondary);
 }
 
 .card-footer {
