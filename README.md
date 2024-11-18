@@ -7,8 +7,8 @@ As a bonus, the code editor allows pressing "F1" in the browser for a Command Pa
 
 # How to run...
 * Use a Linux Container or Host.
-* Install nodejs, npm, meteorjs
-* Launch the shell script ./start-webapp.sh `(Make sure you know what this BASH script is doing!!!)`
+* Install nodejs, npm, meteorjs, `and netstat (if using the bash script).`
+* Launch the shell script ./start-webapp.sh `(Make sure you know what this BASH script is doing!!!).`
 * Open a web browser to localhost:3000, and upload a file or a note, and it will save those to ./data/files or ./data/notes
 
 # Todo

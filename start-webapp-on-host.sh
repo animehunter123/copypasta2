@@ -27,15 +27,15 @@ cd "$SCRIPT_DIR/webapp-meteor"
 
 # Ensure that node_modules exists(assuming its valid!), if not installs and creates the directory
 if [ ! -d "./node_modules" ]; then
-    echo "Installing node_modules"
+    echo "Installing node_modules..."
     npm install
 fi
 
 # Inform the user which port the web application is running on
-echo "Web application will soon run on port 3000"
+echo "Web application will soon run on port 3000..."
 
 # Kill any older MeteorJS processes running on port 3000
-echo "Killing any older MeteorJS processes on port 3000"
+echo "Killing any older MeteorJS processes on port 3000..."
 netstat -tulnap 2>/dev/null | grep 3000 | grep -i LISTEN | sed 's/.*LISTEN \+//' | sed 's/\/node.*//' | xargs kill -9 2>/dev/null 1>/dev/null
 
 # Export data directory path and start Meteor
