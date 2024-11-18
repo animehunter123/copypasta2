@@ -500,6 +500,17 @@ export default function App() {
     setEditModalOpen(true);
   };
 
+  const handleNavigate = (item) => {
+    if (!item || !item.content) return;
+    
+    let url = item.content.trim();
+    // Add https:// if no protocol is specified
+    if (!url.match(/^https?:\/\//i)) {
+      url = 'https://' + url;
+    }
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
   const renderCard = (item) => {
     const daysRemaining = getDaysRemaining(item.expiresAt);
     const isExpiring = daysRemaining <= 3;
@@ -529,7 +540,7 @@ export default function App() {
             {item.type === 'note' && (
               <button
                 className="card-btn navigate"
-                onClick={() => handleNavigate(item.content)}
+                onClick={() => handleNavigate(item)}
                 title="Navigate to URL"
               >
                 <span className="material-symbols-rounded">open_in_new</span>
