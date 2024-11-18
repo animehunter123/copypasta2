@@ -36,7 +36,7 @@ echo "Web application will soon run on port 3000"
 
 # Kill any older MeteorJS processes running on port 3000
 echo "Killing any older MeteorJS processes on port 3000"
-netstat -tulnap|grep 3000 | grep -i LISTEN | sed 's/.*LISTEN \+//' | sed 's/\/node.*//' | xargs kill -9 2>/dev/null 1>/dev/null
+netstat -tulnap 2>/dev/null | grep 3000 | grep -i LISTEN | sed 's/.*LISTEN \+//' | sed 's/\/node.*//' | xargs kill -9 2>/dev/null 1>/dev/null
 
 # Export data directory path and start Meteor
 export COPYPASTA_DATA_DIR="$SCRIPT_DIR/data"
