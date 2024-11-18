@@ -271,7 +271,10 @@ export default function App() {
           };
           
           if (fileInput.size > 50 * 1024 * 1024) { // 50MB limit
-            throw new Error('File size must be under 50MB');
+            alert('File size must be under 50MB');
+            event.target.value = ''; // Reset file input
+            setFileInput(null);
+            return;
           }
           
           await Meteor.callAsync('files.insert', data);
@@ -820,7 +823,21 @@ export default function App() {
                 <label className="upload-label">
                   <input
                     type="file"
-                    onChange={(e) => setFileInput(e.target.files[0])}
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (!file) return;
+
+                      // 50MB size limit
+                      const MAX_FILE_SIZE = 50 * 1024 * 1024;
+                      
+                      if (file.size > MAX_FILE_SIZE) {
+                        alert('File size must be under 50MB');
+                        e.target.value = ''; // Reset file input
+                        setFileInput(null);
+                        return;
+                      }
+                      setFileInput(file);
+                    }}
                     accept="*"
                   />
                   <span className="material-symbols-rounded">upload_file</span>
