@@ -572,8 +572,7 @@ export default function App() {
         {item.type === 'file' ? (
           <div className="card-content file-content">
             <div className="filename">
-              <span className="material-symbols-rounded">description</span>
-              {truncateFileName(item.fileName)}
+              {item.fileName}
               <div className="file-info">
                 <span className="file-type">{item.fileType}</span>
               </div>

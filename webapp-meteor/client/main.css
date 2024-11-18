@@ -879,41 +879,35 @@ body {
   flex: 1;
   overflow: hidden;
   margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .card-content.file-content {
-  padding: 1rem;
-  background: var(--textarea-bg);
-  border: 1px solid var(--textarea-border);
-  border-radius: var(--radius-sm);
+  padding: 0;
+  background: none;
+  border: none;
 }
 
 .card-content.file-content .filename {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--text-color);
   font-size: 0.875rem;
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
 }
 
-.card-content.file-content .filename .material-symbols-rounded {
-  font-size: 1.25rem;
+.file-info {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
   color: var(--text-color-secondary);
 }
 
-.card-content pre {
-  margin: 0;
-  padding: 1rem;
-  border-radius: var(--radius-sm);
-  background: var(--textarea-bg);
-  color: var(--textarea-text);
-  border: 1px solid var(--textarea-border);
-  overflow-x: auto;
-  font-size: 0.875rem;
-}
-
-.card-content pre code {
-  color: var(--textarea-text);
+.file-type {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  background-color: var(--surface-hover);
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
 }
 
 .card-footer {
@@ -968,21 +962,6 @@ body {
 
 .expiring .card-footer {
   color: var(--error-600);
-}
-
-.file-info {
-  margin-top: 0.5rem;
-  font-size: 0.875rem;
-  color: var(--text-color-secondary);
-}
-
-.file-type {
-  display: inline-block;
-  padding: 0.25rem 0.5rem;
-  background-color: var(--surface-hover);
-  border-radius: var(--radius);
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
 }
 
 /* Modal */
