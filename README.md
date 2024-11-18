@@ -1,23 +1,17 @@
 # Description
-
-Just a todo cards webapp to emulate the copypasta, written in non-reactive VanillaJS, and also in reactive MeteorJS (with Monaco Code Editor).
+Just a example todo cards webapp to emulate the copypasta, written in non-reactive VanillaJS, and also in reactive MeteorJS (with Monaco Code Editor, which was added to package.json via `meteor npm install @monaco-editor/react`).
 
 <img width="964" alt="Sample of MeteorJS CopyPasta" src="https://github-production-user-asset-6210df.s3.amazonaws.com/42163211/387186855-9c5f0701-3cfc-4a43-aab0-0fb6129e9db8.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20241118%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20241118T110036Z&X-Amz-Expires=300&X-Amz-Signature=0548424ff937afc095d5468f6c5970604f8c9658eb0e318fe6527b78fba889cd&X-Amz-SignedHeaders=host">
 
 # How to run...
-
 * Use a Linux Container or Host.
 * Install nodejs, npm, meteorjs
-* Launch the shell script ./start-webapp.sh (Make sure you know what you are doing)
+* Launch the shell script ./start-webapp.sh `(Make sure you know what this BASH script is doing!!!)`
 * Open a web browser to localhost:3000, and upload a file or a note, and it will save those to ./data/files or ./data/notes
 
 # Todo
-* Bug: If the filename is too long, it will be truncated (needs to be, example "SamplePhotoUploaded.png")
-* Bug: Thisprivuserimg rdme need to fix fixd
+* FR: Make both modals mention that PRESSING F1 will open the command palette of MONACO `(like in vscode)`.
+* REQ: make a Dockerfile(uses ubuntu2404 with apt install nodejs/npm/meteorjs)/docker-compose.yaml
 * FR: Show remaining filesystem size in the "Total Size"
-
-* make a Dockerfile(uses ubuntu2404 with apt install nodejs/npm/meteorjs)/docker-compose.yaml
-
-* Would like the Monaco TextArea to be modern font looking, its kinda meh atm
-
-* OPTIONAL: Make the text area allow CONTROL + ENTER to save and close the card, and autofocus back on the new card button > this is still not working!
+* FR: Make the Monaco TextArea to be modern font looking, its kinda meh atm, nerdfont fira would be cool
+* FR: Make the text area allow CONTROL + ENTER to save and close the card, and autofocus back on the new card button > this is still not working!
