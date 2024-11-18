@@ -834,6 +834,7 @@ body {
   align-items: flex-start;
   margin-bottom: 1rem;
   gap: 1rem;
+  width: 100%;
 }
 
 .card-type {
@@ -841,18 +842,22 @@ body {
   align-items: center;
   gap: 0.5rem;
   color: var(--text-color);
+  max-width: calc(100% - 100px); /* Reserve space for buttons */
+  overflow: hidden;
 }
 
-.card-type .material-symbols-rounded {
-  color: var(--primary-500);
+.card-type span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .card-actions {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
+  align-items: center;
   gap: 0.5rem;
-  padding: 1rem;
-  border-top: 1px solid var(--gray-200);
+  padding: 0;
+  flex-wrap: nowrap;
 }
 
 .card-btn {

@@ -523,7 +523,7 @@ export default function App() {
             <span className="material-symbols-rounded">
               {item.type === 'file' ? 'description' : 'note'}
             </span>
-            <span>{item.fileName || 'Note'}</span>
+            <span title={item.fileName || 'Note'}>{truncateFileName(item.fileName) || 'Note'}</span>
           </div>
           <div className="card-actions">
             {item.type === 'note' && (
@@ -573,7 +573,7 @@ export default function App() {
           <div className="card-content file-content">
             <div className="filename">
               <span className="material-symbols-rounded">description</span>
-              {item.fileName}
+              {truncateFileName(item.fileName)}
               <div className="file-info">
                 <span className="file-type">{item.fileType}</span>
               </div>
@@ -606,6 +606,17 @@ export default function App() {
         </div>
       </div>
     );
+  };
+
+  // Truncate filename if it's too long
+  const truncateFileName = (fileName, maxLength = 25) => {
+    if (!fileName || fileName.length <= maxLength) return fileName;
+    
+    const extension = fileName.includes('.') ? fileName.split('.').pop() : '';
+    const nameWithoutExt = fileName.includes('.') ? fileName.slice(0, fileName.lastIndexOf('.')) : fileName;
+    
+    const truncatedName = nameWithoutExt.slice(0, maxLength - extension.length - 3) + '...';
+    return extension ? `${truncatedName}.${extension}` : truncatedName;
   };
 
   // Handle click outside modal
