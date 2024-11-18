@@ -791,26 +791,20 @@ export default function App() {
       )}
 
       {editModalOpen && (
-        <div className="modal-overlay" onClick={(e) => handleClickOutside(e, editModalRef, () => {
-          setEditModalOpen(false);
-          setEditingItem(null);
-          setEditModalContent({ content: '', language: 'plaintext' });
-        })}>
+        <div className="modal-overlay" onClick={handleClickOutside}>
           <div className="modal edit-modal" ref={editModalRef}>
             <div className="modal-header">
               <div className="modal-title">
-                <h2>Edit Content</h2>
-                {editModalContent.language !== 'plaintext' && (
-                  <span className="language-badge">
-                    {editModalContent.language.toUpperCase()}
-                  </span>
-                )}
+                <span className="material-symbols-rounded">
+                  {editingItem?.type === 'file' ? 'description' : 'edit_note'}
+                </span>
+                <h2>Edit {editingItem?.type === 'file' ? 'File' : 'Note'}</h2>
               </div>
-              <button className="close-btn" onClick={() => {
-                setEditModalOpen(false);
-                setEditingItem(null);
-                setEditModalContent({ content: '', language: 'plaintext' });
-              }}>
+              <button 
+                className="close-button"
+                onClick={() => setEditModalOpen(false)}
+                title="Close"
+              >
                 <span className="material-symbols-rounded">close</span>
               </button>
             </div>

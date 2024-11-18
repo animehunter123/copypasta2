@@ -1159,9 +1159,9 @@ textarea:focus {
 }
 
 .close-button {
-  background: none;
-  border: none;
-  color: var(--text-color-secondary);
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid var(--error-100);
+  color: var(--error-500);
   cursor: pointer;
   padding: 0.5rem;
   display: flex;
@@ -1169,11 +1169,18 @@ textarea:focus {
   justify-content: center;
   border-radius: var(--radius);
   transition: all 0.2s;
+  width: 32px;
+  height: 32px;
 }
 
 .close-button:hover {
-  background: var(--surface-hover);
-  color: var(--text-color);
+  background: rgba(239, 68, 68, 0.25);
+  border-color: var(--error-200);
+  color: var(--error-600);
+}
+
+.close-button .material-symbols-rounded {
+  font-size: 1.25rem;
 }
 
 /* Toast notifications */
