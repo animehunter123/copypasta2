@@ -828,7 +828,7 @@ export default function App() {
           <div className="modal" ref={modalRef}>
             <div className="modal-header">
               <h2>Add Content</h2>
-              <div className="modal-hint">Press F1 to Open Command Palette</div>
+              <div className="modal-hint">F1 to Open Command Palette, and Ctrl+Enter to Save</div>
               <button className="close-button" onClick={handleModalClose}>
                 <span className="material-symbols-rounded">close</span>
               </button>
@@ -956,7 +956,7 @@ export default function App() {
                 </span>
                 <h2>Edit {editingItem?.type === 'file' ? 'File' : 'Note'}</h2>
               </div>
-              <div className="modal-hint">Press F1 to Open Command Palette</div>
+              <div className="modal-hint">F1 to Open Command Palette, and Ctrl+Enter to Save</div>
               <button 
                 className="close-button"
                 onClick={() => setEditModalOpen(false)}
