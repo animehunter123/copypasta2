@@ -12,6 +12,7 @@ As a bonus, the code editor allows pressing "F1" in the browser for a Command Pa
 * Open a web browser to localhost:3000, and upload a file or a note, and it will save those to ./data/files or ./data/notes
 
 # Todo
+* BUG: CAN NO LONGER EDIT A TEXTCARD, (VERIFY THIS WITH A RESET COMMAND JUST INCASE IT IS A ISSUE WITH THE ./data JSON'ified stuff)
 * FR: Test the navbar, when the width is too small, the stats should be stacked vertically
 * FR: Make the Monaco TextArea to be modern font looking, its kinda meh atm, nerdfont fira would be cool
 * TST: Do a test to ensure 14 day'eth old'eth card got deleted'eth!
