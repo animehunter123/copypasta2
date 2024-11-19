@@ -704,10 +704,20 @@ export default function App() {
     return extension ? `${truncatedName}.${extension}` : truncatedName;
   };
 
+  // Handle modal close
+  const handleModalClose = () => {
+    setModalOpen(false);
+    setContentInput('');
+    setFileInput(null);
+    if (editorRef.current) {
+      editorRef.current.setValue('');
+    }
+  };
+
   // Handle click outside modal
   const handleClickOutside = (event, modalRef, closeModal) => {
     if (modalRef.current && !modalRef.current.contains(event.target)) {
-      closeModal();
+      handleModalClose();
       // Return focus to New Item button
       if (newItemButtonRef.current) {
         newItemButtonRef.current.focus();
@@ -809,12 +819,12 @@ export default function App() {
       </div>
 
       {modalOpen && (
-        <div className="modal-overlay" onClick={(e) => handleClickOutside(e, modalRef, () => setModalOpen(false))}>
+        <div className="modal-overlay" onClick={(e) => handleClickOutside(e, modalRef, () => handleModalClose())}>
           <div className="modal" ref={modalRef}>
             <div className="modal-header">
               <h2>Add Content</h2>
               <div className="modal-hint">Press F1 to Open Command Palette</div>
-              <button className="close-button" onClick={() => setModalOpen(false)}>
+              <button className="close-button" onClick={handleModalClose}>
                 <span className="material-symbols-rounded">close</span>
               </button>
             </div>
@@ -883,7 +893,7 @@ export default function App() {
               </div>
 
               <div className="modal-footer">
-                <button type="button" className="secondary-btn" onClick={() => setModalOpen(false)}>
+                <button type="button" className="secondary-btn" onClick={handleModalClose}>
                   Cancel
                 </button>
                 <button type="submit" className="primary-btn" disabled={!contentInput.trim() && !fileInput}>
