@@ -38,6 +38,10 @@ echo "Web application will soon run on port 3000..."
 echo "Killing any older MeteorJS processes on port 3000 (via netstat command)..."
 netstat -tulnap 2>/dev/null | grep 3000 | grep -i LISTEN | sed 's/.*LISTEN \+//' | sed 's/\/node.*//' | xargs kill -9 2>/dev/null 1>/dev/null
 
+# Its a good idea to ensure that the .node_modules and .meteor are updated, so if you need to fetch the dependencies, uncomment the below...
+# npm install # This populates the ./node_modules directory
+# meteor npm install # This populates the ./node_modules directory and also the .meteor/local directory (I think?)
+
 # Export data directory path and start Meteor
 export COPYPASTA_DATA_DIR="$SCRIPT_DIR/data"
 echo "PWD directory: $PWD"
