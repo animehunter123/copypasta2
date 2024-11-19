@@ -41,6 +41,9 @@ Meteor.methods({
 // Ensure items have an order field when inserted
 const originalInsert = Items.insert;
 Items.insert = function(doc) {
+  // Add createdAt timestamp for newest-first sorting
+  doc.createdAt = new Date();
+  
   // Get the lowest order value and subtract 1 to add at top
   const lowestOrder = Items.findOne({}, { sort: { order: 1 } })?.order ?? 1;
   doc.order = lowestOrder - 1;

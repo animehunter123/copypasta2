@@ -24,6 +24,7 @@ export default function App() {
   const [editModalContent, setEditModalContent] = useState({ content: '', language: 'plaintext' });
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark');
   const [filter, setFilter] = useState('all');
+  const [sortByNewest, setSortByNewest] = useState(true);
   const [previewLanguage, setPreviewLanguage] = useState('text');
   const [previewContent, setPreviewContent] = useState('');
   const [editingItem, setEditingItem] = useState(null);
@@ -44,14 +45,18 @@ export default function App() {
     const handle = Meteor.subscribe('items');
     
     return {
-      items: Items.find({}, { sort: { order: 1 } }).fetch(),
+      items: Items.find({}, { 
+        sort: sortByNewest ? { createdAt: -1 } : { order: 1 } 
+      }).fetch(),
       isLoading: !handle.ready()
     };
-  }, []);
+  }, [sortByNewest]);
 
   const itemsWithOrder = useTracker(() => {
-    return Items.find({}, { sort: { order: 1 } }).fetch();
-  });
+    return Items.find({}, { 
+      sort: sortByNewest ? { createdAt: -1 } : { order: 1 } 
+    }).fetch();
+  }, [sortByNewest]);
 
   // Stats calculation
   const stats = useTracker(() => {
@@ -839,6 +844,18 @@ export default function App() {
           >
             <span className="material-symbols-rounded">
               {theme === 'dark' ? 'light_mode' : 'dark_mode'}
+            </span>
+          </button>
+          <button
+            className="btn btn-link"
+            onClick={() => setSortByNewest(!sortByNewest)}
+            title={sortByNewest ? "Currently: Newest First" : "Currently: Custom Order"}
+          >
+            <span className="material-symbols-rounded">
+              {sortByNewest ? "sort" : "sort_by_alpha"}
+            </span>
+            <span className="btn-text">
+              {sortByNewest ? "Newest First" : "Custom Order"}
             </span>
           </button>
           <button
