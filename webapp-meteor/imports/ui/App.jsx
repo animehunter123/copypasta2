@@ -44,7 +44,7 @@ export default function App() {
     const handle = Meteor.subscribe('items');
     
     return {
-      items: Items.find({}, { sort: { createdAt: -1 } }).fetch(),
+      items: Items.find({}, { sort: { order: 1 } }).fetch(),
       isLoading: !handle.ready()
     };
   }, []);

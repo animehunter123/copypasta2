@@ -41,8 +41,8 @@ Meteor.methods({
 // Ensure items have an order field when inserted
 const originalInsert = Items.insert;
 Items.insert = function(doc) {
-  // Get the highest order value
-  const highestOrder = Items.findOne({}, { sort: { order: -1 } })?.order ?? -1;
-  doc.order = highestOrder + 1;
+  // Get the lowest order value and subtract 1 to add at top
+  const lowestOrder = Items.findOne({}, { sort: { order: 1 } })?.order ?? 1;
+  doc.order = lowestOrder - 1;
   return originalInsert.call(this, doc);
 };
