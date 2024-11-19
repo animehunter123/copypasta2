@@ -847,15 +847,12 @@ export default function App() {
             </span>
           </button>
           <button
-            className="btn btn-link"
+            className="btn-icon"
             onClick={() => setSortByNewest(!sortByNewest)}
             title={sortByNewest ? "Currently: Newest First" : "Currently: Custom Order"}
           >
             <span className="material-symbols-rounded">
               {sortByNewest ? "sort" : "sort_by_alpha"}
-            </span>
-            <span className="btn-text">
-              {sortByNewest ? "Newest First" : "Custom Order"}
             </span>
           </button>
           <button
