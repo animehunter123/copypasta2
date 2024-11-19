@@ -12,6 +12,7 @@ As a bonus, the code editor allows pressing "F1" in the browser for a Command Pa
 * Open a web browser to localhost:3000, and upload a file or a note, and it will save those to ./data/files or ./data/notes
 
 # Todo
+* BUG: Rmd needs gif fixed yet again
 * BUG: needs to flush text area after saving a modal
 * BUG: needs modal prompt to delete
 * REQ: make a Dockerfile(uses ubuntu2404 with apt install nodejs/npm/meteorjs)/docker-compose.yaml
