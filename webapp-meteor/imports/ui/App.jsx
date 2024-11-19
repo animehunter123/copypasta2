@@ -28,6 +28,7 @@ export default function App() {
   const [previewContent, setPreviewContent] = useState('');
   const [editingItem, setEditingItem] = useState(null);
   const [toasts, setToasts] = useState([]);
+  const [deleteConfirmation, setDeleteConfirmation] = useState({ isOpen: false, item: null });
 
   // Refs for focus management
   const newItemButtonRef = useRef(null);
@@ -224,10 +225,12 @@ export default function App() {
   };
 
   // Delete content
-  const handleDelete = async (item) => {
+  const handleDeleteConfirm = async () => {
     try {
+      const item = deleteConfirmation.item;
       await Meteor.callAsync('items.remove', item.id);
       showToast('Item deleted successfully');
+      setDeleteConfirmation({ isOpen: false, item: null });
     } catch (error) {
       showToast('Failed to delete item', 'error');
     }
@@ -526,8 +529,7 @@ export default function App() {
         if (!content.trim()) return;
         
         const now = new Date();
-        const expiresAt = new Date();
-        expiresAt.setDate(now.getDate() + 14); // 14 days expiration
+        const expiresAt = new Date(now.getTime() + EXPIRATION_DAYS * 24 * 60 * 60 * 1000);
 
         Meteor.call('notes.insert', {
           content: content,
@@ -648,8 +650,11 @@ export default function App() {
             </button>
             <button
               className="card-btn delete"
-              onClick={() => handleDelete(item)}
-              title="Delete content"
+              onClick={(e) => {
+                e.stopPropagation();
+                setDeleteConfirmation({ isOpen: true, item });
+              }}
+              title="Delete"
             >
               <span className="material-symbols-rounded">delete</span>
             </button>
@@ -902,6 +907,34 @@ export default function App() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {deleteConfirmation.isOpen && (
+        <div className="modal-overlay" onClick={(e) => handleClickOutside(e, modalRef, () => setDeleteConfirmation({ isOpen: false, item: null }))}>
+          <div className="modal" ref={modalRef}>
+            <div className="modal-header">
+              <h2>Confirm Delete</h2>
+              <button className="close-button" onClick={() => setDeleteConfirmation({ isOpen: false, item: null })}>
+                <span className="material-symbols-rounded">close</span>
+              </button>
+            </div>
+            <div className="modal-content">
+              <p>Are you sure you want to delete this {deleteConfirmation.item?.type || 'item'}?</p>
+              {deleteConfirmation.item?.fileName && (
+                <p className="filename"><strong>{deleteConfirmation.item.fileName}</strong></p>
+              )}
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="secondary-btn" onClick={() => setDeleteConfirmation({ isOpen: false, item: null })}>
+                Cancel
+              </button>
+              <button type="button" className="danger-btn" onClick={handleDeleteConfirm}>
+                <span className="material-symbols-rounded">delete</span>
+                Delete
+              </button>
+            </div>
           </div>
         </div>
       )}

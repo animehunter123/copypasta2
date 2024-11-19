@@ -12,7 +12,6 @@ As a bonus, the code editor allows pressing "F1" in the browser for a Command Pa
 * Open a web browser to localhost:3000, and upload a file or a note, and it will save those to ./data/files or ./data/notes
 
 # Todo
-* BUG: needs modal prompt to delete
 * FR: Make the Monaco TextArea to be modern font looking, its kinda meh atm, nerdfont fira would be cool
 * FR: Drag and Drop to re-order cards maybe.
 * TST: Do a test to ensure 14 day'eth old'eth card got deleted'eth!
