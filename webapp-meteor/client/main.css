@@ -769,6 +769,25 @@ body {
   opacity: 1;
 }
 
+/* Drag and drop styles */
+.content-card {
+  cursor: grab;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.content-card.dragging {
+  cursor: grabbing;
+  transform: scale(1.02);
+  box-shadow: var(--shadow-lg);
+  opacity: 0.9;
+  z-index: 1000;
+}
+
+.content-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .btn-text {

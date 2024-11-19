@@ -29,6 +29,8 @@ export default function App() {
   const [editingItem, setEditingItem] = useState(null);
   const [toasts, setToasts] = useState([]);
   const [deleteConfirmation, setDeleteConfirmation] = useState({ isOpen: false, item: null });
+  const [draggedItem, setDraggedItem] = useState(null);
+  const [dragOverItem, setDragOverItem] = useState(null);
 
   // Refs for focus management
   const newItemButtonRef = useRef(null);
@@ -46,6 +48,10 @@ export default function App() {
       isLoading: !handle.ready()
     };
   }, []);
+
+  const itemsWithOrder = useTracker(() => {
+    return Items.find({}, { sort: { order: 1 } }).fetch();
+  });
 
   // Stats calculation
   const stats = useTracker(() => {
@@ -228,7 +234,7 @@ export default function App() {
   const handleDeleteConfirm = async () => {
     try {
       const item = deleteConfirmation.item;
-      await Meteor.callAsync('items.remove', item.id);
+      await Meteor.callAsync('items.remove', item._id);
       showToast('Item deleted successfully');
       setDeleteConfirmation({ isOpen: false, item: null });
     } catch (error) {
@@ -319,7 +325,7 @@ export default function App() {
 
     try {
       const data = {
-        id: editingItem.id,
+        _id: editingItem._id,
         content: editModalContent.content,
         language: editModalContent.language
       };
@@ -508,7 +514,7 @@ export default function App() {
         // For edit modal
         const updatedContent = editor.getValue();
         Meteor.call('items.edit', {
-          id: editingItem.id,
+          _id: editingItem._id,
           content: updatedContent,
           language: detectLanguage(updatedContent)
         }, (error) => {
@@ -588,6 +594,40 @@ export default function App() {
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
+  const handleDragStart = (e, item) => {
+    setDraggedItem(item);
+    e.currentTarget.classList.add('dragging');
+  };
+
+  const handleDragEnd = async (e) => {
+    e.currentTarget.classList.remove('dragging');
+    if (draggedItem && dragOverItem && draggedItem._id !== dragOverItem._id) {
+      const itemIds = itemsWithOrder.map(item => item._id);
+      const fromIndex = itemIds.indexOf(draggedItem._id);
+      const toIndex = itemIds.indexOf(dragOverItem._id);
+      
+      // Reorder the array
+      const newOrder = [...itemIds];
+      newOrder.splice(fromIndex, 1);
+      newOrder.splice(toIndex, 0, draggedItem._id);
+      
+      try {
+        await Meteor.callAsync('items.reorderAll', newOrder);
+      } catch (error) {
+        showToast('Failed to reorder items: ' + error.message, 'error');
+      }
+    }
+    setDraggedItem(null);
+    setDragOverItem(null);
+  };
+
+  const handleDragOver = (e, item) => {
+    e.preventDefault();
+    if (item._id !== draggedItem?._id) {
+      setDragOverItem(item);
+    }
+  };
+
   const renderCard = (item) => {
     const daysRemaining = getDaysRemaining(item.expiresAt);
     const isExpiring = daysRemaining <= 3;
@@ -602,8 +642,12 @@ export default function App() {
 
     return (
       <div 
-        key={item.id} 
+        key={item._id}
         className={`content-card ${isExpiring ? 'expiring' : ''}`}
+        draggable="true"
+        onDragStart={(e) => handleDragStart(e, item)}
+        onDragEnd={handleDragEnd}
+        onDragOver={(e) => handleDragOver(e, item)}
         onDoubleClick={handleCardDoubleClick}
       >
         <div className="card-header">
@@ -1068,7 +1112,7 @@ export default function App() {
       )}
 
       <div className="content-grid">
-        {items.filter(item => {
+        {itemsWithOrder.filter(item => {
           if (filter === 'all') return true;
           if (filter === 'files') return item.type === 'file';
           if (filter === 'notes') return item.type === 'note';
