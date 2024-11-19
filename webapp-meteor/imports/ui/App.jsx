@@ -234,7 +234,7 @@ export default function App() {
   const handleDeleteConfirm = async () => {
     try {
       const item = deleteConfirmation.item;
-      await Meteor.callAsync('items.remove', item._id);
+      await Meteor.callAsync('items.remove', item.id);
       showToast('Item deleted successfully');
       setDeleteConfirmation({ isOpen: false, item: null });
     } catch (error) {
