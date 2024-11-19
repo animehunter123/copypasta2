@@ -12,7 +12,6 @@ As a bonus, the code editor allows pressing "F1" in the browser for a Command Pa
 * Open a web browser to localhost:3000, and upload a file or a note, and it will save those to ./data/files or ./data/notes
 
 # Todo
-* BUG: New cards are appearing at the end of the list (I added drag and drop as a mitigation but this is annoying, need to fix this, its quite difficult at the moment)
 * FR: Make the Monaco TextArea to be modern font looking, its kinda meh atm, nerdfont fira would be cool
 * TST: Do a test to ensure 14 day'eth old'eth card got deleted'eth!
 * REQ: make a Dockerfile(uses ubuntu2404 with apt install nodejs/npm/meteorjs)/docker-compose.yaml

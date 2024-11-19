@@ -517,6 +517,29 @@ body {
   font-size: 1.25rem;
 }
 
+.btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius);
+  border: none;
+  background: var(--gray-100);
+  color: var(--text-color);
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.btn-icon:hover {
+  background: var(--gray-200);
+}
+
+.btn-icon .material-symbols-rounded {
+  font-size: 1.25rem;
+}
+
 .primary-btn {
   background-color: var(--primary-500);
   color: white;

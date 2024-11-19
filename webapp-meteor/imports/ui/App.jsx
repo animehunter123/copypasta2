@@ -852,7 +852,7 @@ export default function App() {
             title={sortByNewest ? "Currently: Newest First" : "Currently: Custom Order"}
           >
             <span className="material-symbols-rounded">
-              {sortByNewest ? "sort" : "sort_by_alpha"}
+              {sortByNewest ? "swap_vert" : "drag_indicator"}
             </span>
           </button>
           <button
