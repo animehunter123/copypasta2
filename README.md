@@ -3,7 +3,7 @@ Just a example todo cards webapp to emulate the copypasta, written in non-reacti
 
 As a bonus, the code editor allows pressing "F1" in the browser for a Command Pallette! And I made a eventHandler for "Ctrl+Enter" to submit the code, so you can hit enter to submit your code, or you can use the command palette to submit your code!
 
-<img width="964" alt="Sample Photo of MeteorJS CopyPasta" src="https://github-production-user-asset-6210df.s3.amazonaws.com/42163211/387662522-12c2eb0c-19f2-46cc-9d3b-174203df7d9b.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA%2F20241119%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20241119T125833Z&X-Amz-Expires=300&X-Amz-Signature=561f49d9e406c7ec8dd67cf0a45388e9c5135af2040f1fa17b408b95277ceadc&X-Amz-SignedHeaders=host">
+<img width="964" alt="Sample Photo of MeteorJS CopyPasta" src="https://private-user-images.githubusercontent.com/42163211/387266971-1c1dfc5d-ad81-4704-b7cd-93354c11460b.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MzE5ODcwMjEsIm5iZiI6MTczMTk4NjcyMSwicGF0aCI6Ii80MjE2MzIxMS8zODcyNjY5NzEtMWMxZGZjNWQtYWQ4MS00NzA0LWI3Y2QtOTMzNTRjMTE0NjBiLnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDExMTklMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQxMTE5VDAzMjUyMVomWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTEyYzc2MTY0NmQ0YWE5MTZkMmYzYzFiNjc5MGUwNzk4MGRlNzM4N2ExZTc1NzI4ZDIyMjYwNTQzN2UyMzA5ZGUmWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0In0.Mwj_VAV4tmGrE2odKQrigZpE2poRZFqE2NYVkmcSm9Y">
 
 # How to run...
 * Use a Linux Container or Host.
