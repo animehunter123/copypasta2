@@ -330,7 +330,7 @@ export default function App() {
 
     try {
       const data = {
-        _id: editingItem._id,
+        id: editingItem.id,
         content: editModalContent.content,
         language: editModalContent.language
       };
@@ -519,7 +519,7 @@ export default function App() {
         // For edit modal
         const updatedContent = editor.getValue();
         Meteor.call('items.edit', {
-          _id: editingItem._id,
+          id: editingItem.id,
           content: updatedContent,
           language: detectLanguage(updatedContent)
         }, (error) => {
