@@ -12,6 +12,7 @@ As a bonus, the code editor allows pressing "F1" in the browser for a Command Pa
 * Open a web browser to localhost:3000, and upload a file or a note, and it will save those to ./data/files or ./data/notes
 
 # Todo
+* BUG: WHEN UPLOADING A FILE, then ADDING A COMMENT, it only makes a TEXTCARD NOT A FILECARD
 * BUG: DRAG DROP REORDERING no longer works
 * BUG: CAN NO LONGER EDIT A TEXTCARD, (VERIFY THIS WITH A RESET COMMAND JUST INCASE IT IS A ISSUE WITH THE ./data JSON'ified stuff)
 * FR: Test the navbar, when the width is too small, the stats should be stacked vertically
