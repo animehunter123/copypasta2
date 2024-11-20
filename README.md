@@ -21,4 +21,7 @@ As a bonus, the code editor allows pressing "F1" in the browser for a Command Pa
 * FR: Test the navbar, when the width is too small, the stats should be stacked vertically
 * FR: Make the Monaco TextArea to be modern font looking, its kinda meh atm, nerdfont fira would be cool
 * TST: Do a test to ensure 14 day'eth old'eth card got deleted'eth!
+
+... Before Final Release
+* REQ: move all scripts to ./scripts, and leave a ./restart.sh at top level?
 * REQ: make a Dockerfile(uses ubuntu2404 with apt install nodejs/npm/meteorjs)/docker-compose.yaml
