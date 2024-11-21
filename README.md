@@ -14,6 +14,7 @@ As a bonus, the code editor allows pressing "F1" in the browser for a Command Pa
 # Todo
 * BUG: DRAG DROP REORDERING no longer works
 * BUG: WHEN UPLOADING A FILE, then ADDING A COMMENT, it made 2 cards instead of 1
+* BUG: The total size should also show the used disk space
 
 * Weird these bugs below show up on m, but not on lxc?
   * BUG: FILE DOWNLAODS NOT DOWNLAODING >0 bytes (THIS WAS WORKING IN "d78b3735b48ff05392a24e6bb36ed809747841f6 added a ctrl+enter memo with the f1 instruction to make it apparent to the user of usage")
