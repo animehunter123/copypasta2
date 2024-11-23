@@ -24,7 +24,7 @@ export default function App() {
   const [editModalContent, setEditModalContent] = useState({ content: '', language: 'plaintext' });
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark');
   const [filter, setFilter] = useState('all');
-  const [sortByNewest, setSortByNewest] = useState(true);
+  const [sortByNewest, setSortByNewest] = useState(false);
   const [previewLanguage, setPreviewLanguage] = useState('text');
   const [previewContent, setPreviewContent] = useState('');
   const [editingItem, setEditingItem] = useState(null);
