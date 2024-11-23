@@ -819,18 +819,15 @@ export default function App() {
 
   useEffect(() => {
     if (deleteConfirmation.isOpen) {
-      // Store the element that had focus before opening the modal
-      const previouslyFocusedElement = document.activeElement;
-      
-      // Focus the close button when modal opens
-      if (deleteCloseButtonRef.current) {
-        deleteCloseButtonRef.current.focus();
+      // Focus the delete button when modal opens
+      if (deleteConfirmButtonRef.current) {
+        deleteConfirmButtonRef.current.focus();
       }
 
-      // Restore focus when modal closes
+      // Restore focus to new item button when modal closes
       return () => {
-        if (previouslyFocusedElement) {
-          previouslyFocusedElement.focus();
+        if (newItemButtonRef.current) {
+          newItemButtonRef.current.focus();
         }
       };
     }
@@ -1092,6 +1089,7 @@ export default function App() {
                 className="danger-btn" 
                 onClick={handleDeleteConfirm}
                 ref={deleteConfirmButtonRef}
+                style={{ border: '0.5px solid rgba(255, 255, 255, 0.8)' }}
               >
                 <span className="material-symbols-rounded">delete</span>
                 Delete
