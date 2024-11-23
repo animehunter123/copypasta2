@@ -55,6 +55,10 @@ export const Storage = {
         fs.writeFileSync(filePath, fileData.content);
       }
 
+      // Get the lowest order value and subtract 1 to add at top
+      const lowestOrder = await Items.findOneAsync({}, { sort: { order: 1 } });
+      data.order = (lowestOrder?.order ?? 1) - 1;
+
       // Insert into MongoDB using async method
       const insertedId = await Items.insertAsync(data);
       if (!insertedId) {
@@ -89,6 +93,10 @@ export const Storage = {
 
       // Write content to file
       fs.writeFileSync(filePath, noteData.content, 'utf8');
+
+      // Get the lowest order value and subtract 1 to add at top
+      const lowestOrder = await Items.findOneAsync({}, { sort: { order: 1 } });
+      data.order = (lowestOrder?.order ?? 1) - 1;
 
       // Insert into MongoDB using async method
       const insertedId = await Items.insertAsync(data);
