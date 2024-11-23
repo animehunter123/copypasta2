@@ -902,7 +902,7 @@ export default function App() {
           <button 
             className="danger-btn"
             onClick={handleDeleteAll}
-            title="Delete All Items"
+            title="Delete All Items (Press 'D' key)"
           >
             <span className="material-symbols-rounded">delete_forever</span>
             <span className="btn-text"><strong>D</strong>elete All</span>
@@ -919,7 +919,7 @@ export default function App() {
           <button
             className="btn-icon"
             onClick={() => setSortByNewest(!sortByNewest)}
-            title={sortByNewest ? "Currently: Newest First" : "Currently: Custom Order"}
+            title={sortByNewest ? "Currently: Newest First" : "Currently: Custom Order (with Drag and Drop)"}
           >
             <span className="material-symbols-rounded">
               {sortByNewest ? "swap_vert" : "drag_indicator"}
@@ -931,6 +931,7 @@ export default function App() {
             onClick={() => setModalOpen(true)}
             ref={newItemButtonRef}
             aria-label="Create New Item"
+            title="Create New Item (Press 'N' key)"
           >
             <span className="material-symbols-rounded">add</span>
             <span className="btn-text"><strong>N</strong>ew Item</span>
