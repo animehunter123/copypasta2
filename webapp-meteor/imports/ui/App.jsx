@@ -892,7 +892,7 @@ export default function App() {
             Total Size: {formatBytes(stats.totalSize)}
             {stats.diskSpace && 
               <span className="disk-space">
-                {` / ${formatBytes(stats.diskSpace.total)}`}
+                {` / ${formatBytes(stats.diskSpace.available)} `}
               </span>
             }
           </span>
@@ -1251,7 +1251,7 @@ export default function App() {
         <span>Total Size: {formatBytes(stats.totalSize)}
           {stats.diskSpace && 
             <span className="disk-space">
-              {` / ${formatBytes(stats.diskSpace.total)}`}
+              {` / ${formatBytes(stats.diskSpace.available)} `}
             </span>
           }
         </span>

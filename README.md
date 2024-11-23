@@ -12,14 +12,8 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 * Open a web browser to localhost:3000, and upload a file or a note, and it will save those to ./data/files or ./data/notes
 
 # Todo
-* BUG: If you drag a card and then try to drag it again, it will make a new card instead of reordering 
 * BUG: WHEN UPLOADING A FILE, then ADDING A COMMENT, it made 2 cards instead of 1
-* BUG: The total size should also show the used disk space
-
-* Weird these bugs below show up on m, but not on lxc?
-  * BUG: FILE DOWNLAODS NOT DOWNLAODING >0 bytes (THIS WAS WORKING IN "d78b3735b48ff05392a24e6bb36ed809747841f6 added a ctrl+enter memo with the f1 instruction to make it apparent to the user of usage")
-
-* FR: Test the navbar, when the width is too small, the stats should be stacked vertically
+* FR: Make thte total size show the used disk space
 * FR: Make the Monaco TextArea to be modern font looking, its kinda meh atm, nerdfont fira would be cool
 * TST: Do a test to ensure 14 day'eth old'eth card got deleted'eth!
 

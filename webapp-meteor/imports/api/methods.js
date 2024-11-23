@@ -165,14 +165,19 @@ Meteor.methods({
       }
       
       const stats = fs.statfsSync(dataPath);
+      const total = stats.blocks * stats.bsize;
+      const free = stats.bfree * stats.bsize;
+      const used = total - free;
+      
       return {
-        total: stats.blocks * stats.bsize,
-        free: stats.bfree * stats.bsize,
-        available: stats.bavail * stats.bsize
+        total,
+        free,
+        available: stats.bavail * stats.bsize,
+        used
       };
     } catch (error) {
       console.error('Error getting disk space:', error);
-      throw new Meteor.Error('disk-space-failed', error.message);
+      return null;
     }
   }
 });
