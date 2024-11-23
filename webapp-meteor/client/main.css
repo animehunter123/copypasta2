@@ -406,7 +406,104 @@ body {
   padding: 2rem;
 }
 
-/* Navbar */
+/* Responsive navbar - First stage: Hide stats and filter */
+@media screen and (max-width: 1200px) {
+  .navbar .stats,
+  .navbar .filter-dropdown,
+  .navbar .size-badge {
+    display: none !important;
+  }
+
+  .navbar .nav-group {
+    gap: 0.5rem !important;
+  }
+}
+
+/* Responsive navbar - Second stage: Hide button text */
+@media screen and (max-width: 900px) {
+  .navbar .btn-text {
+    display: none !important;
+  }
+  
+  .navbar .primary-btn,
+  .navbar .danger-btn {
+    padding: 0.5rem !important;
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+    justify-content: center !important;
+  }
+
+  .navbar .nav-group {
+    gap: 0.25rem !important;
+  }
+}
+
+/* Stats base styles to ensure they're shown by default */
+.navbar .stats {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: nowrap;
+  font-size: 0.875rem;
+  color: var(--text-color-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  flex-shrink: 1;
+}
+
+.navbar .size-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  color: var(--text-color-secondary);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.navbar .stats span {
+  flex-shrink: 0;
+}
+
+/* Filter dropdown base styles */
+.navbar .filter-dropdown {
+  display: flex;
+  flex-shrink: 0;
+}
+
+/* Update navbar base styles */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 1rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--gray-200);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: nowrap;
+  min-height: 4rem;
+  width: 100%;
+  overflow: hidden;
+}
+
+.nav-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+}
+
+/* Responsive navbar */
+@media screen and (max-width: 944px) {
+  .navbar {
+    flex-wrap: wrap;
+  }
+}
+
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -1030,12 +1127,23 @@ body {
 
 .stats {
   display: flex;
+  align-items: center;
   gap: 1rem;
-  padding: 0.5rem;
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-  border-top: 1px solid var(--border);
-  background: var(--surface);
+  flex-wrap: nowrap;
+  font-size: 0.875rem;
+  color: var(--text-color-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.stats span {
+  flex-shrink: 0;
+}
+
+@media screen and (max-width: 1120px) {
+  .stats {
+    display: none;
+  }
 }
 
 .stats .expired {
