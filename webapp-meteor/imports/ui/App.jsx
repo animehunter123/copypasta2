@@ -109,6 +109,22 @@ export default function App() {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const handleKeyPress = (e) => {
+      // Only trigger if not in an input/textarea
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      
+      if (e.key.toLowerCase() === 'n') {
+        setModalOpen(true);
+      } else if (e.key.toLowerCase() === 'd') {
+        handleDeleteAll();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyPress);
+    return () => document.removeEventListener('keydown', handleKeyPress);
+  }, []);
+
   const formatBytes = (bytes) => {
     if (!bytes) return '0 B';
     const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
@@ -883,13 +899,13 @@ export default function App() {
         </div>
 
         <div className="nav-group">
-          <button
+          <button 
             className="danger-btn"
             onClick={handleDeleteAll}
             title="Delete All Items"
           >
             <span className="material-symbols-rounded">delete_forever</span>
-            <span className="btn-text">Delete All</span>
+            <span className="btn-text"><strong>D</strong>elete All</span>
           </button>
           <button
             className="theme-btn"
@@ -917,7 +933,7 @@ export default function App() {
             aria-label="Create New Item"
           >
             <span className="material-symbols-rounded">add</span>
-            <span className="btn-text">New Item</span>
+            <span className="btn-text"><strong>N</strong>ew Item</span>
           </button>
         </div>
       </nav>

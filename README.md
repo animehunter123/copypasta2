@@ -12,8 +12,6 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 * Open a web browser to localhost:3000, and upload a file or a note, and it will save those to ./data/files or ./data/notes
 
 # Todo
-* FR: add a eventlistener for if you press 'n' on the main page it will open the new card modal
-
 * BUG: If you drag a card and then try to drag it again, it will make a new card instead of reordering 
 * BUG: WHEN UPLOADING A FILE, then ADDING A COMMENT, it made 2 cards instead of 1
 * BUG: The total size should also show the used disk space
