@@ -39,6 +39,10 @@ export default function App() {
   const modalRef = useRef(null);
   const editModalRef = useRef(null);
   const editorRef = useRef(null);
+  const deleteModalRef = useRef(null);
+  const deleteCloseButtonRef = useRef(null);
+  const deleteCancelButtonRef = useRef(null);
+  const deleteConfirmButtonRef = useRef(null);
 
   // Subscribe to items and get them reactively
   const { items, isLoading, itemsWithOrder } = useTracker(() => {
@@ -813,6 +817,25 @@ export default function App() {
     }
   };
 
+  useEffect(() => {
+    if (deleteConfirmation.isOpen) {
+      // Store the element that had focus before opening the modal
+      const previouslyFocusedElement = document.activeElement;
+      
+      // Focus the close button when modal opens
+      if (deleteCloseButtonRef.current) {
+        deleteCloseButtonRef.current.focus();
+      }
+
+      // Restore focus when modal closes
+      return () => {
+        if (previouslyFocusedElement) {
+          previouslyFocusedElement.focus();
+        }
+      };
+    }
+  }, [deleteConfirmation.isOpen]);
+
   if (isLoading) {
     return (
       <div className="loading">
@@ -894,7 +917,6 @@ export default function App() {
             className="primary-btn"
             onClick={() => setModalOpen(true)}
             ref={newItemButtonRef}
-            onKeyDown={handleNewItemKeyPress}
             aria-label="Create New Item"
           >
             <span className="material-symbols-rounded">add</span>
@@ -1004,11 +1026,49 @@ export default function App() {
       )}
 
       {deleteConfirmation.isOpen && (
-        <div className="modal-overlay" onClick={(e) => handleClickOutside(e, modalRef, () => setDeleteConfirmation({ isOpen: false, item: null }))}>
-          <div className="modal" ref={modalRef}>
+        <div 
+          className="modal-overlay" 
+          onClick={(e) => handleClickOutside(e, deleteModalRef, () => setDeleteConfirmation({ isOpen: false, item: null }))}
+        >
+          <div 
+            className="modal" 
+            ref={deleteModalRef}
+            role="dialog"
+            aria-labelledby="delete-modal-title"
+            aria-modal="true"
+            tabIndex="-1"
+            onKeyDown={(e) => {
+              if (e.key === 'Tab') {
+                e.preventDefault();
+                const focusableElements = [
+                  deleteCloseButtonRef.current,
+                  deleteCancelButtonRef.current,
+                  deleteConfirmButtonRef.current
+                ].filter(Boolean);
+
+                const currentIndex = focusableElements.indexOf(document.activeElement);
+                let nextIndex;
+
+                if (e.shiftKey) {
+                  nextIndex = currentIndex <= 0 ? focusableElements.length - 1 : currentIndex - 1;
+                } else {
+                  nextIndex = currentIndex >= focusableElements.length - 1 ? 0 : currentIndex + 1;
+                }
+
+                focusableElements[nextIndex].focus();
+              }
+              if (e.key === 'Escape') {
+                setDeleteConfirmation({ isOpen: false, item: null });
+              }
+            }}
+          >
             <div className="modal-header">
-              <h2>Confirm Delete</h2>
-              <button className="close-button" onClick={() => setDeleteConfirmation({ isOpen: false, item: null })}>
+              <h2 id="delete-modal-title">Confirm Delete</h2>
+              <button 
+                className="close-button" 
+                onClick={() => setDeleteConfirmation({ isOpen: false, item: null })}
+                ref={deleteCloseButtonRef}
+              >
                 <span className="material-symbols-rounded">close</span>
               </button>
             </div>
@@ -1019,10 +1079,20 @@ export default function App() {
               )}
             </div>
             <div className="modal-footer">
-              <button type="button" className="secondary-btn" onClick={() => setDeleteConfirmation({ isOpen: false, item: null })}>
+              <button 
+                type="button" 
+                className="secondary-btn" 
+                onClick={() => setDeleteConfirmation({ isOpen: false, item: null })}
+                ref={deleteCancelButtonRef}
+              >
                 Cancel
               </button>
-              <button type="button" className="danger-btn" onClick={handleDeleteConfirm}>
+              <button 
+                type="button" 
+                className="danger-btn" 
+                onClick={handleDeleteConfirm}
+                ref={deleteConfirmButtonRef}
+              >
                 <span className="material-symbols-rounded">delete</span>
                 Delete
               </button>

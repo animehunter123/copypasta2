@@ -12,6 +12,8 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 * Open a web browser to localhost:3000, and upload a file or a note, and it will save those to ./data/files or ./data/notes
 
 # Todo
+* FIXED Bug: when i click delete card, this do you want delete modal pops up, but when pressing the tab key, it is actually tabbing through things in the background.
+
 * FR: add a eventlistener for if you press 'n' on the main page it will open the new card modal
 
 * BUG: If you drag a card and then try to drag it again, it will make a new card instead of reordering 
