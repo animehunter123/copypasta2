@@ -963,7 +963,7 @@ export default function App() {
             </div>
             <form className="modal-content" onSubmit={handleSubmit}>
               <div className="upload-area">
-                <label className="upload-label">
+                <label className={`upload-label ${contentInput ? 'disabled' : ''}`}>
                   <input
                     type="file"
                     onChange={(e) => {
@@ -980,12 +980,21 @@ export default function App() {
                         return;
                       }
                       setFileInput(file);
+                      // Clear any text input when file is selected
+                      setContentInput('');
+                      if (editorRef.current) {
+                        editorRef.current.setValue('');
+                      }
                     }}
                     accept="*"
+                    disabled={!!contentInput}
                   />
                   <span className="material-symbols-rounded">upload_file</span>
                   <span>{fileInput ? fileInput.name : 'Click to upload a file'}</span>
                 </label>
+                {contentInput && (
+                  <div className="input-hint">Clear text input to enable file upload</div>
+                )}
               </div>
               
               <div className="separator">
@@ -1020,9 +1029,13 @@ export default function App() {
                       useShadows: false,
                       verticalScrollbarSize: 10,
                       horizontalScrollbarSize: 10
-                    }
+                    },
+                    readOnly: !!fileInput
                   }}
                 />
+                {fileInput && (
+                  <div className="input-hint">Clear file selection to enable text input</div>
+                )}
               </div>
 
               <div className="modal-footer">

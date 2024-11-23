@@ -13,8 +13,6 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 
 # Todo
 * BUG: WHEN UPLOADING A FILE, then ADDING A COMMENT, it made 2 cards instead of 1
-* FR: Make thte total size show the used disk space
-* FR: Make the Monaco TextArea to be modern font looking, its kinda meh atm, nerdfont fira would be cool
 * TST: Do a test to ensure 14 day'eth old'eth card got deleted'eth!
 
 ... Before Final Release
