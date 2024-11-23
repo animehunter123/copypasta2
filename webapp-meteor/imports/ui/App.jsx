@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { ReactiveVar } from 'meteor/reactive-var';
@@ -41,36 +41,43 @@ export default function App() {
   const editorRef = useRef(null);
 
   // Subscribe to items and get them reactively
-  const { items, isLoading } = useTracker(() => {
+  const { items, isLoading, itemsWithOrder } = useTracker(() => {
     const handle = Meteor.subscribe('items');
     
     return {
       items: Items.find({}, { 
         sort: sortByNewest ? { createdAt: -1 } : { order: 1 } 
       }).fetch(),
+      itemsWithOrder: Items.find({}, { 
+        sort: sortByNewest ? { createdAt: -1 } : { order: 1 } 
+      }).fetch(),
       isLoading: !handle.ready()
     };
   }, [sortByNewest]);
 
-  const itemsWithOrder = useTracker(() => {
-    return Items.find({}, { 
-      sort: sortByNewest ? { createdAt: -1 } : { order: 1 } 
-    }).fetch();
-  }, [sortByNewest]);
+  // Memoize filtered counts
+  const filteredCounts = useMemo(() => ({
+    files: items.filter(i => i.type === 'file').length,
+    notes: items.filter(i => i.type === 'note').length,
+    all: items.length
+  }), [items]);
+
+  // Memoize filtered items
+  const filteredItems = useMemo(() => {
+    if (filter === 'all') return items;
+    return items.filter(i => i.type === filter.slice(0, -1));
+  }, [items, filter]);
 
   // Stats calculation
   const stats = useTracker(() => {
-    const totalSize = Items.find({}).fetch().reduce((acc, item) => acc + (item.originalSize || 0), 0);
-    const totalItems = Items.find({}).count();
-    const expiredItems = Items.find({ expiresAt: { $lt: new Date() } }).count();
+    const handle = Meteor.subscribe('items');
+    if (!handle.ready()) return { totalSize: 0, totalItems: 0, expiredItems: 0, diskSpace: null };
 
-    // Get disk space info
-    Meteor.call('system.getDiskSpace', (err, result) => {
-      if (!err && result) {
-        diskSpaceVar.set(result);
-      }
-    });
-
+    // Use the existing items array instead of making new queries
+    const totalSize = items.reduce((acc, item) => acc + (item.originalSize || 0), 0);
+    const totalItems = items.length;
+    const now = new Date();
+    const expiredItems = items.filter(item => new Date(item.expiresAt) < now).length;
     const diskSpace = diskSpaceVar.get();
     
     return {
@@ -79,6 +86,23 @@ export default function App() {
       expiredItems,
       diskSpace
     };
+  }, [items]);
+
+  // Separate effect for disk space updates
+  useEffect(() => {
+    const updateDiskSpace = () => {
+      Meteor.call('system.getDiskSpace', (err, result) => {
+        if (!err && result) {
+          diskSpaceVar.set(result);
+        }
+      });
+    };
+
+    // Update disk space initially and every 5 minutes
+    updateDiskSpace();
+    const interval = setInterval(updateDiskSpace, 5 * 60 * 1000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const formatBytes = (bytes) => {
@@ -616,19 +640,29 @@ export default function App() {
       newOrder.splice(fromIndex, 1);
       newOrder.splice(toIndex, 0, draggedItem._id);
       
+      // Clear drag state before making the async call
+      const draggedId = draggedItem._id;
+      const dragOverId = dragOverItem._id;
+      setDraggedItem(null);
+      setDragOverItem(null);
+      
       try {
         await Meteor.callAsync('items.reorderAll', newOrder);
       } catch (error) {
         showToast('Failed to reorder items: ' + error.message, 'error');
+        // Optionally refresh the list on error
+        Meteor.subscribe('items');
       }
+    } else {
+      setDraggedItem(null);
+      setDragOverItem(null);
     }
-    setDraggedItem(null);
-    setDragOverItem(null);
   };
 
   const handleDragOver = (e, item) => {
     e.preventDefault();
-    if (item._id !== draggedItem?._id) {
+    // Only update dragOverItem if it's actually changing
+    if (item._id !== draggedItem?._id && item._id !== dragOverItem?._id) {
       setDragOverItem(item);
     }
   };
@@ -802,19 +836,19 @@ export default function App() {
                 className={`filter-option ${filter === 'all' ? 'active' : ''}`}
                 onClick={() => setFilter('all')}
               >
-                All ({items.length})
+                All ({filteredCounts.all})
               </button>
               <button
                 className={`filter-option ${filter === 'files' ? 'active' : ''}`}
                 onClick={() => setFilter('files')}
               >
-                Files ({items.filter(i => i.type === 'file').length})
+                Files ({filteredCounts.files})
               </button>
               <button
                 className={`filter-option ${filter === 'notes' ? 'active' : ''}`}
                 onClick={() => setFilter('notes')}
               >
-                Notes ({items.filter(i => i.type === 'note').length})
+                Notes ({filteredCounts.notes})
               </button>
             </div>
           </div>
@@ -1126,12 +1160,7 @@ export default function App() {
       )}
 
       <div className="content-grid">
-        {itemsWithOrder.filter(item => {
-          if (filter === 'all') return true;
-          if (filter === 'files') return item.type === 'file';
-          if (filter === 'notes') return item.type === 'note';
-          return true;
-        }).map(renderCard)}
+        {filteredItems.map(renderCard)}
       </div>
       <div className="stats">
         <span>Total Size: {formatBytes(stats.totalSize)}
