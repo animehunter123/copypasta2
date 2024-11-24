@@ -35,9 +35,11 @@ export const Storage = {
       const filePath = path.join(FILES_DIR, fileName);
       console.log('Saving file to:', filePath);
 
+      // For large binary files (>16MB), store only metadata in MongoDB
+      const isLargeFile = !fileData.isText && fileData.originalSize > 16 * 1024 * 1024;
+
       const data = {
         id: fileName,
-        content: fileData.content,
         fileName: fileData.fileName,
         language: fileData.language,
         originalSize: fileData.originalSize,
@@ -47,12 +49,21 @@ export const Storage = {
         isText: fileData.isText
       };
 
-      // Write content to file
+      // Write content to file system
       if (fileData.isText) {
         fs.writeFileSync(filePath, fileData.content, 'utf8');
+        data.content = fileData.content; // Store text content in MongoDB
       } else {
         // For binary files, write the buffer directly
         fs.writeFileSync(filePath, fileData.content);
+        if (!isLargeFile) {
+          data.content = fileData.content; // Only store small binary files in MongoDB
+        }
+      }
+
+      // Store file path for large files
+      if (isLargeFile) {
+        data.filePath = filePath;
       }
 
       // Get the lowest order value and subtract 1 to add at top

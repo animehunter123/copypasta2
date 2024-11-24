@@ -269,12 +269,34 @@ export default function App() {
       let type = 'text/plain';
       
       if (!item.isText) {
-        // For binary files, create a Uint8Array directly from the content
-        const buffer = new Uint8Array(item.content);
-        content = buffer;
-        type = item.fileType;
+        if (item.filePath) {
+          // For files stored on filesystem, fetch directly
+          fetch(`/files/${item.fileName}`)
+            .then(response => response.blob())
+            .then(blob => {
+              const url = window.URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = item.fileName;
+              document.body.appendChild(a);
+              a.click();
+              window.URL.revokeObjectURL(url);
+              document.body.removeChild(a);
+            })
+            .catch(error => {
+              console.error('Download error:', error);
+              showToast('Failed to download file', 'error');
+            });
+          return;
+        } else {
+          // For binary files stored in MongoDB
+          const buffer = new Uint8Array(item.content);
+          content = buffer;
+          type = item.fileType;
+        }
       }
 
+      // For text files and small binary files in MongoDB
       const blob = new Blob([content], { type });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
