@@ -1122,7 +1122,7 @@ export default function App() {
                     disabled={!!contentInput}
                   />
                   <span className="material-symbols-rounded">upload_file</span>
-                  {/* <span>{fileInput ? fileInput.name : 'Click to upload a file'}</span> */}
+                  <span>{fileInput ? fileInput.name : 'Click to upload a file'}</span>
                   {contentInput && (
                     <div className="input-hint overlay upload-hint">Clear text input to enable file upload</div>
                   )}
