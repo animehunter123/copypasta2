@@ -1238,6 +1238,27 @@ body {
   position: relative;
 }
 
+.upload-area input[type="file"] {
+  display: none;
+}
+
+.upload-area input[type="file"]::-webkit-file-upload-button {
+  display: none;
+}
+
+.upload-area input[type="file"]::file-selector-button {
+  display: none;
+}
+
+.upload-label input[type="file"] {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
 /* Input hint overlay styling */
 .input-hint.overlay {
   position: absolute;
