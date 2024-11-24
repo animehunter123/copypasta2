@@ -443,7 +443,6 @@ body {
   display: flex;
   align-items: center;
   gap: 1rem;
-  flex-wrap: nowrap;
   font-size: 0.875rem;
   color: var(--text-color-secondary);
   white-space: nowrap;
@@ -486,7 +485,7 @@ body {
   flex-wrap: nowrap;
   min-height: 4rem;
   width: 100%;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .nav-group {
@@ -716,7 +715,7 @@ body {
   border: 1px solid var(--gray-200);
   border-radius: var(--radius-sm);
   box-shadow: var(--shadow-md);
-  z-index: 1001;
+  z-index: 9999;
   margin-top: 0.25rem;
 }
 
