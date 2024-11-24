@@ -411,7 +411,7 @@ body {
   .navbar .stats,
   .navbar .filter-dropdown,
   .navbar .size-badge {
-    display: none !important;
+    display: block !important;
   }
 
   .navbar .nav-group {
@@ -717,6 +717,10 @@ body {
   box-shadow: var(--shadow-md);
   z-index: 9999;
   margin-top: 0.25rem;
+}
+
+.filter-dropdown.open .filter-dropdown-content {
+  display: block;
 }
 
 .filter-option {
@@ -1137,7 +1141,7 @@ body {
 
 @media screen and (max-width: 1120px) {
   .stats {
-    display: none;
+    display: block;
   }
 }
 
