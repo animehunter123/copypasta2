@@ -2147,3 +2147,37 @@ textarea:focus {
   background: var(--primary-800);
   color: var(--primary-200);
 }
+
+/* Input hint bubble */
+.input-hint {
+  background: var(--surface);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Close button */
+.close-button {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.close-button:hover {
+  background: var(--surface-hover);
+  color: var(--text-color);
+}
+
+.close-button .material-symbols-rounded {
+  font-size: 20px;
+}
