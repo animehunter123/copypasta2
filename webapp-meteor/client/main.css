@@ -1192,6 +1192,7 @@ body {
   overflow-y: auto;
   min-height: 0;
   position: relative;
+  padding-bottom: calc(1.5rem + 65px);
 }
 
 .modal-footer {
@@ -1221,28 +1222,154 @@ body {
   flex-direction: column;
 }
 
-/* Editor container adjustments */
-.monaco-editor-container {
-  min-height: 200px;
-  height: min(50vh, 400px) !important;
-  margin-bottom: 1rem;
+.upload-area:hover {
+  border-color: var(--primary-400);
+  background-color: var(--primary-50);
 }
 
-/* Make sure the monaco editor respects container size */
-.monaco-editor {
-  height: 100% !important;
+.upload-area input[type="file"] {
+  display: none;
 }
 
-/* Ensure content is scrollable but footer stays fixed */
-.modal-form {
-  height: 100%;
+.upload-label {
+  flex: 1;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  cursor: pointer;
+  text-align: center;
+  color: var(--text-secondary);
+  transition: all 0.2s;
 }
 
-/* Add some bottom padding to ensure content isn't hidden behind footer */
+.upload-label.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.upload-label .material-symbols-rounded {
+  font-size: 3rem;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+}
+
+.upload-label:hover {
+  color: var(--primary-500);
+}
+
+.upload-label:hover .material-symbols-rounded {
+  color: var(--primary-500);
+  transform: scale(1.1);
+}
+
+[data-theme="dark"] .upload-area:hover {
+  background-color: var(--primary-900);
+  border-color: var(--primary-400);
+}
+
+.upload-area .drag-text {
+  font-size: 1.125rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.upload-area .drag-hint {
+  font-size: 0.875rem;
+  opacity: 0.8;
+}
+
+/* Keep the modal improvements */
+.modal {
+  width: 90vw;
+  max-width: 1200px;
+  max-height: 90vh;
+  min-height: min(90vh, 600px);
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  position: relative;
+}
+
+.modal-header {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
 .modal-content {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+  min-height: 0;
+  position: relative;
   padding-bottom: calc(1.5rem + 65px);
+}
+
+.modal-footer {
+  padding: 16px 24px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  background: var(--surface);
+  border-top: 1px solid var(--border-color);
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+/* Buttons styling */
+.primary-btn {
+  padding: 0.5rem 1rem;
+  background: var(--primary-500);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+
+.primary-btn:hover {
+  background: var(--primary-600);
+}
+
+.primary-btn:disabled {
+  background: var(--gray-300);
+  cursor: not-allowed;
+}
+
+.secondary-btn {
+  padding: 0.5rem 1rem;
+  background: var(--surface);
+  color: var(--text-color);
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius);
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+
+.secondary-btn:hover {
+  background: var(--surface-hover);
+  border-color: var(--gray-400);
 }
 
 /* Responsive adjustments */
