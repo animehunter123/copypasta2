@@ -33,6 +33,8 @@ export default function App() {
   const [deleteConfirmation, setDeleteConfirmation] = useState({ isOpen: false, item: null });
   const [draggedItem, setDraggedItem] = useState(null);
   const [dragOverItem, setDragOverItem] = useState(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [isUploading, setIsUploading] = useState(false);
 
   // Refs for focus management
   const newItemButtonRef = useRef(null);
@@ -367,12 +369,35 @@ export default function App() {
       const expiresAt = new Date(now.getTime() + EXPIRATION_DAYS * 24 * 60 * 60 * 1000);
 
       if (fileInput) {
-        const reader = new FileReader();
+        setIsUploading(true);
+        setUploadProgress(0);
         
-        reader.onload = async (e) => {
-          const content = e.target.result;
+        // Create a promise to handle file reading
+        const readFile = () => new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          
+          reader.onprogress = (event) => {
+            if (event.lengthComputable) {
+              const progress = (event.loaded / event.total) * 50; // First 50% for reading
+              setUploadProgress(progress);
+            }
+          };
+          
+          reader.onload = (e) => resolve(e.target.result);
+          reader.onerror = () => reject(reader.error);
+          
+          if (fileInput.type.startsWith('text/') || 
+              ['application/json', 'application/javascript', 'application/xml'].includes(fileInput.type)) {
+            reader.readAsText(fileInput);
+          } else {
+            reader.readAsArrayBuffer(fileInput);
+          }
+        });
+
+        try {
+          const content = await readFile();
           const isText = fileInput.type.startsWith('text/') || 
-                        ['application/json', 'application/javascript', 'application/xml'].includes(fileInput.type);
+                      ['application/json', 'application/javascript', 'application/xml'].includes(fileInput.type);
           
           const data = {
             content: isText ? content : new Uint8Array(content),
@@ -390,20 +415,53 @@ export default function App() {
             alert('File size must be under 50MB');
             event.target.value = ''; // Reset file input
             setFileInput(null);
+            setIsUploading(false);
+            setUploadProgress(0);
             return;
           }
+
+          // Start upload progress simulation for server upload (remaining 50%)
+          const startProgress = 50;
+          const progressInterval = setInterval(() => {
+            setUploadProgress(prev => {
+              if (prev >= 90) {
+                clearInterval(progressInterval);
+                return 90;
+              }
+              return prev + 5;
+            });
+          }, 100);
           
-          await Meteor.callAsync('files.insert', data);
-          setModalOpen(false);
-          setContentInput('');
-          setFileInput(null);
-        };
-        
-        if (fileInput.type.startsWith('text/') || 
-            ['application/json', 'application/javascript', 'application/xml'].includes(fileInput.type)) {
-          reader.readAsText(fileInput);
-        } else {
-          reader.readAsArrayBuffer(fileInput);
+          try {
+            await Meteor.callAsync('files.insert', data);
+            clearInterval(progressInterval);
+            setUploadProgress(100);
+            
+            // Wait a moment to show 100% before closing
+            await new Promise(resolve => setTimeout(resolve, 200));
+            
+            setModalOpen(false);
+            setContentInput('');
+            setFileInput(null);
+            setIsUploading(false);
+            setUploadProgress(0);
+            
+            // Focus the New Item button after successful upload
+            if (newItemButtonRef.current) {
+              newItemButtonRef.current.focus();
+            }
+          } catch (error) {
+            clearInterval(progressInterval);
+            console.error('Upload error:', error);
+            showToast('Failed to upload file', 'error');
+            setIsUploading(false);
+            setUploadProgress(0);
+          }
+        } catch (error) {
+          console.error('File reading error:', error);
+          showToast('Failed to read file', 'error');
+          setIsUploading(false);
+          setUploadProgress(0);
         }
       }
 
@@ -420,10 +478,14 @@ export default function App() {
         setModalOpen(false);
         setContentInput('');
         setFileInput(null);
+        // Focus the New Item button after successful upload
+        if (newItemButtonRef.current) {
+          newItemButtonRef.current.focus();
+        }
       }
     } catch (error) {
       console.error('Error submitting:', error);
-      alert('Error uploading content: ' + error.message);
+      showToast('Error uploading content: ' + error.message, 'error');
     }
   };
 
@@ -1116,6 +1178,13 @@ export default function App() {
                   <span className="material-symbols-rounded">upload</span>
                   Submit
                 </button>
+                {isUploading && (
+                  <div className="upload-progress">
+                    <span>Uploading...</span>
+                    <progress value={uploadProgress} max="100" />
+                    <span>{uploadProgress}%</span>
+                  </div>
+                )}
               </div>
             </form>
           </div>

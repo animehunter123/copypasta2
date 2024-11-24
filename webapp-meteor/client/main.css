@@ -1706,3 +1706,51 @@ textarea:focus {
   border-color: var(--primary-500);
   box-shadow: 0 0 0 3px var(--primary-100);
 }
+
+/* Upload Progress Bar */
+.upload-progress {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  width: 100%;
+  font-size: 0.875rem;
+  color: var(--text-color);
+}
+
+.upload-progress progress {
+  flex: 1;
+  height: 8px;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: none;
+}
+
+.upload-progress progress::-webkit-progress-bar {
+  background-color: var(--gray-200);
+  border-radius: var(--radius);
+}
+
+.upload-progress progress::-webkit-progress-value {
+  background-color: var(--primary-500);
+  border-radius: var(--radius);
+  transition: width 0.3s ease;
+}
+
+.upload-progress progress::-moz-progress-bar {
+  background-color: var(--primary-500);
+  border-radius: var(--radius);
+  transition: width 0.3s ease;
+}
+
+[data-theme="dark"] .upload-progress progress::-webkit-progress-bar {
+  background-color: var(--gray-700);
+}
+
+[data-theme="dark"] .upload-progress progress::-webkit-progress-value {
+  background-color: var(--primary-400);
+}
+
+[data-theme="dark"] .upload-progress progress::-moz-progress-bar {
+  background-color: var(--primary-400);
+}
