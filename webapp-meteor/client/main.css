@@ -1182,8 +1182,8 @@ body {
 }
 
 .upload-area {
-  height: 400px;
-  max-height: 400px;
+  height: 200px;
+  max-height: 200px;
   margin-bottom: 1rem;
   border: 2px dashed var(--gray-300);
   border-radius: var(--radius);
@@ -1693,6 +1693,8 @@ textarea {
   color: var(--textarea-text);
   font-family: var(--font-mono);
   resize: none;
+  height: 200px;
+  max-height: 200px;
 }
 
 textarea:focus {
