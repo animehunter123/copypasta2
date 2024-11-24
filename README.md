@@ -18,5 +18,5 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 * WISH: Refactor to multiple jsx files for the components (with their own imports and exports)
 
 ... Before Final Release
-* REQ: move all scripts to ./scripts, and leave a ./restart.sh at top level?
+* REQ: move all scripts to ./scripts, and leave a ./restart.sh and ./reset.sh at top level NEED BOTH incase the ./data has data which wasnt mongo managed.
 * REQ: make a Dockerfile(uses ubuntu2404 with apt install nodejs/npm/meteorjs)/docker-compose.yaml
