@@ -1123,10 +1123,10 @@ export default function App() {
                   />
                   <span className="material-symbols-rounded">upload_file</span>
                   <span>{fileInput ? fileInput.name : 'Click to upload a file'}</span>
+                  {contentInput && (
+                    <div className="input-hint overlay">Clear text input to enable file upload</div>
+                  )}
                 </label>
-                {contentInput && (
-                  <div className="input-hint">Clear text input to enable file upload</div>
-                )}
               </div>
               
               <div className="separator">
@@ -1166,7 +1166,7 @@ export default function App() {
                   }}
                 />
                 {fileInput && (
-                  <div className="input-hint">Clear file selection to enable text input</div>
+                  <div className="input-hint overlay">Clear file selection to enable text input</div>
                 )}
               </div>
 
