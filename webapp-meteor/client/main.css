@@ -716,11 +716,11 @@ body {
   border: 1px solid var(--gray-200);
   border-radius: var(--radius-sm);
   box-shadow: var(--shadow-md);
-  z-index: 1000;
+  z-index: 1001;
   margin-top: 0.25rem;
 }
 
-.filter-dropdown:hover .filter-dropdown-content {
+.filter-dropdown.open .filter-dropdown-content {
   display: block;
 }
 

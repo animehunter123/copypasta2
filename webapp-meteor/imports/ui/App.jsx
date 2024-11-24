@@ -24,6 +24,7 @@ export default function App() {
   const [editModalContent, setEditModalContent] = useState({ content: '', language: 'plaintext' });
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark');
   const [filter, setFilter] = useState('all');
+  const [isFilterDropdownOpen, setIsFilterDropdownOpen] = useState(false);
   const [sortByNewest, setSortByNewest] = useState(false);
   const [previewLanguage, setPreviewLanguage] = useState('text');
   const [previewContent, setPreviewContent] = useState('');
@@ -61,15 +62,17 @@ export default function App() {
 
   // Memoize filtered counts
   const filteredCounts = useMemo(() => ({
-    files: items.filter(i => i.type === 'file').length,
-    notes: items.filter(i => i.type === 'note').length,
-    all: items.length
+    all: items.length,
+    files: items.filter(item => item.type === 'file').length,
+    notes: items.filter(item => item.type === 'note').length
   }), [items]);
 
   // Memoize filtered items
   const filteredItems = useMemo(() => {
     if (filter === 'all') return items;
-    return items.filter(i => i.type === filter.slice(0, -1));
+    return items.filter(item => 
+      filter === 'files' ? item.type === 'file' : item.type === 'note'
+    );
   }, [items, filter]);
 
   // Stats calculation
@@ -123,6 +126,17 @@ export default function App() {
 
     document.addEventListener('keydown', handleKeyPress);
     return () => document.removeEventListener('keydown', handleKeyPress);
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.filter-dropdown')) {
+        setIsFilterDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const formatBytes = (bytes) => {
@@ -862,27 +876,39 @@ export default function App() {
       <nav className="navbar">
         <div className="nav-group">
           <h1 className="title">CopyPasta</h1>
-          <div className="filter-dropdown">
-            <button className="filter-dropdown-btn">
+          <div className={`filter-dropdown ${isFilterDropdownOpen ? 'open' : ''}`}>
+            <button 
+              className="filter-dropdown-btn"
+              onClick={() => setIsFilterDropdownOpen(!isFilterDropdownOpen)}
+            >
               {filter === 'all' ? 'All' : filter === 'files' ? 'Files' : 'Notes'}
               <span className="material-symbols-rounded">expand_more</span>
             </button>
             <div className="filter-dropdown-content">
               <button
                 className={`filter-option ${filter === 'all' ? 'active' : ''}`}
-                onClick={() => setFilter('all')}
+                onClick={() => {
+                  setFilter('all');
+                  setIsFilterDropdownOpen(false);
+                }}
               >
                 All ({filteredCounts.all})
               </button>
               <button
                 className={`filter-option ${filter === 'files' ? 'active' : ''}`}
-                onClick={() => setFilter('files')}
+                onClick={() => {
+                  setFilter('files');
+                  setIsFilterDropdownOpen(false);
+                }}
               >
                 Files ({filteredCounts.files})
               </button>
               <button
                 className={`filter-option ${filter === 'notes' ? 'active' : ''}`}
-                onClick={() => setFilter('notes')}
+                onClick={() => {
+                  setFilter('notes');
+                  setIsFilterDropdownOpen(false);
+                }}
               >
                 Notes ({filteredCounts.notes})
               </button>
