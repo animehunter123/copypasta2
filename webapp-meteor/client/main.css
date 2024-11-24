@@ -1230,13 +1230,14 @@ body {
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  padding: 1.5rem;
+  padding: 2rem;
   cursor: pointer;
   text-align: center;
   color: var(--text-secondary);
   transition: all 0.2s;
   position: relative;
-  min-height: 150px;
+  min-height: 180px;
+  height: 180px;
 }
 
 .upload-label .material-symbols-rounded {
@@ -1379,8 +1380,10 @@ body {
 .separator {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 1rem;
   margin: 1.5rem 0;
+  width: 100%;
   text-align: center;
   color: var(--text-color-secondary);
 }
@@ -2219,4 +2222,195 @@ textarea:focus {
 
 .editor-container > div {
   width: 100%;
+}
+
+.separator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1.5rem 0;
+  width: 100%;
+  text-align: center;
+  color: var(--text-color-secondary);
+}
+
+.separator::before,
+.separator::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: var(--border-color);
+}
+
+.separator span {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+/* New Card Modal Styles */
+.new-card-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+.input-type-selector {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.input-type-button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.input-type-button:hover {
+  background: var(--surface-hover);
+  border-color: var(--primary-500);
+  color: var(--text-color);
+}
+
+.input-type-button.active {
+  background: var(--primary-50);
+  border-color: var(--primary-500);
+  color: var(--primary-600);
+}
+
+.input-type-button .material-symbols-rounded {
+  font-size: 1.5rem;
+}
+
+.input-area {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: 300px;
+  transition: all 0.3s ease;
+}
+
+.upload-area {
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius);
+  padding: 2.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: var(--surface);
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.upload-area:hover:not(.disabled) {
+  border-color: var(--primary-500);
+  background: var(--primary-50);
+}
+
+.upload-area .material-symbols-rounded {
+  font-size: 3rem;
+  color: var(--primary-500);
+  opacity: 0.8;
+  transition: all 0.2s ease;
+}
+
+.upload-area:hover:not(.disabled) .material-symbols-rounded {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.file-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  font-size: 1rem;
+  color: var(--text-color);
+  margin: 1rem 0;
+}
+
+.file-info .material-symbols-rounded {
+  font-size: 1.5rem;
+  color: var(--primary-500);
+}
+
+.upload-progress {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-left: auto;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  animation: fadeIn 0.3s ease;
+}
+
+.upload-progress progress {
+  width: 120px;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  border: none;
+  background: var(--surface-hover);
+}
+
+.upload-progress progress::-webkit-progress-bar {
+  background: var(--surface-hover);
+}
+
+.upload-progress progress::-webkit-progress-value {
+  background: var(--primary-500);
+  transition: width 0.3s ease;
+}
+
+.upload-progress progress::-moz-progress-bar {
+  background: var(--primary-500);
+  transition: width 0.3s ease;
+}
+
+.file-size-limit {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.upload-instructions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.upload-instructions .main-text {
+  font-size: 1.1rem;
+  color: var(--text-color);
+}
+
+/* Fade animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

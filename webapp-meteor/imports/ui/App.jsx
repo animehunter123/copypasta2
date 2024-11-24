@@ -35,6 +35,7 @@ export default function App() {
   const [dragOverItem, setDragOverItem] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
+  const [isUploadMode, setIsUploadMode] = useState(false);
 
   // Refs for focus management
   const newItemButtonRef = useRef(null);
@@ -46,6 +47,7 @@ export default function App() {
   const deleteCloseButtonRef = useRef(null);
   const deleteCancelButtonRef = useRef(null);
   const deleteConfirmButtonRef = useRef(null);
+  const fileInputRef = useRef(null);
 
   // Subscribe to items and get them reactively
   const { items, isLoading, itemsWithOrder } = useTracker(() => {
@@ -1084,99 +1086,155 @@ export default function App() {
       </div>
 
       {modalOpen && (
-        <div className="modal-overlay" onClick={(e) => handleClickOutside(e, modalRef, () => handleModalClose())}>
+        <div className="modal-overlay" onClick={(e) => handleClickOutside(e, modalRef, handleModalClose)}>
           <div className="modal" ref={modalRef}>
             <div className="modal-header">
-              <h2>Add Content</h2>
-              <div className="modal-hint">F1 to Open Command Palette, and Ctrl+Enter to Save</div>
+              <h2>New Card</h2>
               <button className="close-button" onClick={handleModalClose}>
                 <span className="material-symbols-rounded">close</span>
               </button>
             </div>
-            <form className="modal-content" onSubmit={handleSubmit}>
-              <div className="upload-area">
-                <label className={`upload-label ${contentInput ? 'disabled' : ''}`}>
-                  <input
-                    type="file"
-                    onChange={(e) => {
-                      const file = e.target.files[0];
-                      if (!file) return;
-
-                      // 50MB size limit
-                      const MAX_FILE_SIZE = 50 * 1024 * 1024;
-                      
-                      if (file.size > MAX_FILE_SIZE) {
-                        alert('File size must be under 50MB');
-                        e.target.value = ''; // Reset file input
-                        setFileInput(null);
-                        return;
-                      }
-                      setFileInput(file);
-                      // Clear any text input when file is selected
-                      setContentInput('');
-                      if (editorRef.current) {
-                        editorRef.current.setValue('');
-                      }
-                    }}
-                    accept="*"
-                    disabled={!!contentInput}
-                  />
-                  <span className="material-symbols-rounded">upload_file</span>
-                  <span>{fileInput ? fileInput.name : 'Click to upload a file'}</span>
-                  {contentInput && (
-                    <div className="input-hint overlay upload-hint">Click Submit To Save! Otherwise you must, clear the text input to enable file upload</div>
-                  )}
-                </label>
-              </div>
-              
-              <div className="separator">
-                <span>or paste content</span>
-              </div>
-
-              <div className="editor-container">
-                {fileInput && (
-                  <div className="input-hint overlay centered">Click Submit To Save! Otherwise you must, clear the file selection by clicking cancel.</div>
-                )}
-                <Editor
-                  height="300px"
-                  defaultLanguage="plaintext"
-                  language={language}
-                  value={contentInput}
-                  theme={theme === 'dark' ? 'vs-dark' : 'light'}
-                  onChange={handleEditorChange}
-                  onMount={handleEditorMount}
-                  options={{
-                    minimap: { enabled: false },
-                    fontSize: 14,
-                    fontFamily: "'Fira Code', monospace",
-                    fontLigatures: true,
-                    lineNumbers: 'on',
-                    roundedSelection: true,
-                    scrollBeyondLastLine: false,
-                    automaticLayout: true,
-                    wordWrap: 'on',
-                    quickSuggestions: true,
-                    suggestOnTriggerCharacters: true,
-                    acceptSuggestionOnEnter: "on",
-                    tabCompletion: "on",
-                    contextmenu: true,
-                    scrollbar: {
-                      useShadows: false,
-                      verticalScrollbarSize: 10,
-                      horizontalScrollbarSize: 10
-                    },
-                    readOnly: !!fileInput
+            <form onSubmit={handleSubmit} className="new-card-modal">
+              <div className="input-type-selector">
+                <button
+                  type="button"
+                  className={`input-type-button ${!isUploadMode ? 'active' : ''}`}
+                  onClick={() => {
+                    setIsUploadMode(false);
+                    setFileInput(null);
+                    if (fileInputRef.current) {
+                      fileInputRef.current.value = '';
+                    }
                   }}
-                />
+                >
+                  <span className="material-symbols-rounded">edit_note</span>
+                  Text Note
+                </button>
+                <button
+                  type="button"
+                  className={`input-type-button ${isUploadMode ? 'active' : ''}`}
+                  onClick={() => {
+                    setIsUploadMode(true);
+                    setContentInput('');
+                    if (editorRef.current) {
+                      editorRef.current.setValue('');
+                    }
+                    fileInputRef.current?.click();
+                  }}
+                >
+                  <span className="material-symbols-rounded">upload_file</span>
+                  Upload File
+                </button>
+              </div>
+
+              <div className="input-area">
+                {!isUploadMode ? (
+                  <>
+                    <Editor
+                      height="300px"
+                      defaultLanguage="plaintext"
+                      language={language}
+                      value={contentInput}
+                      theme={theme === 'dark' ? 'vs-dark' : 'light'}
+                      onChange={handleEditorChange}
+                      onMount={handleEditorMount}
+                      options={{
+                        minimap: { enabled: false },
+                        fontSize: 14,
+                        fontFamily: "'Fira Code', monospace",
+                        fontLigatures: true,
+                        lineNumbers: 'on',
+                        roundedSelection: true,
+                        scrollBeyondLastLine: false,
+                        automaticLayout: true,
+                        wordWrap: 'on',
+                        quickSuggestions: true,
+                        suggestOnTriggerCharacters: true,
+                        acceptSuggestionOnEnter: "on",
+                        tabCompletion: "on",
+                        contextmenu: true,
+                        scrollbar: {
+                          useShadows: false,
+                          verticalScrollbarSize: 10,
+                          horizontalScrollbarSize: 10
+                        }
+                      }}
+                    />
+                    {contentInput && (
+                      <div className="status-message info">
+                        <span className="material-symbols-rounded">info</span>
+                        Click Save to create your text note
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      style={{ display: 'none' }}
+                      onChange={(e) => {
+                        const file = e.target.files[0];
+                        if (!file) return;
+
+                        const MAX_FILE_SIZE = 50 * 1024 * 1024;
+                        if (file.size > MAX_FILE_SIZE) {
+                          alert('File size must be under 50MB');
+                          e.target.value = '';
+                          setFileInput(null);
+                          return;
+                        }
+                        setFileInput(file);
+                        setContentInput('');
+                        if (editorRef.current) {
+                          editorRef.current.setValue('');
+                        }
+                      }}
+                      accept="*"
+                    />
+                    {fileInput ? (
+                      <>
+                        <div className="file-info">
+                          <span className="material-symbols-rounded">description</span>
+                          {fileInput.name}
+                          <span style={{ marginLeft: 'auto', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
+                            {(fileInput.size / (1024 * 1024)).toFixed(1)} MB
+                          </span>
+                        </div>
+                        <div className="status-message info">
+                          <span className="material-symbols-rounded">info</span>
+                          Click Upload to save this file
+                        </div>
+                      </>
+                    ) : (
+                      <div
+                        className="upload-area"
+                        onClick={() => fileInputRef.current?.click()}
+                      >
+                        <span className="material-symbols-rounded">upload_file</span>
+                        <div className="upload-instructions">
+                          <span className="main-text">Click to select a file</span>
+                          <span className="file-size-limit">Maximum file size: 50MB</span>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                )}
               </div>
 
               <div className="modal-footer">
                 <button type="button" className="secondary-btn" onClick={handleModalClose}>
                   Cancel
                 </button>
-                <button type="submit" className="primary-btn" disabled={!contentInput.trim() && !fileInput}>
-                  <span className="material-symbols-rounded">upload</span>
-                  Submit
+                <button
+                  type="submit"
+                  className="primary-btn"
+                  disabled={!contentInput.trim() && !fileInput}
+                >
+                  <span className="material-symbols-rounded">
+                    {fileInput ? 'upload' : 'save'}
+                  </span>
+                  {fileInput ? 'Upload' : 'Save'}
                 </button>
                 {isUploading && (
                   <div className="upload-progress">
