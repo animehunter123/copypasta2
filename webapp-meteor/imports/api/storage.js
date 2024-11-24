@@ -183,5 +183,37 @@ export const Storage = {
       console.error('Error in cleanExpired:', error);
       throw new Meteor.Error('clean-expired-failed', error.message);
     }
-  }
+  },
+
+  async removeAll() {
+    try {
+      // Remove all items from the database
+      await Items.removeAsync({});
+
+      // Clean up files directory
+      if (fs.existsSync(FILES_DIR)) {
+        const files = await fs.promises.readdir(FILES_DIR);
+        for (const file of files) {
+          await fs.promises.unlink(path.join(FILES_DIR, file));
+        }
+      }
+
+      // Clean up notes directory
+      if (fs.existsSync(NOTES_DIR)) {
+        const notes = await fs.promises.readdir(NOTES_DIR);
+        for (const note of notes) {
+          await fs.promises.unlink(path.join(NOTES_DIR, note));
+        }
+      }
+
+      // Recreate empty directories
+      await fs.promises.mkdir(FILES_DIR, { recursive: true });
+      await fs.promises.mkdir(NOTES_DIR, { recursive: true });
+
+      return true;
+    } catch (error) {
+      console.error('Error in Storage.removeAll:', error);
+      throw error;
+    }
+  },
 };

@@ -12,9 +12,6 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 * Open a web browser to localhost:3000, and upload a file or a note, and it will save those to ./data/files or ./data/notes
 
 # Todo
-* perhaps consider a upload progress bar for large files up to max which is 50mb intentionally for now
-* the delete all should also delete all files in the ./data/files and ./data/notes folders
-
 * TST: Do a test to ensure 14 day'eth old'eth card got deleted'eth!
 * WISH: Refactor to multiple jsx files for the components (with their own imports and exports)
 

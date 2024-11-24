@@ -120,14 +120,12 @@ Meteor.methods({
 
   async 'items.removeAll'() {
     try {
-      const items = await Storage.getAllItems();
-      for (const item of items) {
-        await Storage.removeItem(item.id);
-      }
+      // Use the new Storage.removeAll method to clean up everything
+      await Storage.removeAll();
       return true;
     } catch (error) {
       console.error('Error in items.removeAll:', error);
-      throw new Meteor.Error('remove-all-failed', error.message);
+      throw new Meteor.Error('remove-all-failed', 'Failed to remove all items: ' + error.message);
     }
   },
 
