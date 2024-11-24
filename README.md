@@ -13,6 +13,7 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 
 # Todo
 * navbar dropdown for ALL/FILES/NOTES needs to be ontop all the time if clicked, not just on hover, it also needs to filter correctly again (it has a memoization bug at the moment)
+* perhaps consider a upload progress bar for large files up to max which is 50mb intentionally for now
 
 * TST: Do a test to ensure 14 day'eth old'eth card got deleted'eth!
 * WISH: Refactor to multiple jsx files for the components (with their own imports and exports)
