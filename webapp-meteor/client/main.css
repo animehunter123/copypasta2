@@ -2414,3 +2414,30 @@ textarea:focus {
     transform: translateY(0);
   }
 }
+
+.delete-note-content {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  background: var(--code-bg);
+  max-height: 300px;
+  overflow-y: auto;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  white-space: pre-wrap;
+}
+
+.delete-note-content code {
+  display: block;
+  width: 100%;
+  color: var(--text-color);
+}
+
+.dark .delete-note-content {
+  background: var(--dark-code-bg);
+}
+
+.dark .delete-note-content code {
+  color: var(--dark-text-color);
+}

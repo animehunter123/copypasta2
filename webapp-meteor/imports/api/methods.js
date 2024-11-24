@@ -147,6 +147,16 @@ Meteor.methods({
     }
   },
 
+  async 'items.getNoteContent'(itemId) {
+    check(itemId, String);
+    try {
+      return await Storage.getNoteContent(itemId);
+    } catch (error) {
+      console.error('Error in items.getNoteContent:', error);
+      throw new Meteor.Error('get-note-content-failed', error.message);
+    }
+  },
+
   'system.getDiskSpace'() {
     if (!Meteor.isServer) return;
     

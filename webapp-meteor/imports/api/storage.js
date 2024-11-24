@@ -216,4 +216,23 @@ export const Storage = {
       throw error;
     }
   },
+
+  async getNoteContent(itemId) {
+    try {
+      const item = await Items.findOneAsync({ id: itemId });
+      if (!item || item.type !== 'note') {
+        throw new Meteor.Error('not-found', 'Note not found');
+      }
+
+      const filePath = path.join(NOTES_DIR, item.id);
+      if (!fs.existsSync(filePath)) {
+        throw new Meteor.Error('file-not-found', 'Note file not found');
+      }
+
+      return fs.readFileSync(filePath, 'utf8');
+    } catch (error) {
+      console.error('Error in getNoteContent:', error);
+      throw error;
+    }
+  },
 };

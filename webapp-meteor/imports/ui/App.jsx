@@ -31,6 +31,7 @@ export default function App() {
   const [editingItem, setEditingItem] = useState(null);
   const [toasts, setToasts] = useState([]);
   const [deleteConfirmation, setDeleteConfirmation] = useState({ isOpen: false, item: null });
+  const [deleteNoteContent, setDeleteNoteContent] = useState('');
   const [draggedItem, setDraggedItem] = useState(null);
   const [dragOverItem, setDragOverItem] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -164,6 +165,23 @@ export default function App() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    const fetchNoteContent = async () => {
+      if (deleteConfirmation.isOpen && deleteConfirmation.item?.type === 'note') {
+        try {
+          const content = await Meteor.callAsync('items.getNoteContent', deleteConfirmation.item.id);
+          setDeleteNoteContent(content);
+        } catch (error) {
+          console.error('Error fetching note content:', error);
+          showToast('Failed to load note content', 'error');
+        }
+      } else {
+        setDeleteNoteContent('');
+      }
+    };
+    fetchNoteContent();
+  }, [deleteConfirmation.isOpen, deleteConfirmation.item]);
 
   const formatBytes = (bytes) => {
     if (!bytes) return '0 B';
@@ -1300,6 +1318,13 @@ export default function App() {
               <p>Are you sure you want to delete this {deleteConfirmation.item?.type || 'item'}?</p>
               {deleteConfirmation.item?.fileName && (
                 <p className="filename"><strong>{deleteConfirmation.item.fileName}</strong></p>
+              )}
+              {deleteConfirmation.item?.type === 'note' && (
+                <pre className="delete-note-content">
+                  <code className={`language-${detectLanguage(deleteNoteContent)}`}>
+                    {deleteNoteContent}
+                  </code>
+                </pre>
               )}
             </div>
             <div className="modal-footer">
