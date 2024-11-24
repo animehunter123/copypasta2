@@ -1124,7 +1124,7 @@ export default function App() {
                   <span className="material-symbols-rounded">upload_file</span>
                   <span>{fileInput ? fileInput.name : 'Click to upload a file'}</span>
                   {contentInput && (
-                    <div className="input-hint overlay upload-hint">Clear text input to enable file upload</div>
+                    <div className="input-hint overlay upload-hint">Click Submit To Save! Otherwise you must, clear the text input to enable file upload</div>
                   )}
                 </label>
               </div>
@@ -1135,7 +1135,7 @@ export default function App() {
 
               <div className="editor-container">
                 {fileInput && (
-                  <div className="input-hint overlay centered">Clear file selection to enable text input</div>
+                  <div className="input-hint overlay centered">Click Submit To Save! Otherwise you must, clear the file selection by clicking cancel.</div>
                 )}
                 <Editor
                   height="300px"
