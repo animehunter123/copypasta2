@@ -90,6 +90,7 @@
 
   /* Warning (Edit) - Orange */
   --warning-50: #fff7ed;
+  --warning-100: #fff3bf;
   --warning-500: #f97316;
   --warning-600: #ea580c;
 
@@ -492,7 +493,6 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  flex-wrap: nowrap;
   flex-shrink: 0;
 }
 
@@ -1236,6 +1236,31 @@ body {
   color: var(--text-secondary);
   transition: all 0.2s;
   position: relative;
+  min-height: 150px;
+}
+
+.upload-label .material-symbols-rounded {
+  font-size: 2rem;
+  opacity: 0.7;
+  transition: all 0.2s;
+}
+
+.upload-label:hover:not(.disabled) .material-symbols-rounded {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.upload-label.disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.upload-label.disabled span:not(.material-symbols-rounded) {
+  opacity: 0.3;
+}
+
+.upload-label.disabled .material-symbols-rounded {
+  opacity: 0.7;
 }
 
 .upload-area input[type="file"] {
@@ -1259,99 +1284,6 @@ body {
   z-index: -1;
 }
 
-/* Input hint overlay styling */
-.input-hint.overlay {
-  position: absolute;
-  padding: 0.5rem 1rem;
-  background: var(--surface);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius);
-  font-size: 0.875rem;
-  color: var(--text-color-secondary);
-  z-index: 10;
-  box-shadow: var(--shadow-sm);
-  opacity: 0;
-  transform: translateY(-10px);
-  animation: fadeInDown 0.3s ease forwards;
-}
-
-.upload-label .input-hint.overlay {
-  bottom: 1rem;
-  left: 50%;
-  transform: translateX(-50%) translateY(10px);
-  white-space: nowrap;
-}
-
-.editor-container .input-hint.overlay {
-  top: 0.5rem;
-  right: 0.5rem;
-  transform: translateY(-10px);
-}
-
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.upload-label .input-hint.overlay {
-  animation: fadeInUp 0.3s ease forwards;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateX(-50%) translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-}
-
-/* Editor container */
-.editor-container {
-  position: relative;
-  margin-top: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.editor-container > div {
-  width: 100%;
-}
-
-/* Centered input hint */
-.input-hint.overlay.centered {
-  position: relative;
-  margin-bottom: 0.75rem;
-  background: var(--surface);
-  border: 1px solid var(--border-color);
-  padding: 0.5rem 1rem;
-  border-radius: var(--radius);
-  white-space: nowrap;
-  z-index: 10;
-  box-shadow: var(--shadow-sm);
-  animation: fadeInDown 0.3s ease forwards;
-}
-
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 /* Upload area hint */
 .input-hint.overlay.upload-hint {
   position: absolute;
@@ -1360,32 +1292,87 @@ body {
   transform: translate(-50%, -50%);
   background: var(--surface);
   border: 1px solid var(--border-color);
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1.25rem;
   border-radius: var(--radius);
   white-space: nowrap;
   z-index: 20;
-  box-shadow: var(--shadow-sm);
-  animation: fadeIn 0.3s ease forwards;
+  box-shadow: var(--shadow-lg);
+  animation: fadeIn 0.2s ease forwards;
+  font-size: 0.9rem;
+  color: var(--text-color);
+  pointer-events: none;
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--warning-50);
+  border: 1px solid var(--warning-500);
 }
 
+.input-hint.overlay.upload-hint::before {
+  content: "info";
+  font-family: 'Material Symbols Rounded';
+  color: var(--warning-500);
+  font-size: 1.1rem;
+}
+
+/* Animation for the upload hint */
 @keyframes fadeIn {
   from {
     opacity: 0;
+    transform: translate(-50%, -40%);
   }
   to {
     opacity: 1;
+    transform: translate(-50%, -50%);
   }
 }
 
-/* Make the upload area visually disabled */
 .upload-label.disabled {
   opacity: 0.7;
   cursor: not-allowed;
 }
 
-.upload-label.disabled .material-symbols-rounded,
 .upload-label.disabled span:not(.material-symbols-rounded) {
-  opacity: 0.5;
+  opacity: 0.3;
+}
+
+.upload-label.disabled .material-symbols-rounded {
+  opacity: 0.7;
+}
+
+/* Input hint bubble */
+.input-hint {
+  background: var(--surface);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Close button */
+.close-button {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.close-button:hover {
+  background: var(--surface-hover);
+  color: var(--text-color);
+}
+
+.close-button .material-symbols-rounded {
+  font-size: 20px;
 }
 
 /* Separator styling */
