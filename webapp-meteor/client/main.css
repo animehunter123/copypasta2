@@ -1166,10 +1166,12 @@ body {
 
 .modal {
   max-width: 600px;
+  max-height: 90vh;
   background-color: var(--surface);
   border-radius: var(--radius-lg);
-  width: 100%;
+  width: 90vw;
   box-shadow: var(--shadow-lg);
+  overflow-y: auto;
 }
 
 .modal-header {
