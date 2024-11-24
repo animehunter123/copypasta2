@@ -18,6 +18,13 @@ garbage
 # Project specific for our UPLOAD and DOWNLOADS
 data/
 
+# Project specific Docker Images
+docker-build.*/*.tar.bz2
+docker-build.*/*.tar
+
+docker-build/*.tar
+docker-build/*.tar.bz2
+
 # OS generated files (JUST IN CASE YOUR FOLDER HAS EXTRA USELESS STUFF)
 .DS_Store
 .DS_Store?

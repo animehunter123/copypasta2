@@ -1,0 +1,12 @@
+# This is a sample docker-compose.yml for our meteorjs webapp
+
+# version: '3' # obsolete
+services:
+  sample_flask_app:
+    container_name: docker-meteorjs-webapp
+    image: docker-meteorjs-webapp:latest
+    ports:
+      - 3000:3000
+    volumes:
+      - ../:/app 
+

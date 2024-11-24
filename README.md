@@ -17,4 +17,4 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 
 ... Before Final Release
 * REQ: move all scripts to ./scripts, and leave a ./restart.sh and ./reset.sh at top level NEED BOTH incase the ./data has data which wasnt mongo managed.
-* REQ: make a Dockerfile(uses ubuntu2404 with apt install nodejs/npm/meteorjs)/docker-compose.yaml
+* REQ: make a Dockerfile(uses ubuntu2404 with apt install nodejs/npm/meteorjs)/docker-compose.yaml (STILL NOT FINISHED YET, ADDED TO GIT JUST IN CASE BUT METEOR DOESNT RUN WELL IN DOCKER ATM...)
