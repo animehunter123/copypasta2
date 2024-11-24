@@ -719,10 +719,6 @@ body {
   margin-top: 0.25rem;
 }
 
-.filter-dropdown.open .filter-dropdown-content {
-  display: block;
-}
-
 .filter-option {
   display: block;
   width: 100%;
@@ -1176,6 +1172,64 @@ body {
   box-shadow: var(--shadow-lg);
 }
 
+.modal-content {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+  min-height: 0;
+  height: calc(90vh - 120px);
+  max-height: calc(90vh - 120px);
+}
+
+.upload-area {
+  height: 400px;
+  max-height: 400px;
+  margin-bottom: 1rem;
+  border: 2px dashed var(--gray-300);
+  border-radius: var(--radius);
+  background-color: var(--surface-hover);
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+
+.upload-area:hover {
+  border-color: var(--primary-400);
+  background-color: var(--primary-50);
+}
+
+.upload-area input[type="file"] {
+  display: none;
+}
+
+.upload-label {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  cursor: pointer;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.upload-label.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.upload-label .material-symbols-rounded {
+  font-size: 3rem;
+  color: var(--text-secondary);
+}
+
+.upload-label:hover .material-symbols-rounded {
+  color: var(--primary-500);
+}
+
 .modal-header {
   padding: 16px 24px;
   border-bottom: 1px solid var(--border-color);
@@ -1189,13 +1243,6 @@ body {
   font-weight: 600;
   color: var(--text-color);
   margin: 0;
-}
-
-.modal-content {
-  flex: 1;
-  padding: 1.5rem;
-  overflow-y: auto;
-  min-height: 0; /* Important for flex container */
 }
 
 .type-selector {
@@ -1232,39 +1279,6 @@ body {
   color: var(--primary-700);
 }
 
-.upload-area {
-  margin-top: 1.5rem;
-  padding: 1.5rem;
-  border: 2px dashed var(--gray-300);
-  border-radius: var(--radius);
-  background-color: var(--surface-hover);
-  text-align: center;
-  transition: all 0.2s;
-}
-
-.upload-area:hover {
-  border-color: var(--primary-400);
-  background-color: var(--primary-50);
-}
-
-.upload-area input[type="file"] {
-  display: none;
-}
-
-.upload-label {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  color: var(--text-color-secondary);
-}
-
-.upload-label .material-symbols-rounded {
-  font-size: 2rem;
-  color: var(--primary-500);
-}
-
 .separator {
   display: flex;
   align-items: center;
@@ -1279,25 +1293,6 @@ body {
   flex: 1;
   height: 1px;
   background-color: var(--gray-300);
-}
-
-textarea {
-  width: 100%;
-  min-height: 200px;
-  padding: 1rem;
-  border-radius: var(--radius);
-  border: 1px solid var(--textarea-border);
-  background-color: var(--textarea-bg);
-  color: var(--textarea-text);
-  font-family: var(--font-mono);
-  resize: vertical;
-  margin-bottom: 1rem;
-}
-
-textarea:focus {
-  outline: none;
-  border-color: var(--primary-500);
-  box-shadow: 0 0 0 3px var(--primary-100);
 }
 
 .modal-footer {
@@ -1652,4 +1647,56 @@ textarea:focus {
 .modal-content p {
   color: var(--text-color);
   margin: 0;
+}
+
+.modal-content form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.upload-area {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.upload-label {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  cursor: pointer;
+  background: var(--surface);
+}
+
+.upload-label.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+textarea {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  padding: 1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--textarea-border);
+  background-color: var(--textarea-bg);
+  color: var(--textarea-text);
+  font-family: var(--font-mono);
+  resize: none;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px var(--primary-100);
 }
