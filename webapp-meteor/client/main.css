@@ -1192,7 +1192,8 @@ body {
   overflow-y: auto;
   min-height: 0;
   position: relative;
-  padding-bottom: calc(1.5rem + 65px);
+  display: flex;
+  flex-direction: column;
 }
 
 .modal-footer {
