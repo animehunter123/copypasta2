@@ -129,6 +129,28 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') {
+        if (modalOpen) {
+          handleModalClose();
+        }
+        if (editModalOpen) {
+          setEditModalOpen(false);
+          setEditingItem(null);
+          setEditModalContent({ content: '', language: 'plaintext' });
+        }
+        // Focus the New Item button
+        if (newItemButtonRef.current) {
+          newItemButtonRef.current.focus();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [modalOpen, editModalOpen]);
+
+  useEffect(() => {
     const handleClickOutside = (event) => {
       if (!event.target.closest('.filter-dropdown')) {
         setIsFilterDropdownOpen(false);
