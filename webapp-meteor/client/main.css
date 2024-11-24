@@ -2168,3 +2168,55 @@ textarea:focus {
 .close-button .material-symbols-rounded {
   font-size: 20px;
 }
+
+/* Input hint centered */
+.input-hint.overlay.centered {
+  position: relative;
+  margin-bottom: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius);
+  white-space: nowrap;
+  z-index: 20;
+  box-shadow: var(--shadow-lg);
+  animation: fadeInDown 0.2s ease forwards;
+  font-size: 0.9rem;
+  color: var(--text-color);
+  pointer-events: none;
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--warning-50);
+  border: 1px solid var(--warning-500);
+}
+
+.input-hint.overlay.centered::before {
+  content: "info";
+  font-family: 'Material Symbols Rounded';
+  color: var(--warning-500);
+  font-size: 1.1rem;
+}
+
+/* Animation for the centered hint */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.editor-container {
+  position: relative;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.editor-container > div {
+  width: 100%;
+}
