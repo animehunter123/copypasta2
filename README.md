@@ -27,13 +27,14 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 * Finally, open a web browser to http://localhost:3000, and upload a file or a note, and it will save those to `./data/files` or `./data/notes`
 
 # Todo
-* BUG: New Meteor3.1 came out 4 days ago. Updated the entire baseline to it, need to fix deprecated feature of: (node:10338) Warning: The `util._extend` API is deprecated. Please use Object.assign() instead.
 * FR: add drag on drop for the new version of file modal
 * BUG: the "infoClick Save to create your text note", as typing forces the modal to go down a line, just remove this span, because we dont need this anymore, its too much info for the user
 * TST: Do a test to ensure 14 day'eth old'eth card got deleted'eth!
 * FR: Overlay for ? to show all keyboard shortcuts across webapp (F1,n,d,l/dmode,filenotes?)
 * FR: For docker, maybe make a specific user instead of running it in root mode (this is definitely safer)
+
 * WISH: Refactor to multiple jsx files for the components (with their own imports and exports)
+* LOWPRI: New Meteor3.1 came out 4 days ago. Updated the entire baseline to it, need to fix deprecated feature of: (node:10338) Warning: The `util._extend` API is deprecated. Please use Object.assign() instead.
 
 ... Before Final Release
 * REQ: move all scripts to ./scripts, and leave a ./restart.sh and ./reset.sh at top level NEED BOTH incase the ./data has data which wasnt mongo managed.
