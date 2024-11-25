@@ -15,12 +15,19 @@ ENV METEOR_DISABLE_OPTIMISTIC_CACHING=1
 ENV METEOR_OFFLINE_CATALOG=1
 ENV ROOT_URL="http://localhost:3000"
 
-# Install Meteor, but a SPECIFIC VERSION that works for this project (If you need to update it later, remember to: cd webapp-meteor && rm -rf node_modules && rm -rf .meteor/local && meteor update --release 3.1 && meteor reset && meteor npm install --save)
-# RUN curl https://install.meteor.com/ | sh
-# RUN curl https://install.meteor.com/\?release\=3.1 | sh
-RUN curl https://install.meteor.com/\?release\=3.0.4 | sh
-# RUN  meteor update --release 3.1 --allow-superuser
-RUN  meteor update --release 3.0.4 --allow-superuser
+# Install Meteor Notes
+# EVERY MeteorJS WebApp is tied to a SPECIFIC VERSION (see .meteor/release). The OFFICIAL Curl installer 
+# method automatically updates it to the latest version uninstalling the old version (If 
+# you need to UPGRADE THE PROJECT from Meteor 3.0.4 to 3.1.0, THEN IN THIS CASE remember to (ON HOST): 
+# cd webapp-meteor && sudo chmod 777 -R .meteor && sudo chmod 777 -R node_modules && rm -rf node_modules && rm -rf .meteor/local && meteor reset && meteor update --release 3.1 &&  meteor npm install --save
+# At this point, the PROJECT is now using Meteor 3.1 for example.
+# Then rebuild the container adjusting the below curl and update to the new version appropriately (based on what the PROJECT version is from above).
+
+# Install Meteor
+# RUN curl https://install.meteor.com/\?release\=3.0.4 | sh
+# RUN meteor update --release 3.0.4 --allow-superuser
+RUN curl https://install.meteor.com/\?release\=3.1 | sh
+RUN meteor update --release 3.1 --allow-superuser
 
 COPY package*.json ./
 COPY .meteor/packages ./.meteor/
