@@ -5,9 +5,11 @@ services:
   docker-meteorjs-webapp:
     container_name: docker-meteorjs-webapp
     image: docker-meteorjs-webapp:latest
-    network_mode: "host" # STUB: use the host's network (e.g., Docker Desktop)
+    # STUB: use the host's network (e.g., Docker Desktop)
+    # network_mode: "host" 
     ports:
       - 3000:3000
     volumes:
       - ../:/app 
+      
 
