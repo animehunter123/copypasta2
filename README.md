@@ -27,13 +27,7 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 * Finally, open a web browser to http://localhost:3000, and upload a file or a note, and it will save those to `./data/files` or `./data/notes`
 
 # Todo
-* TST: Do a test to ensure 14 day'eth old'eth card got deleted'eth!
+* VERIFY: Do a test to ensure 14 day'eth old'eth card got deleted'eth!
 * FR: For docker, maybe make a specific user instead of running it in root mode (this is definitely safer)
-
-
-* WISH: Refactor to multiple jsx files for the components (with their own imports and exports)
-* LOWPRI: New Meteor3.1 came out 4 days ago. Updated the entire baseline to it, need to fix deprecated feature of: (node:10338) Warning: The `util._extend` API is deprecated. Please use Object.assign() instead.
-
-... Before Final Release
-* REQ: move all scripts to ./scripts, and leave a ./restart.sh and ./reset.sh at top level NEED BOTH incase the ./data has data which wasnt mongo managed.
-* REQ: make a Dockerfile(uses ubuntu2404 with apt install nodejs/npm/meteorjs)/docker-compose.yaml (STILL NOT FINISHED YET, ADDED TO GIT JUST IN CASE BUT METEOR DOESNT RUN WELL IN DOCKER ATM...)
+* FR: Refactor to multiple jsx files for the components (with their own imports and exports)
+* FR: After updated to Meteor3.1 noticed dependency deprecated feature of: (node:10338) Warning: The `util._extend` API is deprecated. Please use Object.assign() instead. For now, we will ignore this as it is not affecting our app and it is a external dependency which we cannot fix.
