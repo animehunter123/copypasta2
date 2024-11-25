@@ -2441,3 +2441,61 @@ textarea:focus {
 .dark .delete-note-content code {
   color: var(--dark-text-color);
 }
+
+/* Help Modal */
+.help-modal {
+  max-width: 500px;
+}
+
+.help-section {
+  margin-bottom: 1.5rem;
+}
+
+.help-section h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+  color: var(--text-color);
+}
+
+.help-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.help-section li {
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.help-section kbd {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 0.1rem 0.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+/* Help Button */
+.help-btn {
+  color: var(--text-color);
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.help-btn:hover {
+  background: var(--card-hover);
+  border-color: var(--primary-500);
+}
+
+.help-btn .material-symbols-rounded {
+  font-size: 1.25rem;
+}

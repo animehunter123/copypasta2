@@ -37,6 +37,7 @@ export default function App() {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
   const [isUploadMode, setIsUploadMode] = useState(false);
+  const [helpModalOpen, setHelpModalOpen] = useState(false);
 
   // Refs for focus management
   const newItemButtonRef = useRef(null);
@@ -126,6 +127,8 @@ export default function App() {
         setModalOpen(true);
       } else if (e.key.toLowerCase() === 'd') {
         handleDeleteAll();
+      } else if (e.key === '?') {
+        setHelpModalOpen(true);
       }
     };
 
@@ -1051,7 +1054,15 @@ export default function App() {
         </div>
 
         <div className="nav-group">
-          <button 
+          <button
+            className="icon-btn help-btn"
+            onClick={() => setHelpModalOpen(true)}
+            aria-label="Help"
+            title="Help (Press '?' key)"
+          >
+            <span className="material-symbols-rounded">help</span>
+          </button>
+          <button
             className="danger-btn"
             onClick={handleDeleteAll}
             title="Delete All Items (Press 'D' key)"
@@ -1359,6 +1370,40 @@ export default function App() {
                 <span className="material-symbols-rounded">delete</span>
                 Delete
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {helpModalOpen && (
+        <div className="modal-overlay" onClick={() => setHelpModalOpen(false)}>
+          <div className="modal help-modal" onClick={e => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>Need help on using CopyPasta?</h2>
+              <button
+                className="close-btn"
+                onClick={() => setHelpModalOpen(false)}
+                aria-label="Close"
+              >
+                <span className="material-symbols-rounded">close</span>
+              </button>
+            </div>
+            <div className="modal-content">
+              <div className="help-section">
+                <h3>Main Screen</h3>
+                <ul>
+                  <li><kbd>d</kbd> Delete all cards forcefully</li>
+                  <li><kbd>n</kbd> Create a new card</li>
+                </ul>
+              </div>
+              <div className="help-section">
+                <h3>Card Edit Screen</h3>
+                <ul>
+                  <li>Type in the text area code or paste text</li>
+                  <li><kbd>Ctrl</kbd> + <kbd>Enter</kbd> Save</li>
+                  <li><kbd>Esc</kbd> Exit</li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
