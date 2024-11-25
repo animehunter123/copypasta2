@@ -31,6 +31,7 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 * FR: Overlay for ? to show all keyboard shortcuts across webapp (F1,n,d,l/dmode,filenotes?)
 * FR: For docker, maybe make a specific user instead of running it in root mode (this is definitely safer)
 
+
 * WISH: Refactor to multiple jsx files for the components (with their own imports and exports)
 * LOWPRI: New Meteor3.1 came out 4 days ago. Updated the entire baseline to it, need to fix deprecated feature of: (node:10338) Warning: The `util._extend` API is deprecated. Please use Object.assign() instead.
 
