@@ -6,17 +6,24 @@ FROM node:22
 
 WORKDIR /app
 
+ENV  METEOR_ALLOW_SUPERUSER=1
+ENV  METEOR_DISABLE_OPTIMISTIC_CACHING=1
+
 # Install Meteor, but a SPECIFIC VERSION that works for this project (If you need to update it later, remember to: cd webapp-meteor && rm -rf node_modules && rm -rf .meteor/local && meteor update --release 3.1 && meteor reset && meteor npm install --save)
 # RUN curl https://install.meteor.com/ | sh
 RUN curl https://install.meteor.com/\?release\=3.1 | sh
+RUN  meteor update --release 3.1 --allow-superuser
+
 COPY package*.json ./
 COPY .meteor/packages ./.meteor/
 COPY .meteor/platforms ./.meteor/
 COPY .meteor/release ./.meteor/
 COPY .meteor/versions ./.meteor/
-RUN  METEOR_ALLOW_SUPERUSER=1 meteor npm install --save --allow-superuser
+RUN  meteor npm --no-audit install --save --allow-superuser
+RUN npm --no-audit install
 
 COPY . .
+RUN  meteor npm --no-audit install --save --allow-superuser
 
 EXPOSE 3000
 
