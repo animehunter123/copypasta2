@@ -27,6 +27,9 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 * Finally, open a web browser to http://localhost:3000, and upload a file or a note, and it will save those to `./data/files` or `./data/notes`
 
 # Todo
+* BUG: Files are 0 bytes when downloaded.
+* FR: Add a Copy button in navbar for "Copy Text of most recent card"
+
 * VERIFY: Do a test to ensure 14 day'eth old'eth card got deleted'eth!
 * FR: List Toggle to view in List View or Grid View
 * FR: Add authentication/login to this (Got Lazy and left this for the end)
