@@ -2,6 +2,7 @@ $erroractionpreference = 0
 
 # This is just a test script for using podman to build and run the webapp
 # Podman runs really well on WSL2 (Windows Subsystem for Linux)
+# NOTE: This is only if you didnt install the "Podman Compose" plugin for Windows Podman
 
 pushd .
 
