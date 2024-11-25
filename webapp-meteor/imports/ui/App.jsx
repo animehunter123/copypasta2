@@ -1228,6 +1228,19 @@ export default function App() {
                       <div
                         className="upload-area"
                         onClick={() => fileInputRef.current?.click()}
+                        onDragOver={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                        }}
+                        onDrop={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          const file = e.dataTransfer.files[0];
+                          if (file) {
+                            setFileInput(file);
+                            setIsUploadMode(true);
+                          }
+                        }}
                       >
                         <span className="material-symbols-rounded">upload_file</span>
                         <div className="upload-instructions">
