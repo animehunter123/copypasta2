@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "Installing dependencies, this script should be launched as non-root user, and it will elevate during install manually."
+
 # Install NodeJS 
 sudo apt update
 sudo apt install -y nodejs npm
