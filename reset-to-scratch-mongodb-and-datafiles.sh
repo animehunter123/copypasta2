@@ -6,4 +6,5 @@ echo "Deleting Meteorjs Webapp Data"
 rm -rf ./webapp-meteor/.meteor/local/db
 
 echo "Deleting Meteorjs Webapp ./data folder"
-rm -rf ./webapp-meteor/data
+rm -rf ./data
+# rm -rf ./webapp-meteor/data
