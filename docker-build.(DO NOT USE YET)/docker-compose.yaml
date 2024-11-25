@@ -2,7 +2,7 @@
 
 # version: '3' # obsolete
 services:
-  sample_flask_app:
+  docker-meteorjs-webapp:
     container_name: docker-meteorjs-webapp
     image: docker-meteorjs-webapp:latest
     ports:
