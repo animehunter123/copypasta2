@@ -1,0 +1,22 @@
+FROM node:22
+
+WORKDIR /app
+
+# Install Meteor, but a SPECIFIC VERSION that works for this project (If you need to update it later, remember to: cd webapp-meteor && rm -rf node_modules && rm -rf .meteor/local && meteor update --release 3.1 && meteor reset && meteor npm install --save)
+# RUN curl https://install.meteor.com/ | sh
+RUN curl -sL https://install.meteor.com | sed 's/RELEASE="[^"]*"/RELEASE="3.1"/' | sh
+
+COPY package*.json ./
+COPY .meteor/packages ./.meteor/
+COPY .meteor/platforms ./.meteor/
+COPY .meteor/release ./.meteor/
+COPY .meteor/versions ./.meteor/
+RUN meteor npm install --save
+
+COPY . .
+
+EXPOSE 3000
+
+# CMD ["/app/start-webapp-on-host.sh"]
+# CMD ["meteor"]
+CMD ["meteor", "--allow-superuser", "--port", "3000"]
