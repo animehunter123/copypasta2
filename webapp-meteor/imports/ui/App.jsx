@@ -1400,6 +1400,7 @@ export default function App() {
                 <h3>Card Edit Screen</h3>
                 <ul>
                   <li>Type in the text area code or paste text</li>
+                  <li><kbd>F1</kbd> Open Command Palette</li>
                   <li><kbd>Ctrl</kbd> + <kbd>Enter</kbd> Save</li>
                   <li><kbd>Esc</kbd> Exit</li>
                 </ul>
