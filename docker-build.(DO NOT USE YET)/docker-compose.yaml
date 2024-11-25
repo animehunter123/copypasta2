@@ -1,11 +1,11 @@
 # This is a sample docker-compose.yml for our meteorjs webapp
 
-# version: '3' # obsolete
+# version: '3' # STUB: obsolete, but required if still using ubuntu 22.04 host (not for 24.04)
 services:
   docker-meteorjs-webapp:
     container_name: docker-meteorjs-webapp
     image: docker-meteorjs-webapp:latest
-    # network_mode: host # use the host's network (e.g., Docker Desktop)
+    # network_mode: host # STUB: use the host's network (e.g., Docker Desktop)
     ports:
       - 3000:3000
     volumes:
