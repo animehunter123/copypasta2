@@ -16,7 +16,7 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
         ./start-webapp-on-host.sh
         ```
 
-    2. On a Linux Container on your docker host: 
+    2. On a Linux Container on your docker host (This will change perms, so you need to rebuild if you want on host again): 
     
         ```
         cd ./docker-build-scripts  
