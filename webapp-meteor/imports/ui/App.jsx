@@ -1392,6 +1392,7 @@ export default function App() {
               <div className="help-section">
                 <h3>Main Screen</h3>
                 <ul>
+                  <li>You can Drag & Drop cards to reorder cards.</li>
                   <li><kbd>d</kbd> Delete all cards forcefully</li>
                   <li><kbd>n</kbd> Create a new card</li>
                 </ul>
@@ -1399,7 +1400,7 @@ export default function App() {
               <div className="help-section">
                 <h3>Card Edit Screen</h3>
                 <ul>
-                  <li>Type in the text area code or paste text</li>
+                  <li>Type in the text area code or paste text.</li>
                   <li><kbd>F1</kbd> Open Command Palette</li>
                   <li><kbd>Ctrl</kbd> + <kbd>Enter</kbd> Save</li>
                   <li><kbd>Esc</kbd> Exit</li>

@@ -28,7 +28,6 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 
 # Todo
 * TST: Do a test to ensure 14 day'eth old'eth card got deleted'eth!
-* FR: Overlay for ? to show all keyboard shortcuts across webapp (F1,n,d,l/dmode,filenotes?)
 * FR: For docker, maybe make a specific user instead of running it in root mode (this is definitely safer)
 
 
