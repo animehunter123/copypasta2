@@ -28,6 +28,8 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 
 # Todo
 * VERIFY: Do a test to ensure 14 day'eth old'eth card got deleted'eth!
-* FR: For docker, maybe make a specific user instead of running it in root mode (this is definitely safer)
-* FR: Refactor to multiple jsx files for the components (with their own imports and exports)
+* FR: List Toggle to view in List View or Grid View
+* FR: Add authentication/login to this (Got Lazy and left this for the end)
+* FR: For Docker Best Practices, should run as a non-root user instead of root (to remove warnings during startup)
+* FR: Refactor to multiple jsx files for the components (with their own imports and exports). Currently impossible to maintain.
 * FR: After updated to Meteor3.1 noticed dependency deprecated feature of: (node:10338) Warning: The `util._extend` API is deprecated. Please use Object.assign() instead. For now, we will ignore this as it is not affecting our app and it is a external dependency which we cannot fix.
