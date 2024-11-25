@@ -7,9 +7,24 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 
 # How to run...
 * Use a Linux Container or Host.
-* Install nodejs, npm, meteorjs, `and netstat (if using the bash script). Also: You may need to run the exact Meteor or update your environment via "meteor --version && meteor update --release 3.1"`
-* Launch the shell script ./start-webapp.sh `(Make sure you review what this BASH script is doing, before running it!!!).`
-* Open a web browser to localhost:3000, and upload a file or a note, and it will save those to ./data/files or ./data/notes
+* Install nodejs, npm, meteorjs `(and netstat if using the bash script on the host).`
+* Launch it via one of these two methods:
+
+    1. On your Host Directly (Please carefully check the Bash Script before running it): 
+
+        ```        
+        ./start-webapp-on-host.sh
+        ```
+
+    2. On a Linux Container on your docker host: 
+    
+        ```
+        cd ./docker-build-scripts  
+        ./Dockerfile_Build.sh       # Only do this ONCE
+        ./start-webapp-on-docker.sh
+        ```
+
+* Finally, open a web browser to http://localhost:3000, and upload a file or a note, and it will save those to `./data/files` or `./data/notes`
 
 # Todo
 * BUG: New Meteor3.1 came out 4 days ago. Updated the entire baseline to it, need to fix deprecated feature of: (node:10338) Warning: The `util._extend` API is deprecated. Please use Object.assign() instead.
