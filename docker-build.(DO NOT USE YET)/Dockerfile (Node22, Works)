@@ -1,17 +1,20 @@
+# This is a docker file to use to launch our meteorjs webapp
+# Example on how to build without docker-compose (and run without docker network wan access):
+# ... podman build -t docker-meteorjs-webapp . --network=host
+# ... podman run  -it --rm -p 3000:3000 -v "%cd%\\..\\..:/app" docker-meteorjs-webapp bash
 FROM node:22
 
 WORKDIR /app
 
 # Install Meteor, but a SPECIFIC VERSION that works for this project (If you need to update it later, remember to: cd webapp-meteor && rm -rf node_modules && rm -rf .meteor/local && meteor update --release 3.1 && meteor reset && meteor npm install --save)
 # RUN curl https://install.meteor.com/ | sh
-RUN curl -sL https://install.meteor.com | sed 's/RELEASE="[^"]*"/RELEASE="3.1"/' | sh
-
+RUN curl https://install.meteor.com/\?release\=3.1 | sh
 COPY package*.json ./
 COPY .meteor/packages ./.meteor/
 COPY .meteor/platforms ./.meteor/
 COPY .meteor/release ./.meteor/
 COPY .meteor/versions ./.meteor/
-RUN meteor npm install --save
+RUN  METEOR_ALLOW_SUPERUSER=1 meteor npm install --save --allow-superuser
 
 COPY . .
 
