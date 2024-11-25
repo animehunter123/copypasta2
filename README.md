@@ -27,8 +27,6 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 * Finally, open a web browser to http://localhost:3000, and upload a file or a note, and it will save those to `./data/files` or `./data/notes`
 
 # Todo
-* FR: add drag on drop for the new version of file modal
-* BUG: the "infoClick Save to create your text note", as typing forces the modal to go down a line, just remove this span, because we dont need this anymore, its too much info for the user
 * TST: Do a test to ensure 14 day'eth old'eth card got deleted'eth!
 * FR: Overlay for ? to show all keyboard shortcuts across webapp (F1,n,d,l/dmode,filenotes?)
 * FR: For docker, maybe make a specific user instead of running it in root mode (this is definitely safer)
