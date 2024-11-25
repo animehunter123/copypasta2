@@ -1,6 +1,6 @@
 # This is a sample docker-compose.yml for our meteorjs webapp
 
-# version: '3' # STUB: obsolete, but required if still using ubuntu 22.04 host (not for 24.04)
+version: '3' # STUB: obsolete warning, but required if still using ubuntu 22.04 host (not for 24.04)
 services:
   docker-meteorjs-webapp:
     container_name: docker-meteorjs-webapp
