@@ -6,7 +6,15 @@ import hljs from 'highlight.js';
 import '/public/cdn/highlight.js/github.css';
 import '/public/cdn/highlight.js/github-dark.css';
 import { Items } from '../api/collections';
+import loader from "@monaco-editor/loader";
 import Editor from "@monaco-editor/react";
+
+// Configure Monaco Editor to use local files
+loader.config({
+  paths: {
+    vs: '/monaco-editor/vs'
+  }
+});
 
 // Constants
 const EXPIRATION_DAYS = 14;
