@@ -2654,3 +2654,20 @@ textarea:focus {
 .nav-group .icon-btn .material-symbols-rounded {
   font-size: 1.25rem;
 }
+
+/* Specific styles for help button to match other navbar icons */
+.nav-group button.icon-btn:not(.theme-btn):not(.btn-icon):not(.danger-btn) {
+  background: var(--surface-hover);
+}
+
+.nav-group button.icon-btn:not(.theme-btn):not(.btn-icon):not(.danger-btn):hover {
+  background: var(--surface-active);
+}
+
+[data-theme="dark"] .nav-group button.icon-btn:not(.theme-btn):not(.btn-icon):not(.danger-btn) {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .nav-group button.icon-btn:not(.theme-btn):not(.btn-icon):not(.danger-btn):hover {
+  background: rgba(255, 255, 255, 0.1);
+}
