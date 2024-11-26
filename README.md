@@ -28,7 +28,7 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 
 # Todo
 
-* BUG: Need to load monaco via ./public for offline homelab
+* BUG: Need to load monaco via ./public for offline homelab // the monaco initialization: error is happening, failed to load resource net: err_name_not_resolved in loader.js:1
 
 * VF: Do a test to ensure 14 day'eth old'eth card got deleted'eth!
 * FR: Add authentication/login to this (Meh, Got Lazy and left this for the end.)
