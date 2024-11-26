@@ -29,6 +29,7 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 # Todo
 * FR: Toggle to list mode from card grid mode?
 * FR: inside create new card, add keyboard shortcut to toggle to code view or file view"
+* FR: The close button for the help modal isnt styled correctly
 
 * VERIFY: Do a test to ensure 14 day'eth old'eth card got deleted'eth!
 * FR: List Toggle to view in List View or Grid View
