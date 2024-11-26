@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # This is my main script to start the app. Open to suggestions to improve it.
-printf "This script will launch the meteorjs webpage on a Ubuntu Host.\nNote: Host environment must have already run:\n  sudo apt install -y nodejs npm && npx -y meteor\n"
+printf "This script will launch the meteorjs webpage on a Ubuntu Host.\nNote: Host environment must have already run:\n  sudo apt install -y nodejs npm && curl https://install.meteor.com/?release=3.1 | sh\n"
 
 # Get the absolute path of the script directory
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
