@@ -2625,3 +2625,32 @@ textarea:focus {
   outline: none;
   box-shadow: var(--focus-ring);
 }
+
+[data-theme="dark"] .navbar button {
+  color: var(--text-color);
+  outline: none;
+}
+
+[data-theme="dark"] .navbar button.help-button {
+  outline: none;
+}
+
+.nav-group .icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm);
+  color: var(--text-color);
+  cursor: pointer;
+}
+
+.nav-group .icon-btn:hover {
+  background: var(--surface-hover);
+}
+
+.nav-group .icon-btn .material-symbols-rounded {
+  font-size: 1.25rem;
+}

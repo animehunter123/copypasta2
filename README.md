@@ -27,8 +27,8 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 * Finally, open a web browser to http://localhost:3000, and upload a file or a note, and it will save those to `./data/files` or `./data/notes`
 
 # Todo
-* FR: The close button for the help modal isnt styled correctly
-* FR: The Help button in darkmode is the only one with a outline on it
+* FR: In the navbar, The Help button in darkmode is the only one with a outline on it
+* BUG: All the outlines of the cards in light mode are not seeable anymore. They look perfect in dark mode, so please make it like the equivalent in lightmode
 * FR: The server log is keeps printing "Publishing items...", i want that removed to be less spammy
 * FR: Remove lots of console.log's from the client side
 

@@ -1119,7 +1119,7 @@ export default function App() {
 
         <div className="nav-group">
           <button
-            className="icon-btn help-btn"
+            className="icon-btn"
             onClick={() => setHelpModalOpen(true)}
             aria-label="Help"
             title="Help (Press '?' key)"
