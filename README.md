@@ -27,10 +27,6 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 * Finally, open a web browser to http://localhost:3000, and upload a file or a note, and it will save those to `./data/files` or `./data/notes`
 
 # Todo
-* FR: The server log is keeps printing "Publishing items...", i want that removed to be less spammy
-* FR: Remove lots of console.log's from the client side
-* make the text note or upload file label also say altf1/altf2
-
 * VERIFY: Do a test to ensure 14 day'eth old'eth card got deleted'eth!
 * FR: Add authentication/login to this (Meh, Got Lazy and left this for the end.)
 * FR: For Docker Best Practices, should run as a non-root user instead of root (to remove warnings during startup)
