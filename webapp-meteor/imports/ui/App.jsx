@@ -142,11 +142,35 @@ export default function App() {
     return sortedItems.find(item => item.type === 'note' && item.isText);
   };
 
+  const copyToClipboard = (text) => {
+    // Try using the Clipboard API first
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text);
+    }
+    
+    // Fallback method using textarea
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';  // Prevent scrolling to bottom
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    
+    try {
+      const successful = document.execCommand('copy');
+      document.body.removeChild(textarea);
+      return successful ? Promise.resolve() : Promise.reject('Copy command failed');
+    } catch (err) {
+      document.body.removeChild(textarea);
+      return Promise.reject(err);
+    }
+  };
+
   const handleCopyRecentTextCard = () => {
     const recentTextCard = findMostRecentTextCard();
     if (recentTextCard) {
       const content = recentTextCard.content || recentTextCard.text || '';
-      navigator.clipboard.writeText(content).then(() => {
+      copyToClipboard(content).then(() => {
         // Visual feedback - highlight the card
         setHighlightedCardId(recentTextCard._id);
         setTimeout(() => {
