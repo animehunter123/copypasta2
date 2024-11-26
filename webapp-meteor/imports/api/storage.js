@@ -98,11 +98,11 @@ export const Storage = {
         originalSize: noteData.originalSize,
         createdAt: noteData.createdAt,
         expiresAt: noteData.expiresAt,
-        type: noteData.type,
-        isText: true
+        type: 'note',  // Ensure type is always 'note'
+        isText: true   // Always true for notes
       };
 
-      // Write content to file
+      // Write content to file system
       fs.writeFileSync(filePath, noteData.content, 'utf8');
 
       // Get the lowest order value and subtract 1 to add at top
@@ -111,6 +111,8 @@ export const Storage = {
 
       // Insert into MongoDB using async method
       const insertedId = await Items.insertAsync(data);
+      console.log('Saved note with ID:', insertedId, 'Data:', data);
+      
       if (!insertedId) {
         throw new Error('Failed to insert note into MongoDB');
       }
@@ -123,12 +125,10 @@ export const Storage = {
   },
 
   async getAllItems() {
-    try {
-      return await Items.find({}, { sort: { createdAt: -1 } }).fetchAsync();
-    } catch (error) {
-      console.error('Error in getAllItems:', error);
-      throw new Meteor.Error('get-items-failed', error.message);
-    }
+    console.log('Getting all items...');
+    const items = await Items.find({}).fetchAsync();
+    console.log('Found items:', items);
+    return items;
   },
 
   async removeItem(itemId) {

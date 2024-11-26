@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { ReactiveVar } from 'meteor/reactive-var';
@@ -38,6 +38,7 @@ export default function App() {
   const [isUploading, setIsUploading] = useState(false);
   const [isUploadMode, setIsUploadMode] = useState(false);
   const [helpModalOpen, setHelpModalOpen] = useState(false);
+  const [highlightedCardId, setHighlightedCardId] = useState(null);
 
   // Refs for focus management
   const newItemButtonRef = useRef(null);
@@ -52,17 +53,23 @@ export default function App() {
   const fileInputRef = useRef(null);
 
   // Subscribe to items and get them reactively
-  const { items, isLoading, itemsWithOrder } = useTracker(() => {
+  const { items, isLoading } = useTracker(() => {
     const handle = Meteor.subscribe('items');
+    console.log('Subscription ready:', handle.ready());
+    
+    if (!handle.ready()) {
+      return { items: [], isLoading: true };
+    }
+
+    const allItems = Items.find({}, { 
+      sort: sortByNewest ? { createdAt: -1 } : { order: 1 } 
+    }).fetch();
+
+    console.log('Loaded items:', allItems);
     
     return {
-      items: Items.find({}, { 
-        sort: sortByNewest ? { createdAt: -1 } : { order: 1 } 
-      }).fetch(),
-      itemsWithOrder: Items.find({}, { 
-        sort: sortByNewest ? { createdAt: -1 } : { order: 1 } 
-      }).fetch(),
-      isLoading: !handle.ready()
+      items: allItems,
+      isLoading: false
     };
   }, [sortByNewest]);
 
@@ -118,23 +125,57 @@ export default function App() {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    const handleKeyPress = (e) => {
-      // Only trigger if not in an input/textarea
-      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-      
-      if (e.key.toLowerCase() === 'n') {
-        setModalOpen(true);
-      } else if (e.key.toLowerCase() === 'd') {
-        handleDeleteAll();
-      } else if (e.key === '?') {
-        setHelpModalOpen(true);
-      }
-    };
+  // Define handlers before useEffect
+  const findMostRecentTextCard = () => {
+    // Use the filtered and sorted items
+    const sortedItems = sortByNewest 
+      ? [...items].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      : items;  // items are already sorted by order if !sortByNewest
 
+    // Find the first note type card
+    return sortedItems.find(item => item.type === 'note' && item.isText);
+  };
+
+  const handleCopyRecentTextCard = () => {
+    const recentTextCard = findMostRecentTextCard();
+    if (recentTextCard) {
+      const content = recentTextCard.content || recentTextCard.text || '';
+      navigator.clipboard.writeText(content).then(() => {
+        // Visual feedback - highlight the card
+        setHighlightedCardId(recentTextCard._id);
+        setTimeout(() => {
+          setHighlightedCardId(null);
+        }, 1000);
+        showToast('Most recent text card copied to clipboard');
+      }).catch(err => {
+        console.error('Failed to copy:', err);
+        showToast('Failed to copy content', 'error');
+      });
+    } else {
+      showToast('No text card found', 'error');
+    }
+  };
+
+  // Memoize the keyboard handler to prevent recreating on every render
+  const handleKeyPress = useCallback((e) => {
+    // Only trigger if not in an input/textarea
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    
+    if (e.key.toLowerCase() === 'n') {
+      setModalOpen(true);
+    } else if (e.key.toLowerCase() === 'd') {
+      handleDeleteAll();
+    } else if (e.key === '?') {
+      setHelpModalOpen(true);
+    } else if (e.key.toLowerCase() === 'c') {
+      handleCopyRecentTextCard();
+    }
+  }, [handleCopyRecentTextCard]); // Only depends on the copy handler
+
+  useEffect(() => {
     document.addEventListener('keydown', handleKeyPress);
     return () => document.removeEventListener('keydown', handleKeyPress);
-  }, []);
+  }, [handleKeyPress]);
 
   useEffect(() => {
     const handleEscape = (e) => {
@@ -845,7 +886,9 @@ export default function App() {
     return (
       <div 
         key={item._id}
-        className={`content-card ${isExpiring ? 'expiring' : ''}`}
+        className={`content-card ${isExpiring ? 'expiring' : ''} ${
+          highlightedCardId === item._id ? 'highlight-copy' : ''
+        }`}
         draggable="true"
         onDragStart={(e) => handleDragStart(e, item)}
         onDragEnd={handleDragEnd}
@@ -1087,6 +1130,13 @@ export default function App() {
             <span className="material-symbols-rounded">
               {sortByNewest ? "swap_vert" : "drag_indicator"}
             </span>
+          </button>
+          <button
+            className="theme-btn"
+            onClick={handleCopyRecentTextCard}
+            title="Copy Recent Text Card (Press 'C' key)"
+          >
+            <span className="material-symbols-rounded">content_copy</span>
           </button>
           <button
             autoFocus
