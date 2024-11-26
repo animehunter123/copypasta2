@@ -34,4 +34,5 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 * FR: Add authentication/login to this (Meh, Got Lazy and left this for the end.)
 * FR: For Docker Best Practices, should run as a non-root user instead of root (to remove warnings during startup)
 * FR: Refactor the terrifying App.jsx into multiple jsx files for the components (with their own imports and exports). 
+* FR: Use ImageMagick to make a thumbnail of the image and display it in the UI.
 * FR: After updated to Meteor3.1 noticed dependency deprecated feature of: (node:10338) Warning: The `util._extend` API is deprecated. Please use Object.assign() instead. For now, we will ignore this as it is not affecting our app and it is a external dependency which we cannot fix.
