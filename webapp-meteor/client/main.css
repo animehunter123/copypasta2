@@ -1034,6 +1034,11 @@ body {
   padding: 0;
 }
 
+/* Hide file info in list view */
+.content-cards.list-view .file-info {
+  display: none;
+}
+
 /* Responsive adjustments for list view */
 @media screen and (max-width: 768px) {
   .content-cards.list-view .content-card {
@@ -1641,32 +1646,32 @@ textarea:focus {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-top: 1rem;
-  width: 100%;
-  font-size: 0.875rem;
-  color: var(--text-color);
+  margin-left: auto;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  animation: fadeIn 0.3s ease;
 }
 
 .upload-progress progress {
-  flex: 1;
+  width: 120px;
   height: 8px;
-  border-radius: var(--radius);
+  border-radius: 4px;
   overflow: hidden;
   border: none;
+  background: var(--surface-hover);
 }
 
 .upload-progress progress::-webkit-progress-bar {
-  background-color: var(--gray-200);
-  border-radius: var(--radius);
+  background: var(--surface-hover);
 }
 
 .upload-progress progress::-webkit-progress-value {
-  background-color: var(--primary-500);
+  background: var(--primary-500);
   transition: width 0.3s ease;
 }
 
 .upload-progress progress::-moz-progress-bar {
-  background-color: var(--primary-500);
+  background: var(--primary-500);
   transition: width 0.3s ease;
 }
 
@@ -2570,11 +2575,6 @@ textarea:focus {
   justify-self: end;
 }
 
-/* Hide file info in list view */
-.content-cards.list-view .file-info {
-  display: none;
-}
-
 /* Responsive adjustments for list view */
 @media screen and (max-width: 768px) {
   .content-cards.list-view .content-card {
@@ -2595,4 +2595,33 @@ textarea:focus {
   .content-cards.list-view .content-card .card-buttons {
     display: none;
   }
+}
+
+.help-modal .modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.help-modal .modal-header button {
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  color: var(--text-color);
+}
+
+.help-modal .modal-header button:hover {
+  background: var(--surface-hover);
+}
+
+.help-modal .modal-header button:focus {
+  outline: none;
+  box-shadow: var(--focus-ring);
 }
