@@ -3,8 +3,8 @@ import { useTracker } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 import { ReactiveVar } from 'meteor/reactive-var';
 import hljs from 'highlight.js';
-import 'highlight.js/styles/github.css';
-import 'highlight.js/styles/github-dark.css';
+import '/public/cdn/highlight.js/github.css';
+import '/public/cdn/highlight.js/github-dark.css';
 import { Items } from '../api/collections';
 import Editor from "@monaco-editor/react";
 
@@ -241,8 +241,8 @@ export default function App() {
     const style = document.createElement('link');
     style.rel = 'stylesheet';
     style.href = theme === 'dark' 
-      ? '/packages/highlightjs/styles/github-dark.css'
-      : '/packages/highlightjs/styles/github.css';
+      ? '/public/cdn/highlight.js/github-dark.css'
+      : '/public/cdn/highlight.js/github.css';
     
     // Remove any existing highlight.js styles
     document.querySelectorAll('link[href*="highlightjs"]').forEach(el => el.remove());
