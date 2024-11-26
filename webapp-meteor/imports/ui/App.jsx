@@ -1035,6 +1035,27 @@ export default function App() {
     localStorage.setItem('viewMode', viewMode);
   }, [viewMode]);
 
+  const handleModalKeyDown = useCallback((e) => {
+    if (modalOpen) {
+      if (e.key === 'Escape') {
+        handleModalClose();
+      } else if (e.altKey) {
+        if (e.key === '1') {
+          e.preventDefault();
+          setIsUploadMode(false);
+        } else if (e.key === '2') {
+          e.preventDefault();
+          setIsUploadMode(true);
+        }
+      }
+    }
+  }, [modalOpen]);
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleModalKeyDown);
+    return () => document.removeEventListener('keydown', handleModalKeyDown);
+  }, [handleModalKeyDown]);
+
   if (isLoading) {
     return (
       <div className="loading">
@@ -1185,6 +1206,7 @@ export default function App() {
                       fileInputRef.current.value = '';
                     }
                   }}
+                  title="Text Note (Alt+1)"
                 >
                   <span className="material-symbols-rounded">edit_note</span>
                   Text Note
@@ -1200,6 +1222,7 @@ export default function App() {
                     }
                     fileInputRef.current?.click();
                   }}
+                  title="Upload File (Alt+2)"
                 >
                   <span className="material-symbols-rounded">upload_file</span>
                   Upload File
@@ -1454,17 +1477,12 @@ export default function App() {
                   <li>Type in the text area code or paste text.</li>
                   <li><kbd>F1</kbd> Open Command Palette</li>
                   <li><kbd>Ctrl</kbd> + <kbd>Enter</kbd> Save</li>
-                  <li><kbd>Esc</kbd> Exit</li>
+                  <li><kbd>Alt</kbd> + <kbd>1</kbd> Switch to Text Note</li>
+                  <li><kbd>Alt</kbd> + <kbd>2</kbd> Switch to File Upload</li>
+                  <li><kbd>Esc</kbd> Cancel editing</li>
                 </ul>
               </div>
-              <div className="help-section">
-                <h3>View Options</h3>
-                <ul>
-                  <li>Click the view toggle button to switch between grid and list views</li>
-                  <li>List view shows items in a compact, single-line format</li>
-                  <li>Grid view (default) shows items in a card layout</li>
-                </ul>
-              </div>
+
             </div>
           </div>
         </div>
