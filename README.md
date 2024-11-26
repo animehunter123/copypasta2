@@ -27,7 +27,6 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 * Finally, open a web browser to http://localhost:3000, and upload a file or a note, and it will save those to `./data/files` or `./data/notes`
 
 # Todo
-* FR: Toggle to list mode from card grid mode?
 * FR: inside create new card, add keyboard shortcut to toggle to code view or file view"
 * FR: The close button for the help modal isnt styled correctly
 * FR: The Help button in darkmode is the only one with a outline on it

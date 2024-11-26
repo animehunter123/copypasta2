@@ -833,7 +833,7 @@ export default function App() {
   const handleDragEnd = async (e) => {
     e.currentTarget.classList.remove('dragging');
     if (draggedItem && dragOverItem && draggedItem._id !== dragOverItem._id) {
-      const itemIds = itemsWithOrder.map(item => item._id);
+      const itemIds = filteredItems.map(item => item._id);
       const fromIndex = itemIds.indexOf(draggedItem._id);
       const toIndex = itemIds.indexOf(dragOverItem._id);
       
@@ -843,17 +843,14 @@ export default function App() {
       newOrder.splice(toIndex, 0, draggedItem._id);
       
       // Clear drag state before making the async call
-      const draggedId = draggedItem._id;
-      const dragOverId = dragOverItem._id;
       setDraggedItem(null);
       setDragOverItem(null);
       
       try {
         await Meteor.callAsync('items.reorderAll', newOrder);
       } catch (error) {
-        showToast('Failed to reorder items: ' + error.message, 'error');
-        // Optionally refresh the list on error
-        Meteor.subscribe('items');
+        console.error('Error reordering items:', error);
+        showToast('Failed to reorder items', 'error');
       }
     } else {
       setDraggedItem(null);
