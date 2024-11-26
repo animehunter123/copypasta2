@@ -29,6 +29,8 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 # Todo
 * FR: Add a Copy button in navbar for "Copy Text of most recent card"
 
+* FR: Toggle to list mode from card grid mode?
+
 * VERIFY: Do a test to ensure 14 day'eth old'eth card got deleted'eth!
 * FR: List Toggle to view in List View or Grid View
 * FR: Add authentication/login to this (Got Lazy and left this for the end)
