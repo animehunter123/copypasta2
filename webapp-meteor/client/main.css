@@ -1662,13 +1662,11 @@ textarea:focus {
 
 .upload-progress progress::-webkit-progress-value {
   background-color: var(--primary-500);
-  border-radius: var(--radius);
   transition: width 0.3s ease;
 }
 
 .upload-progress progress::-moz-progress-bar {
   background-color: var(--primary-500);
-  border-radius: var(--radius);
   transition: width 0.3s ease;
 }
 
@@ -2503,6 +2501,7 @@ textarea:focus {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  padding: 1rem;
 }
 
 .content-cards.list-view .content-card {
@@ -2517,13 +2516,30 @@ textarea:focus {
   min-height: unset;
 }
 
-.content-cards.list-view .content-card .card-content {
+/* Common styles for both text and file cards in list view */
+.content-cards.list-view .card-content {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   margin: 0;
   padding: 0;
   max-height: none;
+  grid-column: 1;
+  order: 1;
+}
+
+/* File card specific styles in list view */
+.content-cards.list-view .content-card.file-card .card-content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.content-cards.list-view .content-card.file-card .filename {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 0;
 }
 
 .content-cards.list-view .content-card pre {
@@ -2540,6 +2556,8 @@ textarea:focus {
   gap: 0.5rem;
   margin: 0;
   padding: 0;
+  grid-column: 2;
+  order: 2;
 }
 
 .content-cards.list-view .content-card .card-buttons {
@@ -2547,6 +2565,14 @@ textarea:focus {
   gap: 0.5rem;
   margin: 0;
   padding: 0;
+  grid-column: 3 / span 2;
+  order: 3;
+  justify-self: end;
+}
+
+/* Hide file info in list view */
+.content-cards.list-view .file-info {
+  display: none;
 }
 
 /* Responsive adjustments for list view */
