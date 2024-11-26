@@ -138,7 +138,12 @@ app.get('/download/:id', (req, res) => {
     const notePath = path.join(notesDir, id);
 
     if (fs.existsSync(filePath)) {
-        res.download(filePath);
+        res.sendFile(filePath, (err) => {
+            if (err) {
+                console.error('Error sending file:', err);
+                res.status(500).json({ error: 'Failed to download file' });
+            }
+        });
     } else if (fs.existsSync(notePath)) {
         const noteData = JSON.parse(fs.readFileSync(notePath, 'utf8'));
         res.json(noteData);
