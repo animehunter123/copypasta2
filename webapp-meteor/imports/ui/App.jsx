@@ -1445,6 +1445,7 @@ export default function App() {
                   <li>You can Drag & Drop cards to reorder cards.</li>
                   <li><kbd>d</kbd> Delete all cards forcefully</li>
                   <li><kbd>n</kbd> Create a new card</li>
+                  <li><kbd>c</kbd> Copy the text of most recent text card</li>
                 </ul>
               </div>
               <div className="help-section">
