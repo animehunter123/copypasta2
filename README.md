@@ -27,9 +27,8 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 * Finally, open a web browser to http://localhost:3000, and upload a file or a note, and it will save those to `./data/files` or `./data/notes`
 
 # Todo
-* FR: Add a Copy button in navbar for "Copy Text of most recent card"
-
 * FR: Toggle to list mode from card grid mode?
+* FR: inside create new card, add keyboard shortcut to toggle to code view or file view"
 
 * VERIFY: Do a test to ensure 14 day'eth old'eth card got deleted'eth!
 * FR: List Toggle to view in List View or Grid View
