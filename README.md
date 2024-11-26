@@ -27,7 +27,7 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 * Finally, open a web browser to http://localhost:3000, and upload a file or a note, and it will save those to `./data/files` or `./data/notes`
 
 # Todo
-* VERIFY: Do a test to ensure 14 day'eth old'eth card got deleted'eth!
+* VF: Do a test to ensure 14 day'eth old'eth card got deleted'eth!
 * FR: Add authentication/login to this (Meh, Got Lazy and left this for the end.)
 * FR: For Docker Best Practices, should run as a non-root user instead of root (to remove warnings during startup)
 * FR: Refactor the terrifying App.jsx into multiple jsx files for the components (with their own imports and exports). 
