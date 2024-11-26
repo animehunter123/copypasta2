@@ -1153,11 +1153,12 @@ export default function App() {
             </span>
           </button>
           <button
-            className="theme-btn"
+            className="success-btn"
             onClick={handleCopyRecentTextCard}
             title="Copy Recent Text Card (Press 'C' key)"
           >
             <span className="material-symbols-rounded">content_copy</span>
+            {/* Copy Recent Text */}
           </button>
           <button
             autoFocus
