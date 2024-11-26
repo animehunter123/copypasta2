@@ -9,7 +9,7 @@ services:
     # STUB: use the host's network (e.g., Docker Desktop)
     # network_mode: "host" 
     ports:
-      - 3000:3000
+      - '3000:3000'
     volumes:
       - '../:/app'
       
