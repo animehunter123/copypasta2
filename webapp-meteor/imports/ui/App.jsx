@@ -25,7 +25,7 @@ export default function App() {
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark');
   const [filter, setFilter] = useState('all');
   const [isFilterDropdownOpen, setIsFilterDropdownOpen] = useState(false);
-  const [sortByNewest, setSortByNewest] = useState(false);
+  const [viewMode, setViewMode] = useState(localStorage.getItem('viewMode') || 'grid');
   const [previewLanguage, setPreviewLanguage] = useState('text');
   const [previewContent, setPreviewContent] = useState('');
   const [editingItem, setEditingItem] = useState(null);
@@ -62,7 +62,7 @@ export default function App() {
     }
 
     const allItems = Items.find({}, { 
-      sort: sortByNewest ? { createdAt: -1 } : { order: 1 } 
+      sort: { order: 1 } 
     }).fetch();
 
     console.log('Loaded items:', allItems);
@@ -71,7 +71,7 @@ export default function App() {
       items: allItems,
       isLoading: false
     };
-  }, [sortByNewest]);
+  }, []);
 
   // Memoize filtered counts
   const filteredCounts = useMemo(() => ({
@@ -128,9 +128,7 @@ export default function App() {
   // Define handlers before useEffect
   const findMostRecentTextCard = () => {
     // Use the filtered and sorted items
-    const sortedItems = sortByNewest 
-      ? [...items].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-      : items;  // items are already sorted by order if !sortByNewest
+    const sortedItems = [...items].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
     // Find the first note type card
     return sortedItems.find(item => item.type === 'note' && item.isText);
@@ -1035,6 +1033,11 @@ export default function App() {
     }
   }, [deleteConfirmation.isOpen]);
 
+  useEffect(() => {
+    // Save view mode preference
+    localStorage.setItem('viewMode', viewMode);
+  }, [viewMode]);
+
   if (isLoading) {
     return (
       <div className="loading">
@@ -1124,11 +1127,11 @@ export default function App() {
           </button>
           <button
             className="btn-icon"
-            onClick={() => setSortByNewest(!sortByNewest)}
-            title={sortByNewest ? "Currently: Newest First" : "Currently: Custom Order (with Drag and Drop)"}
+            onClick={() => setViewMode(viewMode === 'grid' ? 'list' : 'grid')}
+            title={`Switch to ${viewMode === 'grid' ? 'list' : 'grid'} view`}
           >
             <span className="material-symbols-rounded">
-              {sortByNewest ? "swap_vert" : "drag_indicator"}
+              {viewMode === 'grid' ? 'view_list' : 'grid_view'}
             </span>
           </button>
           <button
@@ -1457,6 +1460,14 @@ export default function App() {
                   <li><kbd>Esc</kbd> Exit</li>
                 </ul>
               </div>
+              <div className="help-section">
+                <h3>View Options</h3>
+                <ul>
+                  <li>Click the view toggle button to switch between grid and list views</li>
+                  <li>List view shows items in a compact, single-line format</li>
+                  <li>Grid view (default) shows items in a card layout</li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -1590,7 +1601,7 @@ export default function App() {
         </div>
       )}
 
-      <div className="content-grid">
+      <div className={`content-cards ${viewMode === 'list' ? 'list-view' : 'grid-view'}`}>
         {filteredItems.map(renderCard)}
       </div>
       <div className="stats">

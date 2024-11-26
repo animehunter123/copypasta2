@@ -31,6 +31,7 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 * FR: inside create new card, add keyboard shortcut to toggle to code view or file view"
 * FR: The close button for the help modal isnt styled correctly
 * FR: The Help button in darkmode is the only one with a outline on it
+* FR: The server log is keeps printing "Publishing Items", i want that removed to be less spammy
 
 * VERIFY: Do a test to ensure 14 day'eth old'eth card got deleted'eth!
 * FR: List Toggle to view in List View or Grid View
