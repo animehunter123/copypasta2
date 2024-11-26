@@ -27,14 +27,12 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 * Finally, open a web browser to http://localhost:3000, and upload a file or a note, and it will save those to `./data/files` or `./data/notes`
 
 # Todo
-* BUG: All the outlines of the cards in light mode are not seeable anymore. They look perfect in dark mode, so please make it like the equivalent in lightmode
 * FR: The server log is keeps printing "Publishing items...", i want that removed to be less spammy
 * FR: Remove lots of console.log's from the client side
 * make the text note or upload file label also say altf1/altf2
 
 * VERIFY: Do a test to ensure 14 day'eth old'eth card got deleted'eth!
-* FR: List Toggle to view in List View or Grid View
-* FR: Add authentication/login to this (Got Lazy and left this for the end)
+* FR: Add authentication/login to this (Meh, Got Lazy and left this for the end.)
 * FR: For Docker Best Practices, should run as a non-root user instead of root (to remove warnings during startup)
-* FR: Refactor to multiple jsx files for the components (with their own imports and exports). Currently impossible to maintain.
+* FR: Refactor the terrifying App.jsx into multiple jsx files for the components (with their own imports and exports). 
 * FR: After updated to Meteor3.1 noticed dependency deprecated feature of: (node:10338) Warning: The `util._extend` API is deprecated. Please use Object.assign() instead. For now, we will ignore this as it is not affecting our app and it is a external dependency which we cannot fix.

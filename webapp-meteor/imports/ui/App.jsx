@@ -55,7 +55,7 @@ export default function App() {
   // Subscribe to items and get them reactively
   const { items, isLoading } = useTracker(() => {
     const handle = Meteor.subscribe('items');
-    console.log('Subscription ready:', handle.ready());
+    // console.log('Subscription ready:', handle.ready());
     
     if (!handle.ready()) {
       return { items: [], isLoading: true };
@@ -65,7 +65,7 @@ export default function App() {
       sort: { order: 1 } 
     }).fetch();
 
-    console.log('Loaded items:', allItems);
+    // console.log('Loaded items:', allItems);
     
     return {
       items: allItems,
@@ -146,7 +146,7 @@ export default function App() {
         }, 1000);
         showToast('Most recent text card copied to clipboard');
       }).catch(err => {
-        console.error('Failed to copy:', err);
+        // console.error('Failed to copy:', err);
         showToast('Failed to copy content', 'error');
       });
     } else {
@@ -215,7 +215,7 @@ export default function App() {
           const content = await Meteor.callAsync('items.getNoteContent', deleteConfirmation.item.id);
           setDeleteNoteContent(content);
         } catch (error) {
-          console.error('Error fetching note content:', error);
+          // console.error('Error fetching note content:', error);
           showToast('Failed to load note content', 'error');
         }
       } else {
@@ -348,7 +348,7 @@ export default function App() {
               document.body.removeChild(a);
             })
             .catch(error => {
-              console.error('Download error:', error);
+              // console.error('Download error:', error);
               showToast('Failed to download file', 'error');
             });
           return;
@@ -372,7 +372,7 @@ export default function App() {
       document.body.removeChild(a);
       showToast('Content download started');
     } catch (error) {
-      console.error('Download error:', error);
+      // console.error('Download error:', error);
       showToast('Failed to download content', 'error');
     }
   };
@@ -387,7 +387,7 @@ export default function App() {
         // Try to convert ArrayBuffer to string if needed
         content = new TextDecoder().decode(content);
       } catch (error) {
-        console.error('Error decoding file content:', error);
+        // console.error('Error decoding file content:', error);
         content = String(content); // Fallback to basic string conversion
       }
     }
@@ -514,13 +514,13 @@ export default function App() {
             }
           } catch (error) {
             clearInterval(progressInterval);
-            console.error('Upload error:', error);
+            // console.error('Upload error:', error);
             showToast('Failed to upload file', 'error');
             setIsUploading(false);
             setUploadProgress(0);
           }
         } catch (error) {
-          console.error('File reading error:', error);
+          // console.error('File reading error:', error);
           showToast('Failed to read file', 'error');
           setIsUploading(false);
           setUploadProgress(0);
@@ -546,7 +546,7 @@ export default function App() {
         }
       }
     } catch (error) {
-      console.error('Error submitting:', error);
+      // console.error('Error submitting:', error);
       showToast('Error uploading content: ' + error.message, 'error');
     }
   };
@@ -565,7 +565,7 @@ export default function App() {
       setEditingItem(null);
       setEditModalContent({ content: '', language: 'plaintext' });
     } catch (error) {
-      console.error('Error saving edit:', error);
+      // console.error('Error saving edit:', error);
       alert('Error saving edit: ' + error.message);
     }
   };
@@ -750,7 +750,7 @@ export default function App() {
           language: detectLanguage(updatedContent)
         }, (error) => {
           if (error) {
-            console.error('Error updating item:', error);
+            // console.error('Error updating item:', error);
           } else {
             setEditModalOpen(false);
             setEditingItem(null);
@@ -777,7 +777,7 @@ export default function App() {
           type: 'note'
         }, (error) => {
           if (error) {
-            console.error('Error inserting note:', error);
+            // console.error('Error inserting note:', error);
           } else {
             setModalOpen(false);
             setContentInput('');
@@ -849,7 +849,7 @@ export default function App() {
       try {
         await Meteor.callAsync('items.reorderAll', newOrder);
       } catch (error) {
-        console.error('Error reordering items:', error);
+        // console.error('Error reordering items:', error);
         showToast('Failed to reorder items', 'error');
       }
     } else {

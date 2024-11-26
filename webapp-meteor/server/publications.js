@@ -56,6 +56,6 @@ WebApp.connectHandlers.use('/files', (req, res, next) => {
 
 // Publish all items
 Meteor.publish('items', function() {
-  console.log('Publishing items...');
+  // console.log('Publishing items...');
   return Items.find({});
 });

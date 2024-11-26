@@ -12,18 +12,19 @@ if (!DATA_DIR) {
 const NOTES_DIR = path.join(DATA_DIR, 'notes');
 const FILES_DIR = path.join(DATA_DIR, 'files');
 
-console.log('Storage Paths:');
-console.log('Data Dir:', DATA_DIR);
-console.log('Notes Dir:', NOTES_DIR);
-console.log('Files Dir:', FILES_DIR);
+// Storage Paths:
+// console.log('Storage Paths:');
+// console.log('Data Dir:', DATA_DIR);
+// console.log('Notes Dir:', NOTES_DIR);
+// console.log('Files Dir:', FILES_DIR);
 
 // Create directories if they don't exist
 [DATA_DIR, NOTES_DIR, FILES_DIR].forEach(dir => {
   if (!fs.existsSync(dir)) {
-    console.log('Creating directory:', dir);
+    // console.log('Creating directory:', dir);
     fs.mkdirSync(dir, { recursive: true });
   } else {
-    console.log('Directory exists:', dir);
+    // console.log('Directory exists:', dir);
   }
 });
 
@@ -33,7 +34,7 @@ export const Storage = {
       const timestamp = Date.now();
       const fileName = `${timestamp}-${fileData.fileName}`;
       const filePath = path.join(FILES_DIR, fileName);
-      console.log('Saving file to:', filePath);
+      // console.log('Saving file to:', filePath);
 
       // For large binary files (>16MB), store only metadata in MongoDB
       const isLargeFile = !fileData.isText && fileData.originalSize > 16 * 1024 * 1024;
@@ -78,7 +79,7 @@ export const Storage = {
 
       return data;
     } catch (error) {
-      console.error('Error in saveFile:', error);
+      // console.error('Error in saveFile:', error);
       throw new Meteor.Error('save-file-failed', error.message);
     }
   },
@@ -88,7 +89,7 @@ export const Storage = {
       const timestamp = Date.now();
       const fileName = `${timestamp}-note.txt`;
       const filePath = path.join(NOTES_DIR, fileName);
-      console.log('Saving note to:', filePath);
+      // console.log('Saving note to:', filePath);
 
       const data = {
         id: fileName,
@@ -111,7 +112,7 @@ export const Storage = {
 
       // Insert into MongoDB using async method
       const insertedId = await Items.insertAsync(data);
-      console.log('Saved note with ID:', insertedId, 'Data:', data);
+      // console.log('Saved note with ID:', insertedId, 'Data:', data);
       
       if (!insertedId) {
         throw new Error('Failed to insert note into MongoDB');
@@ -119,15 +120,15 @@ export const Storage = {
 
       return data;
     } catch (error) {
-      console.error('Error in saveNote:', error);
+      // console.error('Error in saveNote:', error);
       throw new Meteor.Error('save-note-failed', error.message);
     }
   },
 
   async getAllItems() {
-    console.log('Getting all items...');
+    // console.log('Getting all items...');
     const items = await Items.find({}).fetchAsync();
-    console.log('Found items:', items);
+    // console.log('Found items:', items);
     return items;
   },
 
@@ -153,7 +154,7 @@ export const Storage = {
 
       return true;
     } catch (error) {
-      console.error('Error in removeItem:', error);
+      // console.error('Error in removeItem:', error);
       throw new Meteor.Error('remove-item-failed', error.message);
     }
   },
@@ -180,7 +181,7 @@ export const Storage = {
 
       return removedCount;
     } catch (error) {
-      console.error('Error in cleanExpired:', error);
+      // console.error('Error in cleanExpired:', error);
       throw new Meteor.Error('clean-expired-failed', error.message);
     }
   },
@@ -212,7 +213,7 @@ export const Storage = {
 
       return true;
     } catch (error) {
-      console.error('Error in Storage.removeAll:', error);
+      // console.error('Error in Storage.removeAll:', error);
       throw error;
     }
   },
@@ -231,7 +232,7 @@ export const Storage = {
 
       return fs.readFileSync(filePath, 'utf8');
     } catch (error) {
-      console.error('Error in getNoteContent:', error);
+      // console.error('Error in getNoteContent:', error);
       throw error;
     }
   },

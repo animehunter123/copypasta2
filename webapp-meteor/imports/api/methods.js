@@ -40,7 +40,7 @@ Meteor.methods({
 
       return await Storage.saveFile(fileData);
     } catch (error) {
-      console.error('Error in files.insert:', error);
+      // console.error('Error in files.insert:', error);
       throw new Meteor.Error('insert-failed', error.message);
     }
   },
@@ -58,7 +58,7 @@ Meteor.methods({
 
       return await Storage.saveNote(noteData);
     } catch (error) {
-      console.error('Error in notes.insert:', error);
+      // console.error('Error in notes.insert:', error);
       throw new Meteor.Error('insert-failed', error.message);
     }
   },
@@ -103,7 +103,7 @@ Meteor.methods({
 
       return true;
     } catch (error) {
-      console.error('Error in items.edit:', error);
+      // console.error('Error in items.edit:', error);
       throw new Meteor.Error('edit-failed', error.message);
     }
   },
@@ -113,7 +113,7 @@ Meteor.methods({
       check(itemId, String);
       return await Storage.removeItem(itemId);
     } catch (error) {
-      console.error('Error in items.remove:', error);
+      // console.error('Error in items.remove:', error);
       throw new Meteor.Error('remove-failed', error.message);
     }
   },
@@ -124,7 +124,7 @@ Meteor.methods({
       await Storage.removeAll();
       return true;
     } catch (error) {
-      console.error('Error in items.removeAll:', error);
+      // console.error('Error in items.removeAll:', error);
       throw new Meteor.Error('remove-all-failed', 'Failed to remove all items: ' + error.message);
     }
   },
@@ -133,7 +133,7 @@ Meteor.methods({
     try {
       return await Storage.getAllItems();
     } catch (error) {
-      console.error('Error in items.getAll:', error);
+      // console.error('Error in items.getAll:', error);
       throw new Meteor.Error('get-all-failed', error.message);
     }
   },
@@ -142,7 +142,7 @@ Meteor.methods({
     try {
       return await Storage.cleanExpired();
     } catch (error) {
-      console.error('Error in items.cleanExpired:', error);
+      // console.error('Error in items.cleanExpired:', error);
       throw new Meteor.Error('clean-expired-failed', error.message);
     }
   },
@@ -152,7 +152,7 @@ Meteor.methods({
     try {
       return await Storage.getNoteContent(itemId);
     } catch (error) {
-      console.error('Error in items.getNoteContent:', error);
+      // console.error('Error in items.getNoteContent:', error);
       throw new Meteor.Error('get-note-content-failed', error.message);
     }
   },
@@ -184,7 +184,7 @@ Meteor.methods({
         used
       };
     } catch (error) {
-      console.error('Error getting disk space:', error);
+      // console.error('Error getting disk space:', error);
       return null;
     }
   }
