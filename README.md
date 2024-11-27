@@ -27,6 +27,7 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 * Finally, open a web browser to http://localhost:3000, and upload a file or a note, and it will save those to `./data/files` or `./data/notes`
 
 # Todo
+* BUG: Firefox header is 1 line, but on Brave on Linux hosts it is 2 lines (a new line appears after Total Size, and the Question mark button)
 
 * BUG: Need to load monaco via ./public for offline homelab // the monaco initialization: error is happening, failed to load resource net: err_name_not_resolved in loader.js:1
 
