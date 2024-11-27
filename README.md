@@ -36,6 +36,14 @@ Monaco initialization: error
 Event { isTrusted:true, type: "error", target: script, currentTarget: script, eventPhase: 2, ...}
 Uncaught (in promise) Event { isTrusted:true, type: "error", target: script, currentTarget: null, eventPhase: 0, ...}
 ```
+... As a hacky workaround, I am trying this... but i dont know...
+```
+# docker exec -it docker-meteorjs-webapp bash
+root@04c9cb1a06a9:/app# npm install
+root@04c9cb1a06a9:/app# meteor npm install
+root@04c9cb1a06a9:/app# npm install --save
+root@04c9cb1a06a9:/app# meteor npm install --save
+```
 
 * FR: Add a favicon to the webapp
 
