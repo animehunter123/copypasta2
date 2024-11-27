@@ -4,6 +4,14 @@
 target="docker-meteorjs-webapp"
 
 echo "Importing image to $target:latest..."
-docker load -i ./$target.tar.bz2
+
+# If its a bz2 load it, else if its a tar load it
+if [ -f ./$target.tar.bz2 ]; then
+    echo "Loading $target.tar.bz2"
+    docker load -i ./$target.tar.bz2
+else
+    echo "Loading $target.tar"
+    docker load -i ./$target.tar
+fi
 
 echo "Script complete. You should now have a $target in 'docker images'."
