@@ -27,7 +27,8 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 * Finally, open a web browser to http://localhost:3000, and upload a file or a note, and it will save those to `./data/files` or `./data/notes`
 
 # Todo
-
+* FR: tar/bz2 shell bug for 2404 required
+* FR: Search button can be added, but meh this is not a priority
 * BUG: Need to load monaco via ./public for offline homelab // the monaco initialization: error is happening, failed to load resource net: err_name_not_resolved in loader.js:1
 
 * VF: Do a test to ensure 14 day'eth old'eth card got deleted'eth!
