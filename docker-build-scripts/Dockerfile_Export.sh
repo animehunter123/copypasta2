@@ -12,4 +12,4 @@ docker save $target:latest > ./$target.tar
 echo "Compressing the container with bzip2 for space..."
 bzip2 ./$target.tar 2>/dev/null 1>/dev/null
 
-echo "Script complete. You should now have a $target.tar.bz2 file."
+echo "Script complete. You should now have a $target.tar(.bz2) file."
