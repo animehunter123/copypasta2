@@ -1166,7 +1166,7 @@ export default function App() {
             title="Delete All Items (Press 'D' key)"
           >
             <span className="material-symbols-rounded">delete_forever</span>
-            <span className="btn-text"><strong>D</strong>elete All</span>
+            
           </button>
           <button
             className="theme-btn"
@@ -1203,7 +1203,7 @@ export default function App() {
             title="Create New Item (Press 'N' key)"
           >
             <span className="material-symbols-rounded">add</span>
-            <span className="btn-text"><strong>N</strong>ew Item</span>
+            
           </button>
         </div>
       </nav>
