@@ -1100,7 +1100,9 @@ export default function App() {
     <div className="container">
       <nav className="navbar">
         <div className="nav-group">
-          <h1 className="title">CopyPasta</h1>
+          <h1 className="title" 
+          onClick={() => window.location.reload()} 
+  title="Click to refresh page">CopyPasta</h1>
           <div className={`filter-dropdown ${isFilterDropdownOpen ? 'open' : ''}`}>
             <button 
               className="filter-dropdown-btn"
