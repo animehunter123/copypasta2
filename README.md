@@ -27,24 +27,6 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 * Finally, open a web browser to http://localhost:3000, and upload a file or a note, and it will save those to `./data/files` or `./data/notes`
 
 # Todo
-
-* BUG: Need to load monaco via ./public for offline homelab // the monaco initialization: error is happening, failed to load resource net: err_name_not_resolved in loader.js:1 
-... Unfortunately, this still does not work. Might rebuild this entire app again from scratch. The problem is:
-```
-Failed to load resource: net::ERR_NAME_NOT_RESOLVED
-Monaco initialization: error
-Event { isTrusted:true, type: "error", target: script, currentTarget: script, eventPhase: 2, ...}
-Uncaught (in promise) Event { isTrusted:true, type: "error", target: script, currentTarget: null, eventPhase: 0, ...}
-```
-... As a hacky workaround, I am trying this... but i dont know...
-```
-# docker exec -it docker-meteorjs-webapp bash
-root@04c9cb1a06a9:/app# npm install
-root@04c9cb1a06a9:/app# meteor npm install
-root@04c9cb1a06a9:/app# npm install --save
-root@04c9cb1a06a9:/app# meteor npm install --save
-```
-
 * FR: Add a favicon to the webapp
 
 * VF: Do a test to ensure 14 day'eth old'eth card got deleted'eth!
