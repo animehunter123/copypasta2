@@ -28,7 +28,14 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 
 # Todo
 
-* BUG: Need to load monaco via ./public for offline homelab // the monaco initialization: error is happening, failed to load resource net: err_name_not_resolved in loader.js:1
+* BUG: Need to load monaco via ./public for offline homelab // the monaco initialization: error is happening, failed to load resource net: err_name_not_resolved in loader.js:1 
+... Unfortunately, this still does not work. Might rebuild this entire app again from scratch. The problem is:
+```
+Failed to load resource: net::ERR_NAME_NOT_RESOLVED
+Monaco initialization: error
+Event { isTrusted:true, type: "error", target: script, currentTarget: script, eventPhase: 2, ...}
+Uncaught (in promise) Event { isTrusted:true, type: "error", target: script, currentTarget: null, eventPhase: 0, ...}
+```
 
 * FR: Add a favicon to the webapp
 
