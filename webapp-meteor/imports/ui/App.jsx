@@ -33,7 +33,8 @@ export default function App() {
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark');
   const [filter, setFilter] = useState('all');
   const [isFilterDropdownOpen, setIsFilterDropdownOpen] = useState(false);
-  const [viewMode, setViewMode] = useState(localStorage.getItem('viewMode') || 'grid');
+  // THIS IS WHERE I SET IT TO LIST and GRID MODE!
+  const [viewMode, setViewMode] = useState(localStorage.getItem('viewMode') || 'list');
   const [previewLanguage, setPreviewLanguage] = useState('text');
   const [previewContent, setPreviewContent] = useState('');
   const [editingItem, setEditingItem] = useState(null);
