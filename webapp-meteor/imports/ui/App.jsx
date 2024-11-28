@@ -352,7 +352,8 @@ export default function App() {
   // Copy content to clipboard
   const handleCopy = async (item) => {
     try {
-      await navigator.clipboard.writeText(item.content);
+      // await navigator.clipboard.writeText(item.content);
+      await copyToClipboard(item.content);
       showToast('Content copied to clipboard');
     } catch (error) {
       showToast('Failed to copy content', 'error');
