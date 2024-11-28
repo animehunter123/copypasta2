@@ -27,8 +27,7 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 * Finally, open a web browser to http://localhost:3000, and upload a file or a note, and it will save those to `./data/files` or `./data/notes`
 
 # Todo
-* BUG: My Copy Button on all the notes is not working, when i click copymostRecent in the navbar THAT WORKS But the individual cards copy button does not!!!
-
+* TODO: List view really should be vertical card and more indicitive if the text was too long, its difficult at the moment
 * FR: Add a favicon to the webapp
 
 * VF: Do a test to ensure 14 day'eth old'eth card got deleted'eth!
