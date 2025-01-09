@@ -31,6 +31,7 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 * TODO: List view really should be vertical card and more indicitive if the text was too long, its difficult at the moment
 * FR: Add a favicon to the webapp
 
+* FR: When editing a card, the Monaco Editor width div is wider than the edit note div, causing a horizontal scrollbar to appear (This only appears at CERTAIN ZOOM LEVELS then continuing to ZOOM fixes it... weird!)
 * VF: Do a test to ensure 14 day'eth old'eth card got deleted'eth!
 * FR: All/Notes/Files should be a Filter Iconified Button
 * FR: CopyPasta v3: Search button can be added, but meh this is not a priority
