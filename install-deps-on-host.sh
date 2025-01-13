@@ -4,7 +4,7 @@ echo "Installing dependencies, this script should be launched as non-root user, 
 
 # Install NodeJS 
 sudo apt update
-sudo apt install -y nodejs npm
+sudo apt install -y nodejs npm curl
 
 # Install MeteorJS (3.1)
 curl https://install.meteor.com/\?release\=3.1 | sh
