@@ -9,7 +9,7 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 * Use a Linux Container or Host.
 * Install nodejs, npm, meteorjs `(and netstat if using the bash script on the host).`
 * Launch it via one of these two methods:
-    1. On your Host Directly (Please carefully check the Bash Script before running it, this is create for lxc mode which defaults at 512mb ram -- wont cut it): 
+    1. On your Host Directly (Please carefully check the Bash Script before running it, and also: the host/docker/lxc requires minimum of 2gb ram to run this app): 
 
         ```        
         ./start-webapp-on-host.sh
