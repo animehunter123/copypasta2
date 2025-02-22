@@ -17,5 +17,5 @@ docker build -t $target .
 popd
 
 echo "OK: Confirm it with 'docker images' to confirm container $target:latest is now listed"
-echo "OK: Next, you can now launch the dockerized app via: cd .. ; ./start-webapp-on-docker.sh"
+echo "OK: Next, you can now launch the dockerized app via the docker build scripts cwd, then run: ./start-webapp-on-docker.sh"
 echo "OK: Script complete."
