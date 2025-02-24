@@ -1102,6 +1102,7 @@ export default function App() {
     <div className="container">
       <nav className="navbar">
         <div className="nav-group">
+          <img src="/favicon.svg" alt="CopyPasta Logo" className="brand-logo" style={{ width: '24px', height: '24px', marginRight: '8px' }} />
           <h1 className="title" 
           onClick={() => window.location.reload()} 
   title="Click to refresh page">CopyPasta</h1>
