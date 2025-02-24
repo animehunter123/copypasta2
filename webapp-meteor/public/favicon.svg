@@ -1,15 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="clipboard-gradient" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#4A90E2"/>
+      <stop offset="100%" stop-color="#9B51E0"/>
+    </linearGradient>
+    <filter id="shadow" x="-2" y="-1" width="52" height="52" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.25"/>
+    </filter>
+  </defs>
   <style>
-    .clipboard-body { fill: #2196F3; }
-    .clipboard-top { fill: #1976D2; }
-    .clipboard-content { fill: #ffffff; }
+    .icon-base { fill: url(#clipboard-gradient); filter: url(#shadow); }
     @media (prefers-color-scheme: dark) {
-      .clipboard-body, .clipboard-top { fill: #2196F3; }
-      .clipboard-content { fill: #ffffff; }
+      .icon-base { fill: url(#clipboard-gradient); }
     }
   </style>
-  <path class="clipboard-body" d="M8 7C8 5.89543 8.89543 5 10 5H22C23.1046 5 24 5.89543 24 7V27C24 28.1046 23.1046 29 22 29H10C8.89543 29 8 28.1046 8 27V7Z" />
-  <path class="clipboard-top" d="M10 2C10 1.44772 10.4477 1 11 1H21C21.5523 1 22 1.44772 22 2V4C22 4.55228 21.5523 5 21 5H11C10.4477 5 10 4.55228 10 4V2Z" />
-  <text class="clipboard-content" x="11.5" y="20" font-family="Arial" font-weight="bold" font-size="12">CP</text>
+  <g transform="translate(24 24)">
+    <path class="icon-base" d="M0 -20C11 -20 20 -11 20 0C20 11 11 20 0 20C-11 20 -20 11 -20 0C-20 -11 -11 -20 0 -20Z">
+      <animate attributeName="d" dur="0.3s" begin="mouseover" fill="freeze"
+        to="M0 -22C12 -22 22 -12 22 0C22 12 12 22 0 22C-12 22 -22 12 -22 0C-22 -12 -12 -22 0 -22Z"/>
+      <animate attributeName="d" dur="0.3s" begin="mouseout" fill="freeze"
+        to="M0 -20C11 -20 20 -11 20 0C20 11 11 20 0 20C-11 20 -20 11 -20 0C-20 -11 -11 -20 0 -20Z"/>
+    </path>
+    <!-- Stylized C -->
+    <path d="M4 -8C2 -10 -0.5 -11 -3 -11C-8.3 -11 -12.5 -6.8 -12.5 -1.5C-12.5 3.8 -8.3 8 -3 8C-0.5 8 2 7 4 5" 
+          stroke="white" stroke-width="3" stroke-linecap="round" fill="none"/>
+    <!-- Stylized P -->
+    <path d="M6 -11V8M6 -11C6 -11 11 -11 11 -6.5C11 -2 6 -2 6 -2" 
+          stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </g>
 </svg>
