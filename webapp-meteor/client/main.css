@@ -367,12 +367,12 @@
   background: var(--textarea-bg) !important;
 }
 
-[data-theme="dark"] .card-content pre,
+/* [data-theme="dark"] .card-content pre,
 [data-theme="dark"] .card-content pre code,
 [data-theme="dark"] .card-content.file-content {
   color: var(--text-color) !important;
   background: var(--card-bg);
-}
+} */
 
 [data-theme="dark"] .card-content.file-content .filename {
   color: var(--text-color) !important;
