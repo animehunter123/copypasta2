@@ -112,13 +112,13 @@
 
 /* Dark theme */
 [data-theme="dark"] {
-  /* Dark theme colors */
-  --surface: #1a1b1e;
-  --card-bg: #2a2b2e;
-  --card-hover: #32333a;
-  --text-color: #e5e7eb;
-  --text-color-secondary: #9ca3af;
-  --border-color: #374151;
+  /* Material Design dark theme colors */
+  --surface: #121212;
+  --card-bg: #1e1e1e;
+  --card-hover: #2c2c2c;
+  --text-color: rgba(255, 255, 255, 0.87);
+  --text-color-secondary: rgba(255, 255, 255, 0.6);
+  --border-color: rgba(255, 255, 255, 0.12);
 
   /* Hide file-info and file-type borders in dark mode */
   .file-info, .file-type {
@@ -371,7 +371,7 @@
 [data-theme="dark"] .card-content pre code,
 [data-theme="dark"] .card-content.file-content {
   color: var(--text-color) !important;
-  background: var(--textarea-bg);
+  background: var(--card-bg);
 }
 
 [data-theme="dark"] .card-content.file-content .filename {
@@ -380,10 +380,12 @@
 
 /* Ensure text inputs and textareas also follow the theme */
 [data-theme="dark"] textarea,
-[data-theme="dark"] input[type="text"] {
+[data-theme="dark"] input[type="text"],
+[data-theme="dark"] select {
   color: var(--text-color);
-  background: var(--textarea-bg);
-  border-color: var(--textarea-border);
+  background: rgba(30, 30, 30, 0.9);
+  border-color: var(--border-color);
+  font-size: 1rem;
 }
 
 /* Base styles */
@@ -1246,19 +1248,77 @@ body {
   justify-content: center;
   padding: 1rem;
   z-index: 1000;
+  overflow: hidden;
 }
 
-.modal {
-  width: 90vw;
-  max-width: 1200px;
-  max-height: 90vh;
-  min-height: min(90vh, 600px);
+.modal,
+.edit-modal,
+.new-card-modal,
+.help-modal {
   display: flex;
   flex-direction: column;
+  max-width: 90vw;
+  max-height: 90vh;
+  width: 800px;
   background: var(--surface);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
+  overflow: hidden;
   position: relative;
+  z-index: 1000;
+  margin: auto;
+}
+
+/* Responsive modal adjustments */
+@media screen and (max-width: 768px) {
+  .modal,
+  .edit-modal,
+  .new-card-modal,
+  .help-modal {
+    width: 95vw;
+    max-height: 95vh;
+  }
+  
+  .modal-header,
+  .edit-modal .modal-header,
+  .new-card-modal .modal-header,
+  .help-modal .modal-header {
+    height: 56px;
+    padding: 0.75rem 1rem;
+  }
+  
+  .modal-footer,
+  .edit-modal .modal-footer,
+  .new-card-modal .modal-footer,
+  .help-modal .modal-footer {
+    padding: 0.75rem 1rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .modal,
+  .edit-modal,
+  .new-card-modal,
+  .help-modal {
+    width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+  }
+  
+  .modal-footer button,
+  .edit-modal .modal-footer button,
+  .new-card-modal .modal-footer button,
+  .help-modal .modal-footer button {
+    flex: 1;
+    min-width: 0;
+    padding: 0.5rem;
+  }
+  
+  .modal-footer .primary-btn span.material-symbols-rounded,
+  .modal-footer .secondary-btn span.material-symbols-rounded {
+    margin-right: 0.25rem;
+  }
 }
 
 .modal-header {
@@ -1270,7 +1330,10 @@ body {
   flex-shrink: 0;
 }
 
-.modal-content {
+.modal-content,
+.edit-modal .editor-container,
+.new-card-modal .modal-content,
+.help-modal .modal-content {
   flex: 1;
   padding: 1.5rem;
   overflow-y: auto;
@@ -1278,13 +1341,18 @@ body {
   position: relative;
   display: flex;
   flex-direction: column;
+  background: var(--surface);
 }
 
-.modal-footer {
-  padding: 16px 24px;
+.modal-footer,
+.edit-modal .modal-footer,
+.new-card-modal .modal-footer,
+.help-modal .modal-footer {
+  padding: 1rem 1.5rem;
   display: flex;
   justify-content: flex-end;
-  gap: 12px;
+  align-items: center;
+  gap: 1rem;
   background: var(--surface);
   border-top: 1px solid var(--border-color);
   position: sticky;
@@ -1293,6 +1361,9 @@ body {
   right: 0;
   z-index: 10;
   flex-shrink: 0;
+  min-height: 72px;
+  flex-wrap: wrap;
+  row-gap: 0.75rem;
 }
 
 .upload-area {
@@ -1371,17 +1442,22 @@ body {
 
 /* Upload Progress Bar */
 .upload-progress {
+  order: -1;
+  width: 100%;
+  margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin-left: auto;
+  justify-content: flex-start;
+  gap: 0.75rem;
   color: var(--text-secondary);
   font-size: 0.9rem;
   animation: fadeIn 0.3s ease;
+  white-space: nowrap;
 }
 
 .upload-progress progress {
-  width: 120px;
+  flex: 1;
+  max-width: 200px;
   height: 8px;
   border-radius: 4px;
   overflow: hidden;
@@ -1548,22 +1624,26 @@ body {
 }
 
 /* Edit modal */
-.edit-modal {
-  width: 90vw;
-  max-width: 1200px;
-  height: 90vh;
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-  background: var(--surface);
-}
-
-.edit-modal .modal-header {
-  padding: 16px 24px;
+/* Modal Header - Standardized for all modals */
+.modal-header,
+.edit-modal .modal-header,
+.new-card-modal .modal-header,
+.help-modal .modal-header {
+  padding: 1rem 1.5rem;
   border-bottom: 1px solid var(--border-color);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-shrink: 0;
+  background: var(--surface);
+  height: 64px;
+}
+
+/* Edit modal title styling */
+.edit-modal .modal-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .edit-modal .modal-title {
@@ -1577,16 +1657,8 @@ body {
   margin: 0;
   border: none;
   border-radius: 0;
-  border-bottom: 1px solid var(--border-color);
   min-height: 0; /* Important for flex container */
-}
-
-.edit-modal .modal-footer {
-  padding: 16px 24px;
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  background: var(--surface);
+  padding: 0; /* Override the standard padding for editor */
 }
 
 /* Editor container */
@@ -1919,11 +1991,79 @@ textarea:focus {
 }
 
 /* New Card Modal Styles */
+/* Remove redundant modal styles */
 .new-card-modal {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  flex: 1;
+  min-height: 0;
   padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.new-card-modal .modal-footer {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background: var(--surface);
+  border-top: 1px solid var(--border-color);
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: auto;
+}
+
+.modal-footer button,
+.edit-modal .modal-footer button,
+.new-card-modal .modal-footer button,
+.help-modal .modal-footer button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  min-width: 80px;
+  justify-content: center;
+}
+
+.modal-footer .primary-btn,
+.edit-modal .modal-footer .primary-btn,
+.new-card-modal .modal-footer .primary-btn,
+.help-modal .modal-footer .primary-btn {
+  background: var(--primary-500);
+  color: white;
+  border: none;
+}
+
+.modal-footer .primary-btn:hover,
+.edit-modal .modal-footer .primary-btn:hover,
+.new-card-modal .modal-footer .primary-btn:hover,
+.help-modal .modal-footer .primary-btn:hover {
+  background: var(--primary-600);
+}
+
+.modal-footer .secondary-btn,
+.edit-modal .modal-footer .secondary-btn,
+.new-card-modal .modal-footer .secondary-btn,
+.help-modal .modal-footer .secondary-btn {
+  background: transparent;
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+}
+
+.modal-footer .secondary-btn:hover,
+.edit-modal .modal-footer .secondary-btn:hover,
+.new-card-modal .modal-footer .secondary-btn:hover,
+.help-modal .modal-footer .secondary-btn:hover {
+  background: var(--surface-hover);
+  border-color: var(--primary-500);
 }
 
 .input-type-selector {
@@ -1967,8 +2107,10 @@ textarea:focus {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  flex: 1;
   min-height: 300px;
   transition: all 0.3s ease;
+  overflow-y: auto;
 }
 
 .upload-area {
@@ -1980,6 +2122,7 @@ textarea:focus {
   transition: all 0.2s ease;
   background: var(--surface);
   min-height: 300px;
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2023,17 +2166,22 @@ textarea:focus {
 }
 
 .upload-progress {
+  order: -1;
+  width: 100%;
+  margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
-  gap: 1rem;
-  margin-left: auto;
+  justify-content: flex-start;
+  gap: 0.75rem;
   color: var(--text-secondary);
   font-size: 0.9rem;
   animation: fadeIn 0.3s ease;
+  white-space: nowrap;
 }
 
 .upload-progress progress {
-  width: 120px;
+  flex: 1;
+  max-width: 200px;
   height: 8px;
   border-radius: 4px;
   overflow: hidden;
@@ -2331,12 +2479,10 @@ textarea:focus {
   }
 }
 
-.help-modal .modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem;
-  border-bottom: 1px solid var(--border-color);
+/* Help modal specific styles */
+.help-modal .modal-content {
+  padding: 1.5rem;
+  overflow-y: auto;
 }
 
 .help-modal .modal-header button {
