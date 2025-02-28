@@ -25,6 +25,7 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 * Finally, open a web browser to http://localhost:3000, and upload a file or a note, and it will save those to `./data/files` or `./data/notes`
 
 # Todo
+* BUG: darkmode, hovering a filecard - color style does not match
 * FR: List view really should be vertical card and more indicitive if the text was too long, its difficult at the moment
 * FR: Add a favicon to the webapp
 * FR: When editing a card, the Monaco Editor width div is wider than the edit note div, causing a horizontal scrollbar to appear (This only appears at CERTAIN ZOOM LEVELS then continuing to ZOOM fixes it... weird!)
