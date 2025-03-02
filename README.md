@@ -17,7 +17,7 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
     2. On a Linux Container on your docker host (This will change perms, so you need to rebuild if you want on host again): 
     
         ```
-        cd ./docker-build-scripts  
+        cd ./scripts  
         ./Dockerfile_Build.sh       # Only do this ONCE
         ./start-webapp-on-docker.sh
         ```

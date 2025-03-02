@@ -5,7 +5,7 @@ $erroractionpreference = 0
 
 pushd .
 
-cd ../docker-build-scripts -ea 0 | out-null
+cd ../scripts -ea 0 | out-null
 podman rm -f docker-meteorjs-webapp
 podman compose up
 

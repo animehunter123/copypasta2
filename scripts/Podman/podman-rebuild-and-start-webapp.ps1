@@ -14,7 +14,7 @@ podman build -t docker-meteorjs-webapp . --network=host
 # podman run  -it --rm -p 3000:3000 -v "%cd%\\..:/app" docker-meteorjs-webapp bash
 
 # To run it (foreground without -d):
-cd ../docker-build-scripts -ea 0 | out-null
+cd ../scripts -ea 0 | out-null
 podman rm -f docker-meteorjs-webapp
 podman compose up
 
