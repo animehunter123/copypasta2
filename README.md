@@ -12,9 +12,9 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
     1. On your Host Directly (Please carefully check the Bash Script before running it, and also: the host/docker/lxc requires minimum of 2gb ram to run this app): 
 
         ```        
-        ./start-webapp-on-host.sh
+        ./host-start-webapp.sh
         ```
-    2. On a Linux Container on your docker host (This will change perms, so you need to rebuild if you want on host again): 
+    2. *(Reccomended Method)* On a Linux Container on your docker host (This will change perms, so you need to rebuild if you want on host again):
     
         ```
         cd ./scripts  
@@ -25,15 +25,10 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 * Finally, open a web browser to http://localhost:3000, and upload a file or a note, and it will save those to `./data/files` or `./data/notes`
 
 # Todo
-* BUG: darkmode, hovering a filecard - color style does not match
+* FR: Monaco doesnt show the "paste" in right click menu, (see react macos monaco samples)
 * FR: List view really should be vertical card and more indicitive if the text was too long, its difficult at the moment
-* FR: Add a favicon to the webapp
-* FR: When editing a card, the Monaco Editor width div is wider than the edit note div, causing a horizontal scrollbar to appear (This only appears at CERTAIN ZOOM LEVELS then continuing to ZOOM fixes it... weird!)
-* FR: All/Notes/Files should be a Filter Iconified Button
 * FR: Future CopyPasta3 should implement a Search button but meh this is not a priority atm.
-* FR: Add authentication/login to this (Meh, Got Lazy and left this for the end.)
-* FR: For Docker Best Practices, should run as a non-root user instead of root (to remove warnings during startup)
-* FR: Refactor the terrifying App.jsx into multiple jsx files for the components (with their own imports and exports). 
-* FR: Use ImageMagick to make a thumbnail of the image and display it in the UI.
-* FR: Add a search bar for notes and files (just another way to filter)
-* FR: After updated to Meteor3.1 noticed dependency deprecated feature of: (node:10338) Warning: The `util._extend` API is deprecated. Please use Object.assign() instead. For now, we will ignore this as it is not affecting our app and it is a external dependency which we cannot fix.
+* FR: Future CopyPasta3: Add authentication/login to the app.
+* FR: For Docker Best Practices, should run as a non-root user instead of root (to remove warnings during startup).
+* FR: Refactor the extremely long App.jsx into multiple jsx files for the components (with their own imports and exports). 
+* FR: Use ImageMagick to make a thumbnail of the image and display in file cards.
