@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# This will build the docker image. Sometimes you need to run this script as sudo
+
 # Standard name for our docker container
 target="docker-meteorjs-webapp"
 
