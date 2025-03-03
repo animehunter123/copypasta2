@@ -27,8 +27,8 @@ As a bonus, the code editor allows pressing **"F1"** in the browser for a Comman
 # Todo
 * FR: Monaco doesnt show the "paste" in right click menu, (see react macos monaco samples)
 * FR: List view really should be vertical card and more indicitive if the text was too long, its difficult at the moment
+* FR: Use ImageMagick to make a thumbnail of the image and display in file cards.
 * FR: Future CopyPasta3 should implement a Search button but meh this is not a priority atm.
 * FR: Future CopyPasta3: Add authentication/login to the app.
 * FR: For Docker Best Practices, should run as a non-root user instead of root (to remove warnings during startup).
 * FR: Refactor the extremely long App.jsx into multiple jsx files for the components (with their own imports and exports). 
-* FR: Use ImageMagick to make a thumbnail of the image and display in file cards.
