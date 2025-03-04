@@ -47,4 +47,4 @@ EXPOSE 3000
 
 # CMD ["meteor"]
 # CMD ["meteor", "--allow-superuser", "--port", "3000"]
-CMD ["/app/start-webapp-on-host.sh"]
+CMD ["/app/docker-entry.sh"]
