@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
 
-docker compose logs -f
-docker-compose logs -f
+if command -v docker-compose &> /dev/null
+then
+    docker-compose logs -f
+else
+    docker compose logs -f
+fi
