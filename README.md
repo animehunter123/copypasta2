@@ -3,6 +3,24 @@ This is a todo cards webapp to emulate the copypasta. It is written in reactive 
 
 As a bonus, the code editor allows pressing **"F1"** in the browser for a Command Pallette (Monaco)! And, there is a eventHandler for **"Ctrl+Enter"** to submit the code, so you can hit enter to submit your code, or you can use the command palette to submit your code!
 
+# Features 
+This is a web-based clipboard/note-taking application ("CopyPasta") built with:
+* MeteorJS 3.1 and Node.js 22
+* React 18 with Monaco Code Editor integration
+* MongoDB for data storage
+* File and text note uploads
+* Code syntax highlighting
+* Monaco editor with Command Palette (F1) and Ctrl+Enter submission
+* File/note expiration after 14 days
+* Docker/Podman containerization support
+* The app runs on port 3000 and stores data in `./data/files` and `./data/notes` directories. It can be deployed either directly on a Linux host or via Docker (recommended method).
+* The project includes comprehensive Docker configurations and deployment scripts for both Linux and Windows environments, with special consideration for WSL2/Podman setups.
+* Notable technical features:
+* Language auto-detection for syntax highlighting
+* Support for both text and binary files
+* File size limit of 50MB
+* Special handling for large binary files (>16MB)
+
 ![Sample Photo of MeteorJS CopyPasta](https://github.com/user-attachments/assets/1c1dfc5d-ad81-4704-b7cd-93354c11460b "A sample photo of the CopyPasta webpage then runs in MeteorJS")
 
 # How to run...
