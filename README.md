@@ -15,7 +15,6 @@ This is a web-based clipboard/note-taking application ("CopyPasta") built with:
 * Docker/Podman containerization support
 * The app runs on port 3000 and stores data in `./data/files` and `./data/notes` directories. It can be deployed either directly on a Linux host or via Docker (recommended method).
 * The project includes comprehensive Docker configurations and deployment scripts for both Linux and Windows environments, with special consideration for WSL2/Podman setups.
-* Notable technical features:
 * Language auto-detection for syntax highlighting
 * Support for both text and binary files
 * File size limit of 50MB
