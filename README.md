@@ -42,6 +42,7 @@ This is a web-based clipboard/note-taking application ("CopyPasta") built with:
 * Finally, open a web browser to http://localhost:3000, and upload a file or a note, and it will save those to `./data/files` or `./data/notes`
 
 # Todo ⛳
+* FR: Hour/Minute Timestamp should be shown on card to allow sorting order to be easier for users
 * FR: Monaco doesnt show the "paste" in right click menu, (see react macos monaco samples)
 * FR: List view really should be vertical card and more indicitive if the text was too long, its difficult at the moment
 * FR: Use ImageMagick to make a thumbnail of the image and display in file cards.
