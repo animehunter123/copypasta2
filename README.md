@@ -53,4 +53,13 @@ This is a web-based clipboard/note-taking application ("CopyPasta") built with:
 * FR: For Docker Best Practices, should run as a non-root user instead of root (to remove warnings during startup).
 * FR: Refactor the extremely long App.jsx into multiple jsx files for the components (with their own imports and exports). 
 * FR: Update to latest Meteor (See https://docs.meteor.com/history.html and update this project with 'meteor update')!
-* FR: Make this compatible with internet explorer (for old homelabs from the 90's)
+* FR: Make this compatible with internet explorer (for old homelabs from the 90's). Looks like only Meteor 1.0 works correctly, so this requires a complete downgrade of this webapp, else you will see:
+```log
+Detected older Firefox version: 36  firefox-compat.js:12:7
+Applying Firefox compatibility fixes  firefox-compat.js:21:3
+Stub meteorInstall global called  firefox-compat.js:53:7
+SyntaxError: invalid identity escape in regular expression  modules.js:42625:35
+TypeError: Package.modules is undefined[Learn More]  promise.js:15:5
+TypeError: Package.mongo is undefined[Learn More]  global-imports.js:3:1
+TypeError: require is not a function[Learn More]
+```
