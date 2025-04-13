@@ -25,12 +25,13 @@ This is a web-based clipboard/note-taking application ("CopyPasta") built with:
 # How to run...
 * Use a Linux Host or Docker/Podman/Lxc Container.
 * Install netstat
-* Install nodejs/npm/npx. To use portable tarball, just run ```./scripts/Host/host-install-nodejs-portabletarball-as-current-user.sh```
-* Install meteorjs. To use portable meteorjs env, just run ```./scripts/Host/host-install-meteorjs.sh```
+* Install nodejs/npm/npx. To use portable tarball, just run ```./scripts/host/host-install-nodejs-portabletarball-as-current-user.sh```
+* Install meteorjs. To use portable meteorjs env, just run ```./scripts/host/host-install-meteorjs.sh```
 * Launch it via one of these two methods:
     1. On your Host Directly (Please carefully check the Bash Script before running it, and also: the host/docker/lxc requires minimum of 2gb ram to run this app): 
         ```        
-        ./host-start-webapp.sh
+        cd ./scripts
+        ./host/host-start-webapp.sh
         ```
     2. *(Reccomended Method)* On a Linux Container on your docker host (This will change perms, so you need to rebuild if you want on host again):
     
