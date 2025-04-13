@@ -23,11 +23,12 @@ This is a web-based clipboard/note-taking application ("CopyPasta") built with:
 ![Sample Photo of MeteorJS CopyPasta](https://github.com/user-attachments/assets/1c1dfc5d-ad81-4704-b7cd-93354c11460b "A sample photo of the CopyPasta webpage then runs in MeteorJS")
 
 # How to run...
-* Use a Linux Container or Host.
-* Install nodejs, npm, meteorjs `(and netstat if using the bash script on the host).`
+* Use a Linux Host or Docker/Podman/Lxc Container.
+* Install netstat
+* Install nodejs/npm/npx. To use portable tarball, just run ```./scripts/Host/host-install-nodejs-portabletarball-as-current-user.sh```
+* Install meteorjs. To use portable meteorjs env, just run ```./scripts/Host/host-install-meteorjs.sh```
 * Launch it via one of these two methods:
     1. On your Host Directly (Please carefully check the Bash Script before running it, and also: the host/docker/lxc requires minimum of 2gb ram to run this app): 
-
         ```        
         ./host-start-webapp.sh
         ```

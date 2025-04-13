@@ -1,0 +1,36 @@
+#!/bin/bash
+
+echo "Installing dependencies, this script should be launched as non-root user, and it will elevate during install manually."
+
+# Install NodeJS 
+# sudo apt update
+# sudo apt install -y nodejs npm curl
+
+# Install MeteorJS (3.1)
+# curl https://install.meteor.com/\?release\=3.1 | sh
+
+# New way to install the latest meteorjs
+echo "Removing existing Meteor installation (if any)..."
+pushd .
+meteor remove || true # Ignore errors if meteor command not found
+rm -rf ~/.meteor # Remove .meteor directory
+rm -f /usr/local/bin/meteor # Remove the symlink
+npm install -y -g clear-npx-cache
+npx clear-npx-cache
+rm -rf ~/.npm/_npx
+echo "Installing Meteor via npm..."
+npm install -y -g meteor
+echo "Verifying Meteor installation (IT DEFAULTS TO ~/.bashrc NOT FISH, SO I WILL ADD IT TO FISH NOW TOO!!!)..."
+# fish_add_path $HOME/.meteor 2>/dev/null 1>/dev/null # The correct way to do this, but IT WONT APPEAR IN ~/.config/fish/config.fish (which isnt bash'y'ish.)
+echo 'fish_add_path $HOME/.meteor' >> ~/.config/fish/config.fish
+source ~/.bashrc
+meteor --version
+popd
+
+
+# Its a good idea to ensure that the .node_modules and .meteor are updated, so if you need to fetch the dependencies, uncomment the below...
+echo "Now installing the node dependencies to the ./node_modules directory"
+cd webapp-meteor
+npm install        # This populates the ./node_modules directory
+meteor npm install # This populates the ./node_modules directory and also the .meteor/local directory (I think?)
+cd ..
