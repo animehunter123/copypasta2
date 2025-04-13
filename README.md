@@ -53,7 +53,7 @@ This is a web-based clipboard/note-taking application ("CopyPasta") built with:
 * FR: For Docker Best Practices, should run as a non-root user instead of root (to remove warnings during startup).
 * FR: Refactor the extremely long App.jsx into multiple jsx files for the components (with their own imports and exports). 
 * FR: Update to latest Meteor (See https://docs.meteor.com/history.html and update this project with 'meteor update')!
-* FR: Make this compatible with internet explorer (for old homelabs from the 90's). Looks like only Meteor 1.0 works correctly, so this requires a complete downgrade of this webapp, else you will see:
+* BUG: Make this compatible with internet explorer (for old homelabs from the 90's). Looks like only Meteor 1.0 works correctly, so this requires a complete downgrade of this webapp, else you will see:
 ```log
 Detected older Firefox version: 36  firefox-compat.js:12:7
 Applying Firefox compatibility fixes  firefox-compat.js:21:3
@@ -62,4 +62,17 @@ SyntaxError: invalid identity escape in regular expression  modules.js:42625:35
 TypeError: Package.modules is undefined[Learn More]  promise.js:15:5
 TypeError: Package.mongo is undefined[Learn More]  global-imports.js:3:1
 TypeError: require is not a function[Learn More]
+```
+... WHEREFORE I ATTEMPTED DOWNGRADE METEOR from 3.1 to 2.16 or 1.10, VIA BELOW DIDNT WORK. **Maybe just re-write the entire thing with Rust+Leptos(Actix):**
+```bash
+rm -rf node_modules* ; 
+rm -rf package-lock.json ;
+meteor reset ; 
+meteor update --release 2.16 ; # The .meteor/release shows METEOR@3.1, and will change to METEOR@2.16
+meteor add ecmascript ; 
+npm i ; meteor npm install ; 
+npm install --legacy-peer-deps ; 
+npm install @fortawesome/fontawesome-svg-core@6 monaco-editor@0.30 ;
+meteor npm update @babel/core @babel/runtime ;
+node -v ; meteor --port 3000 --allow-superuser ;  #But even after all of this, failure :(
 ```
