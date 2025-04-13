@@ -40,6 +40,7 @@ export default function App() {
   const [editingItem, setEditingItem] = useState(null);
   const [toasts, setToasts] = useState([]);
   const [deleteConfirmation, setDeleteConfirmation] = useState({ isOpen: false, item: null });
+  const [deleteAllConfirmation, setDeleteAllConfirmation] = useState(false);
   const [deleteNoteContent, setDeleteNoteContent] = useState('');
   const [draggedItem, setDraggedItem] = useState(null);
   const [dragOverItem, setDragOverItem] = useState(null);
@@ -59,23 +60,27 @@ export default function App() {
   const deleteCloseButtonRef = useRef(null);
   const deleteCancelButtonRef = useRef(null);
   const deleteConfirmButtonRef = useRef(null);
+  const deleteAllModalRef = useRef(null);
+  const deleteAllCloseButtonRef = useRef(null);
+  const deleteAllCancelButtonRef = useRef(null);
+  const deleteAllConfirmButtonRef = useRef(null);
   const fileInputRef = useRef(null);
 
   // Subscribe to items and get them reactively
   const { items, isLoading } = useTracker(() => {
     const handle = Meteor.subscribe('items');
     // console.log('Subscription ready:', handle.ready());
-    
+
     if (!handle.ready()) {
       return { items: [], isLoading: true };
     }
 
-    const allItems = Items.find({}, { 
-      sort: { order: 1 } 
+    const allItems = Items.find({}, {
+      sort: { order: 1 }
     }).fetch();
 
     // console.log('Loaded items:', allItems);
-    
+
     return {
       items: allItems,
       isLoading: false
@@ -92,7 +97,7 @@ export default function App() {
   // Memoize filtered items
   const filteredItems = useMemo(() => {
     if (filter === 'all') return items;
-    return items.filter(item => 
+    return items.filter(item =>
       filter === 'files' ? item.type === 'file' : item.type === 'note'
     );
   }, [items, filter]);
@@ -108,7 +113,7 @@ export default function App() {
     const now = new Date();
     const expiredItems = items.filter(item => new Date(item.expiresAt) < now).length;
     const diskSpace = diskSpaceVar.get();
-    
+
     return {
       totalSize,
       totalItems,
@@ -148,7 +153,7 @@ export default function App() {
     if (navigator.clipboard && navigator.clipboard.writeText) {
       return navigator.clipboard.writeText(text);
     }
-    
+
     // Fallback method using textarea
     const textarea = document.createElement('textarea');
     textarea.value = text;
@@ -156,7 +161,7 @@ export default function App() {
     textarea.style.opacity = '0';
     document.body.appendChild(textarea);
     textarea.select();
-    
+
     try {
       const successful = document.execCommand('copy');
       document.body.removeChild(textarea);
@@ -191,11 +196,11 @@ export default function App() {
   const handleKeyPress = useCallback((e) => {
     // Only trigger if not in an input/textarea
     if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-    
+
     if (e.key.toLowerCase() === 'n') {
       setModalOpen(true);
     } else if (e.key.toLowerCase() === 'd') {
-      handleDeleteAll();
+      setDeleteAllConfirmation(true);
     } else if (e.key === '?') {
       setHelpModalOpen(true);
     } else if (e.key.toLowerCase() === 'c') {
@@ -273,10 +278,10 @@ export default function App() {
     // Switch highlight.js theme
     const style = document.createElement('link');
     style.rel = 'stylesheet';
-    style.href = theme === 'dark' 
+    style.href = theme === 'dark'
       ? '/public/cdn/highlight.js/github-dark.css'
       : '/public/cdn/highlight.js/github.css';
-    
+
     // Remove any existing highlight.js styles
     document.querySelectorAll('link[href*="highlightjs"]').forEach(el => el.remove());
     document.head.appendChild(style);
@@ -340,7 +345,7 @@ export default function App() {
     const id = Date.now();
     setToasts(prev => [...prev, { id, message, type }]);
     setTimeout(() => {
-      setToasts(prev => prev.map(toast => 
+      setToasts(prev => prev.map(toast =>
         toast.id === id ? { ...toast, removing: true } : toast
       ));
       setTimeout(() => {
@@ -365,7 +370,7 @@ export default function App() {
     try {
       let content = item.content;
       let type = 'text/plain';
-      
+
       if (!item.isText) {
         if (item.filePath) {
           // For files stored on filesystem, fetch directly
@@ -414,7 +419,7 @@ export default function App() {
   // Edit content
   const handleEdit = (item) => {
     let content = item.content;
-    
+
     // If it's a file, we need to ensure the content is a string
     if (item.type === 'file' && typeof content !== 'string') {
       try {
@@ -427,9 +432,9 @@ export default function App() {
     }
 
     const detectedLang = detectLanguage(content);
-    setEditModalContent({ 
-      content: content, 
-      language: detectedLang 
+    setEditModalContent({
+      content: content,
+      language: detectedLang
     });
     setEditingItem(item);
     setEditModalOpen(true);
@@ -459,7 +464,7 @@ export default function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
       const now = new Date();
       const expiresAt = new Date(now.getTime() + EXPIRATION_DAYS * 24 * 60 * 60 * 1000);
@@ -467,22 +472,22 @@ export default function App() {
       if (fileInput) {
         setIsUploading(true);
         setUploadProgress(0);
-        
+
         // Create a promise to handle file reading
         const readFile = () => new Promise((resolve, reject) => {
           const reader = new FileReader();
-          
+
           reader.onprogress = (event) => {
             if (event.lengthComputable) {
               const progress = (event.loaded / event.total) * 50; // First 50% for reading
               setUploadProgress(progress);
             }
           };
-          
+
           reader.onload = (e) => resolve(e.target.result);
           reader.onerror = () => reject(reader.error);
-          
-          if (fileInput.type.startsWith('text/') || 
+
+          if (fileInput.type.startsWith('text/') ||
               ['application/json', 'application/javascript', 'application/xml'].includes(fileInput.type)) {
             reader.readAsText(fileInput);
           } else {
@@ -492,9 +497,9 @@ export default function App() {
 
         try {
           const content = await readFile();
-          const isText = fileInput.type.startsWith('text/') || 
+          const isText = fileInput.type.startsWith('text/') ||
                       ['application/json', 'application/javascript', 'application/xml'].includes(fileInput.type);
-          
+
           const data = {
             content: isText ? content : new Uint8Array(content),
             fileName: fileInput.name,
@@ -506,7 +511,7 @@ export default function App() {
             type: 'file',
             isText: isText
           };
-          
+
           if (fileInput.size > 50 * 1024 * 1024) { // 50MB limit
             alert('File size must be under 50MB');
             event.target.value = ''; // Reset file input
@@ -527,21 +532,21 @@ export default function App() {
               return prev + 5;
             });
           }, 100);
-          
+
           try {
             await Meteor.callAsync('files.insert', data);
             clearInterval(progressInterval);
             setUploadProgress(100);
-            
+
             // Wait a moment to show 100% before closing
             await new Promise(resolve => setTimeout(resolve, 200));
-            
+
             setModalOpen(false);
             setContentInput('');
             setFileInput(null);
             setIsUploading(false);
             setUploadProgress(0);
-            
+
             // Focus the New Item button after successful upload
             if (newItemButtonRef.current) {
               newItemButtonRef.current.focus();
@@ -620,7 +625,7 @@ export default function App() {
 
   const detectLanguage = (content) => {
     if (!content) return 'plaintext';
-    
+
     // Common language patterns
     const patterns = {
       javascript: {
@@ -740,12 +745,12 @@ export default function App() {
     // Check content against patterns
     for (const [lang, pattern] of Object.entries(patterns)) {
       // Look for multiple matches to increase confidence
-      const matches = pattern.keywords.filter(keyword => 
+      const matches = pattern.keywords.filter(keyword =>
         content.toLowerCase().includes(keyword.toLowerCase())
       );
-      
+
       // If we find multiple matches (more confident) or a very specific match
-      if (matches.length >= 2 || 
+      if (matches.length >= 2 ||
           pattern.keywords.some(k => k.length > 10 && content.toLowerCase().includes(k.toLowerCase()))) {
         return lang;
       }
@@ -772,7 +777,7 @@ export default function App() {
     editorRef.current = editor;
     // Restore autofocus
     editor.focus();
-    
+
     // Add command for Ctrl+Enter
     editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
       if (editModalOpen && editingItem) {
@@ -798,7 +803,7 @@ export default function App() {
         // For new card modal
         const content = editor.getValue();
         if (!content.trim()) return;
-        
+
         const now = new Date();
         const expiresAt = new Date(now.getTime() + EXPIRATION_DAYS * 24 * 60 * 60 * 1000);
 
@@ -827,8 +832,8 @@ export default function App() {
 
   const handleEditorChange = (value) => {
     if (editModalOpen) {
-      setEditModalContent(prev => ({ 
-        ...prev, 
+      setEditModalContent(prev => ({
+        ...prev,
         content: value,
         language: detectLanguage(value)
       }));
@@ -840,9 +845,9 @@ export default function App() {
 
   const handleDoubleClick = (item) => {
     const detectedLang = detectLanguage(item.content);
-    setEditModalContent({ 
-      content: item.content, 
-      language: detectedLang 
+    setEditModalContent({
+      content: item.content,
+      language: detectedLang
     });
     setEditingItem(item);
     setEditModalOpen(true);
@@ -850,7 +855,7 @@ export default function App() {
 
   const handleNavigate = (item) => {
     if (!item || !item.content) return;
-    
+
     let url = item.content.trim();
     // Add https:// if no protocol is specified
     if (!url.match(/^https?:\/\//i)) {
@@ -870,16 +875,16 @@ export default function App() {
       const itemIds = filteredItems.map(item => item._id);
       const fromIndex = itemIds.indexOf(draggedItem._id);
       const toIndex = itemIds.indexOf(dragOverItem._id);
-      
+
       // Reorder the array
       const newOrder = [...itemIds];
       newOrder.splice(fromIndex, 1);
       newOrder.splice(toIndex, 0, draggedItem._id);
-      
+
       // Clear drag state before making the async call
       setDraggedItem(null);
       setDragOverItem(null);
-      
+
       try {
         await Meteor.callAsync('items.reorderAll', newOrder);
       } catch (error) {
@@ -913,7 +918,7 @@ export default function App() {
     };
 
     return (
-      <div 
+      <div
         key={item._id}
         className={`content-card ${isExpiring ? 'expiring' : ''} ${
           highlightedCardId === item._id ? 'highlight-copy' : ''
@@ -1005,7 +1010,7 @@ export default function App() {
             <div className={`info-group expiration ${isExpiring ? 'expiring' : ''}`}>
               <span className="material-symbols-rounded">timer</span>
               <span>
-                {daysRemaining > 0 
+                {daysRemaining > 0
                   ? `${daysRemaining} day${daysRemaining === 1 ? '' : 's'} left`
                   : 'Expiring soon'}
               </span>
@@ -1019,10 +1024,10 @@ export default function App() {
   // Truncate filename if it's too long
   const truncateFileName = (fileName, maxLength = 25) => {
     if (!fileName || fileName.length <= maxLength) return fileName;
-    
+
     const extension = fileName.includes('.') ? fileName.split('.').pop() : '';
     const nameWithoutExt = fileName.includes('.') ? fileName.slice(0, fileName.lastIndexOf('.')) : fileName;
-    
+
     const truncatedName = nameWithoutExt.slice(0, maxLength - extension.length - 3) + '...';
     return extension ? `${truncatedName}.${extension}` : truncatedName;
   };
@@ -1065,6 +1070,22 @@ export default function App() {
   }, [deleteConfirmation.isOpen]);
 
   useEffect(() => {
+    if (deleteAllConfirmation) {
+      // Focus the delete button when modal opens
+      if (deleteAllConfirmButtonRef.current) {
+        deleteAllConfirmButtonRef.current.focus();
+      }
+
+      // Restore focus to new item button when modal closes
+      return () => {
+        if (newItemButtonRef.current) {
+          newItemButtonRef.current.focus();
+        }
+      };
+    }
+  }, [deleteAllConfirmation]);
+
+  useEffect(() => {
     // Save view mode preference
     localStorage.setItem('viewMode', viewMode);
   }, [viewMode]);
@@ -1102,11 +1123,11 @@ export default function App() {
     <div className="container">
       <nav className="navbar">
         <div className="nav-group">
-          <h1 className="title" 
-          onClick={() => window.location.reload()} 
+          <h1 className="title"
+          onClick={() => window.location.reload()}
   title="Click to refresh page">CopyPasta</h1>
           <div className={`filter-dropdown ${isFilterDropdownOpen ? 'open' : ''}`}>
-            <button 
+            <button
               className="filter-dropdown-btn"
               onClick={() => setIsFilterDropdownOpen(!isFilterDropdownOpen)}
             >
@@ -1145,7 +1166,7 @@ export default function App() {
           </div>
           <span className="size-badge">
             Total Size: {formatBytes(stats.totalSize)}
-            {stats.diskSpace && 
+            {stats.diskSpace &&
               <span className="disk-space">
                 {` / ${formatBytes(stats.diskSpace.available)} `}
               </span>
@@ -1164,11 +1185,11 @@ export default function App() {
           </button>
           <button
             className="danger-btn"
-            onClick={handleDeleteAll}
+            onClick={() => setDeleteAllConfirmation(true)}
             title="Delete All Items (Press 'D' key)"
           >
             <span className="material-symbols-rounded">delete_forever</span>
-            
+
           </button>
           <button
             className="theme-btn"
@@ -1205,7 +1226,7 @@ export default function App() {
             title="Create New Item (Press 'N' key)"
           >
             <span className="material-symbols-rounded">add</span>
-            
+
           </button>
         </div>
       </nav>
@@ -1402,12 +1423,12 @@ export default function App() {
       )}
 
       {deleteConfirmation.isOpen && (
-        <div 
-          className="modal-overlay" 
+        <div
+          className="modal-overlay"
           onClick={(e) => handleClickOutside(e, deleteModalRef, () => setDeleteConfirmation({ isOpen: false, item: null }))}
         >
-          <div 
-            className="modal" 
+          <div
+            className="modal"
             ref={deleteModalRef}
             role="dialog"
             aria-labelledby="delete-modal-title"
@@ -1440,8 +1461,8 @@ export default function App() {
           >
             <div className="modal-header">
               <h2 id="delete-modal-title">Confirm Delete</h2>
-              <button 
-                className="close-button" 
+              <button
+                className="close-button"
                 onClick={() => setDeleteConfirmation({ isOpen: false, item: null })}
                 ref={deleteCloseButtonRef}
               >
@@ -1462,23 +1483,105 @@ export default function App() {
               )}
             </div>
             <div className="modal-footer">
-              <button 
-                type="button" 
-                className="secondary-btn" 
+              <button
+                type="button"
+                className="secondary-btn"
                 onClick={() => setDeleteConfirmation({ isOpen: false, item: null })}
                 ref={deleteCancelButtonRef}
               >
                 Cancel
               </button>
-              <button 
-                type="button" 
-                className="danger-btn" 
+              <button
+                type="button"
+                className="danger-btn"
                 onClick={handleDeleteConfirm}
                 ref={deleteConfirmButtonRef}
                 style={{ border: '0.5px solid rgba(255, 255, 255, 0.8)' }}
               >
                 <span className="material-symbols-rounded">delete</span>
                 Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {deleteAllConfirmation && (
+        <div
+          className="modal-overlay"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setDeleteAllConfirmation(false);
+            }
+          }}
+        >
+          <div
+            className="modal"
+            ref={deleteAllModalRef}
+            role="dialog"
+            aria-labelledby="delete-all-modal-title"
+            aria-modal="true"
+            tabIndex="-1"
+            onKeyDown={(e) => {
+              if (e.key === 'Tab') {
+                e.preventDefault();
+                const focusableElements = [
+                  deleteAllCloseButtonRef.current,
+                  deleteAllCancelButtonRef.current,
+                  deleteAllConfirmButtonRef.current
+                ].filter(Boolean);
+
+                const currentIndex = focusableElements.indexOf(document.activeElement);
+                let nextIndex;
+
+                if (e.shiftKey) {
+                  nextIndex = currentIndex <= 0 ? focusableElements.length - 1 : currentIndex - 1;
+                } else {
+                  nextIndex = currentIndex >= focusableElements.length - 1 ? 0 : currentIndex + 1;
+                }
+
+                focusableElements[nextIndex].focus();
+              }
+              if (e.key === 'Escape') {
+                setDeleteAllConfirmation(false);
+              }
+            }}
+          >
+            <div className="modal-header">
+              <h2 id="delete-all-modal-title">Confirm Delete All</h2>
+              <button
+                className="close-button"
+                onClick={() => setDeleteAllConfirmation(false)}
+                ref={deleteAllCloseButtonRef}
+              >
+                <span className="material-symbols-rounded">close</span>
+              </button>
+            </div>
+            <div className="modal-content">
+              <p>Are you sure you want to delete all items?</p>
+              <p>This action cannot be undone.</p>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="secondary-btn"
+                onClick={() => setDeleteAllConfirmation(false)}
+                ref={deleteAllCancelButtonRef}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="danger-btn"
+                onClick={() => {
+                  handleDeleteAll();
+                  setDeleteAllConfirmation(false);
+                }}
+                ref={deleteAllConfirmButtonRef}
+                style={{ border: '0.5px solid rgba(255, 255, 255, 0.8)' }}
+              >
+                <span className="material-symbols-rounded">delete_forever</span>
+                Delete All
               </button>
             </div>
           </div>
@@ -1503,7 +1606,7 @@ export default function App() {
                 <h3>Main Screen</h3>
                 <ul>
                   <li>You can Drag & Drop cards to reorder cards.</li>
-                  <li><kbd>d</kbd> Delete all cards forcefully</li>
+                  <li><kbd>d</kbd> Delete all cards</li>
                   <li><kbd>n</kbd> Create a new card</li>
                   <li><kbd>c</kbd> Copy the text of most recent text card</li>
                 </ul>
@@ -1543,7 +1646,7 @@ export default function App() {
                 <h2>Edit {editingItem?.type === 'file' ? 'File' : 'Note'}</h2>
               </div>
               <div className="modal-hint">F1 to Open Command Palette, and Ctrl+Enter to Save</div>
-              <button 
+              <button
                 className="close-button"
                 onClick={() => setEditModalOpen(false)}
                 title="Close"
@@ -1551,7 +1654,7 @@ export default function App() {
                 <span className="material-symbols-rounded">close</span>
               </button>
             </div>
-            
+
             <div className="modal-content">
               {editingItem?.type === 'file' ? (
                 <>
@@ -1607,9 +1710,9 @@ export default function App() {
             </div>
 
             <div className="modal-footer">
-              <button 
-                type="button" 
-                className="secondary-btn" 
+              <button
+                type="button"
+                className="secondary-btn"
                 onClick={() => {
                   setEditModalOpen(false);
                   setEditingItem(null);
@@ -1658,7 +1761,7 @@ export default function App() {
       </div>
       <div className="stats">
         <span>Total Size: {formatBytes(stats.totalSize)}
-          {stats.diskSpace && 
+          {stats.diskSpace &&
             <span className="disk-space">
               {` / ${formatBytes(stats.diskSpace.available)} `}
             </span>
