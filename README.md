@@ -52,3 +52,5 @@ This is a web-based clipboard/note-taking application ("CopyPasta") built with:
 * FR: Future CopyPasta3: Add authentication/login to the app.
 * FR: For Docker Best Practices, should run as a non-root user instead of root (to remove warnings during startup).
 * FR: Refactor the extremely long App.jsx into multiple jsx files for the components (with their own imports and exports). 
+* FR: Update to latest Meteor (See https://docs.meteor.com/history.html and update this project with 'meteor update')!
+* FR: Make this compatible with internet explorer (for old homelabs from the 90's)
