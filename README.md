@@ -76,3 +76,4 @@ npm install @fortawesome/fontawesome-svg-core@6 monaco-editor@0.30 ;
 meteor npm update @babel/core @babel/runtime ;
 node -v ; meteor --port 3000 --allow-superuser ;  #But even after all of this, failure :(
 ```
+* Add a "Favorite" so that it gets protected from being deleted in 14 days
