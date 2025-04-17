@@ -3,6 +3,10 @@
 # This is my main script to start the app. Open to suggestions to improve it.
 echo "This script will launch the meteorjs webpage on your Ubuntu Host."
 
+# Use NodeJS Portable Tarball Environment
+NODEJS_HOME=$(echo "$PWD"/node-v*/bin)
+PATH=$NODEJS_HOME:$PATH
+
 # Ensure that node/npm/meteor is installed or exit with a message to the user
 command -v node >/dev/null 2>&1 || { echo >&2 "Node.js is required but it's not installed. Aborting."; exit 1; }
 command -v npm >/dev/null 2>&1 || { echo >&2 "npm is required but it's not installed.  Aborting."; exit 1; }

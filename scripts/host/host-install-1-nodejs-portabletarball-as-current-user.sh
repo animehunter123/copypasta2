@@ -22,19 +22,19 @@ echo "npm version:"
 npm -v
 echo "npx version:"
 npx -v
-# Update ~/.bashrc for Bash users
-echo "Updating ~/.bashrc for persistent environment variables..."
-echo "export NODEJS_HOME=$NODEJS_HOME" >> ~/.bashrc
-echo "export PATH=\$NODEJS_HOME:\$PATH" >> ~/.bashrc
-# Update ~/.config/fish/config.fish for Fish users
-FISH_CONFIG="$HOME/.config/fish/config.fish"
-if [ -d "$HOME/.config/fish" ]; then
-    echo "Updating $FISH_CONFIG for persistent environment variables..."
-    echo "set -x NODEJS_HOME $NODEJS_HOME" >> $FISH_CONFIG
-    echo "set -x PATH \$NODEJS_HOME \$PATH" >> $FISH_CONFIG
-else
-    echo "Fish shell configuration directory not found. Skipping Fish shell update."
-fi
+# # Update ~/.bashrc for Bash users
+# echo "Updating ~/.bashrc for persistent environment variables..."
+# echo "export NODEJS_HOME=$NODEJS_HOME" >> ~/.bashrc
+# echo "export PATH=\$NODEJS_HOME:\$PATH" >> ~/.bashrc
+# # Update ~/.config/fish/config.fish for Fish users
+# FISH_CONFIG="$HOME/.config/fish/config.fish"
+# if [ -d "$HOME/.config/fish" ]; then
+#     echo "Updating $FISH_CONFIG for persistent environment variables..."
+#     echo "set -x NODEJS_HOME $NODEJS_HOME" >> $FISH_CONFIG
+#     echo "set -x PATH \$NODEJS_HOME \$PATH" >> $FISH_CONFIG
+# else
+#     echo "Fish shell configuration directory not found. Skipping Fish shell update."
+# fi
 # Reload Bash and Fish configurations
 echo "Reloading shell configurations..."
 source ~/.bashrc 2>/dev/null || echo "Please restart your Bash session to apply changes."
