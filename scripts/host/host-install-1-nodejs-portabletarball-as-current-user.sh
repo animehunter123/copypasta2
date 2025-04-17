@@ -1,10 +1,7 @@
 #!/bin/bash
 
-read -p "This will install Node.js and npm for the current user. Are you sure you want to proceed? (y/n) " choice
-if [ "$choice" != "y" ]; then
-    echo "Installation aborted."
-    exit 1
-fi
+echo "WARNING CHANGING YOUR SYSTEM!!!!!!!
+This will install Node.js and npm for the current user. Are you sure you want to proceed? (y/n) " choice
 
 # Step 1: Fetch the latest version from Node.js website
 LATEST_VERSION=$(curl -s https://nodejs.org/dist/latest/ | grep -oP 'node-v[\d.]+-linux-x64.tar.xz' | head -1)
