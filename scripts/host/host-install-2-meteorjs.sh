@@ -59,3 +59,5 @@ cd ../webapp-meteor
 npm install        # This populates the ./node_modules directory
 meteor npm install --allow-superuser # This populates the ./node_modules directory and also the .meteor/local directory (I think?)
 popd
+
+echo "Ok Now Meteor has been propertly installed, but when you run the app it still needs to install deps like meteor-tool for this webapp, but at least at this point you have meteor usable in the CLI, BUT THE PORTABLE NODE VERSION IS NOT INSTALLED SYSTEMWIDE SO MAKE SURE YOU KNOW WHAT YOU ARE DOING!!!!"
