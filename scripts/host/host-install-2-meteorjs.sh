@@ -28,7 +28,7 @@ echo "Verifying Meteor installation (IT DEFAULTS TO ~/.bashrc NOT FISH, SO I WIL
 # fish_add_path $HOME/.meteor 2>/dev/null 1>/dev/null # The correct way to do this, but IT WONT APPEAR IN ~/.config/fish/config.fish (which isnt bash'y'ish.)
 echo 'fish_add_path $HOME/.meteor' >> ~/.config/fish/config.fish
 source ~/.bashrc
-meteor --version
+meteor --version  --allow-superuser
 popd
 
 # Its a good idea to ensure that the .node_modules and .meteor are updated, so if you need to fetch the dependencies, uncomment the below...

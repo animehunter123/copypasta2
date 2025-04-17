@@ -43,7 +43,6 @@ netstat -tulnap 2>/dev/null | grep 3000 | grep -i LISTEN | sed 's/.*LISTEN \+//'
 
 # Export data directory path and start Meteor
 # export COPYPASTA_DATA_DIR="$WEBAPP_DIR/data"
-cd $WEBAPPDIR
 export COPYPASTA_DATA_DIR="./data"
 echo "PWD directory: $PWD"
 echo "Data directory: $COPYPASTA_DATA_DIR"
