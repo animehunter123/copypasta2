@@ -27,7 +27,6 @@ source ~/.bashrc
 meteor --version
 popd
 
-
 # Its a good idea to ensure that the .node_modules and .meteor are updated, so if you need to fetch the dependencies, uncomment the below...
 echo "Now installing the node dependencies to the ./node_modules directory"
 cd webapp-meteor

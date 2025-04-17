@@ -42,7 +42,9 @@ echo "Killing any older MeteorJS processes on port 3000 (via netstat command)...
 netstat -tulnap 2>/dev/null | grep 3000 | grep -i LISTEN | sed 's/.*LISTEN \+//' | sed 's/\/node.*//' | xargs kill -9 2>/dev/null 1>/dev/null
 
 # Export data directory path and start Meteor
-export COPYPASTA_DATA_DIR="$WEBAPP_DIR/data"
+# export COPYPASTA_DATA_DIR="$WEBAPP_DIR/data"
+cd $WEBAPPDIR
+export COPYPASTA_DATA_DIR="./data"
 echo "PWD directory: $PWD"
 echo "Data directory: $COPYPASTA_DATA_DIR"
 meteor --port 3000 --allow-superuser # This is the new MeteorJS webapp with explicit port and superuser access (for development only!!!)
