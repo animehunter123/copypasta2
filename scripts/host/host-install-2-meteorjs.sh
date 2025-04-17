@@ -9,6 +9,10 @@ echo "Installing dependencies, this script should be launched as non-root user, 
 # Install MeteorJS (3.1)
 # curl https://install.meteor.com/\?release\=3.1 | sh
 
+# Use NodeJS Portable Runtime Tarball Environment
+NODEJS_HOME=$(echo "$PWD"/node-v*/bin)
+PATH=$NODEJS_HOME:$PATH
+
 # New way to install the latest meteorjs
 echo "Removing existing Meteor installation (if any)..."
 pushd .
