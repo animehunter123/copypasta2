@@ -76,4 +76,5 @@ npm install @fortawesome/fontawesome-svg-core@6 monaco-editor@0.30 ;
 meteor npm update @babel/core @babel/runtime ;
 node -v ; meteor --port 3000 --allow-superuser ;  #But even after all of this, failure :(
 ```
+* host scripts seem to be weird, and running twice launches it correctly - need to use a .env file instead of messing up the bashrc, i dont like this.
 * Add a "Favorite" so that it gets protected from being deleted in 14 days
