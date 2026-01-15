@@ -22,28 +22,14 @@ This is a web-based clipboard/note-taking application ("CopyPasta") built with:
 
 ![Sample Photo of MeteorJS CopyPasta](https://github.com/user-attachments/assets/1c1dfc5d-ad81-4704-b7cd-93354c11460b "A sample photo of the CopyPasta webpage then runs in MeteorJS")
 
-# Warning Bug
-*Currently only I only support this version: git checkout 43dc0a1*
-
 # How to run...
 * Use a Linux Host or Docker/Podman/Lxc Container.
-* Install netstat
-* Install nodejs/npm/npx. To use portable tarball, just run ```./scripts/host/host-install-nodejs-portabletarball-as-current-user.sh```
-* Install meteorjs. To use portable meteorjs env, just run ```./scripts/host/host-install-meteorjs.sh```
-* Launch it via one of these two methods:
-    1. On your Host Directly (Please carefully check the Bash Script before running it, and also: the host/docker/lxc requires minimum of 2gb ram to run this app): 
-        ```        
-        cd ./scripts
-        ./host/host-start-webapp.sh
-        ```
-    2. *(Reccomended Method)* On a Linux Container on your docker host (This will change perms, so you need to rebuild if you want on host again):
-    
-        ```
-        cd ./scripts  
-        ./Dockerfile_Build.sh       # Only do this ONCE
-        ./start-webapp-on-docker.sh
-        ```
-
+* Use the bash scripts which use docker commands:
+```bash
+./build.sh # <-- this will build the docker container
+./start.sh # <-- this will start the container
+./logs.sh  # <-- this will `tail -f` the logs for debugging, it will say "App running at: http://localhost:3000" when it is ready!
+```
 * Finally, open a web browser to http://localhost:3000, and upload a file or a note, and it will save those to `./data/files` or `./data/notes`
 
 # Todo ⛳
@@ -56,7 +42,7 @@ This is a web-based clipboard/note-taking application ("CopyPasta") built with:
 * FR: For Docker Best Practices, should run as a non-root user instead of root (to remove warnings during startup).
 * FR: Refactor the extremely long App.jsx into multiple jsx files for the components (with their own imports and exports). 
 * FR: Update to latest Meteor (See https://docs.meteor.com/history.html and update this project with 'meteor update')!
-* BUG: Make this compatible with internet explorer (for old homelabs from the 90's). Looks like only Meteor 1.0 works correctly, so this requires a complete downgrade of this webapp, else you will see:
+* BUG: Make this compatible with internet explorer (for old homelabs from the 90's and ECMA5 instead of ECMA6 and polyfills ughh...). Looks like only Meteor 1.0 works correctly, so this requires a complete downgrade of this webapp, else you will see:
 ```log
 Detected older Firefox version: 36  firefox-compat.js:12:7
 Applying Firefox compatibility fixes  firefox-compat.js:21:3

@@ -17,7 +17,7 @@ services:
 #     - proxy-network      
 
     volumes:
-      - '../webapp-meteor/:/app'        
+      - './webapp-meteor/:/app'        
       
 # These are settings #2 for using ADDS Reverse Proxy
 #networks: # Required section#2 for cp2/ to work via ADDNS Cname of cp2 to lm-docker01.lm.local. (with dot)

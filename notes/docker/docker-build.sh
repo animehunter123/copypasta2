@@ -10,7 +10,7 @@ docker rm -f $target 2>/dev/null
 docker image rm -f $target 2>/dev/null
 
 pushd .
-cd ../webapp-meteor
+cd ../../webapp-meteor
 
 echo "Building the new container: $target from the internet..."
 # Or on Windows/WSL/Podman set network=host on wsl...: podman build -t docker-meteorjs-webapp . --network=host
