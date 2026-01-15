@@ -22,6 +22,9 @@ This is a web-based clipboard/note-taking application ("CopyPasta") built with:
 
 ![Sample Photo of MeteorJS CopyPasta](https://github.com/user-attachments/assets/1c1dfc5d-ad81-4704-b7cd-93354c11460b "A sample photo of the CopyPasta webpage then runs in MeteorJS")
 
+# Warning Bug
+*Currently only I only support this version: git checkout 43dc0a1*
+
 # How to run...
 * Use a Linux Host or Docker/Podman/Lxc Container.
 * Install netstat
