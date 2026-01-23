@@ -32,7 +32,7 @@ This is a web-based clipboard/note-taking application ("CopyPasta") built with:
 ```
 * Finally, open a web browser to http://localhost:3000, and upload a file or a note, and it will save those to `./data/files` or `./data/notes`
 
-# Todo ⛳
+# Todo's
 * FR: Hour/Minute Timestamp should be shown on card to allow sorting order to be easier for users
 * FR: Monaco doesnt show the "paste" in right click menu, (see react macos monaco samples)
 * FR: List view really should be vertical card and more indicitive if the text was too long, its difficult at the moment
@@ -51,19 +51,6 @@ SyntaxError: invalid identity escape in regular expression  modules.js:42625:35
 TypeError: Package.modules is undefined[Learn More]  promise.js:15:5
 TypeError: Package.mongo is undefined[Learn More]  global-imports.js:3:1
 TypeError: require is not a function[Learn More]
-```
-... WHEREFORE I ATTEMPTED DOWNGRADE METEOR from 3.1 to 2.16 or 1.10, VIA BELOW DIDNT WORK. **Maybe just re-write the entire thing with Rust+Leptos(Actix):**
-```bash
-rm -rf node_modules* ; 
-rm -rf package-lock.json ;
-meteor reset ; 
-meteor update --release 2.16 ; # The .meteor/release shows METEOR@3.1, and will change to METEOR@2.16
-meteor add ecmascript ; 
-npm i ; meteor npm install ; 
-npm install --legacy-peer-deps ; 
-npm install @fortawesome/fontawesome-svg-core@6 monaco-editor@0.30 ;
-meteor npm update @babel/core @babel/runtime ;
-node -v ; meteor --port 3000 --allow-superuser ;  #But even after all of this, failure :(
 ```
 * host scripts seem to be weird, and running twice launches it correctly - need to use a .env file instead of messing up the bashrc, i dont like this. >> For Now, using a fresh LXC does in fact behave correctly if you use ./1.sh and then ./2.sh for example, al
 * Add a "Favorite" so that it gets protected from being deleted in 14 days
