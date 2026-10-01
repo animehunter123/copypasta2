@@ -49,3 +49,5 @@ TypeError: Package.mongo is undefined[Learn More]  global-imports.js:3:1
 TypeError: require is not a function[Learn More]
 ```
 * host scripts seem to be weird, and running twice launches it correctly - need to use a .env file instead of messing up the bashrc, i dont like this. >> For Now, using a fresh LXC does in fact behave correctly if you use ./1.sh and then ./2.sh for example, al
+
+* FEATURE REQ: The modal should be draggable and resizable
