@@ -1245,7 +1245,7 @@ export default function App() {
 
       {modalOpen && (
         <div className="modal-overlay" onClick={(e) => handleClickOutside(e, modalRef, handleModalClose)}>
-          <div className="modal" ref={modalRef}>
+          <div className="modal new-card-modal-container" ref={modalRef}>
             <div className="modal-header">
               <h2>New Card</h2>
               <button className="close-button" onClick={handleModalClose}>

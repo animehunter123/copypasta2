@@ -5,7 +5,7 @@
 :root {
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   --font-mono: 'Fira Code', 'SF Mono', Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-  
+
   /* Light theme colors */
   --primary-50: #f0f7ff;
   --primary-100: #e0f0ff;
@@ -15,7 +15,7 @@
   --primary-500: #0090ff;
   --primary-600: #0070d1;
   --primary-700: #0058a3;
-  
+
   --gray-50: #ffffff;
   --gray-100: #f8f9fa;
   --gray-200: #e9ecef;
@@ -26,47 +26,47 @@
   --gray-700: #495057;
   --gray-800: #343a40;
   --gray-900: #212529;
-  
+
   --error-50: #fff5f5;
   --error-100: #ffe3e3;
   --error-200: #ffc9c9;
   --error-500: #ff6b6b;
   --error-600: #fa5252;
   --error-700: #e03131;
-  
+
   --warning-50: #fff9db;
   --warning-100: #fff3bf;
   --warning-500: #fcc419;
-  
+
   --success-50: #ebfbee;
   --success-100: #d3f9d8;
   --success-500: #40c057;
-  
+
   --surface: var(--gray-50);
   --surface-hover: var(--gray-100);
   --surface-active: var(--gray-200);
   --on-surface: var(--gray-900);
   --on-surface-medium: var(--gray-700);
   --on-surface-disabled: var(--gray-500);
-  
+
   --text-color: var(--gray-900);
   --text-color-secondary: var(--gray-600);
-  
+
   --radius-sm: 0.375rem;
   --radius: 0.5rem;
   --radius-md: 0.75rem;
   --radius-lg: 1rem;
-  
+
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  
+
   /* Navigate color (purple) */
   --navigate-50: #f3e8ff;
   --navigate-500: #9333ea;
   --navigate-600: #7e22ce;
-  
+
   /* Base colors */
   --white: #ffffff;
   --black: #000000;
@@ -215,7 +215,7 @@
   --primary-500: #3498db;
   --primary-600: #57a9e2;
   --primary-700: #7abbe9;
-  
+
   /* Dark theme grays - Softer, more pleasant */
   --gray-50: #171923;
   --gray-100: #1a202c;
@@ -227,7 +227,7 @@
   --gray-700: #e2e8f0;
   --gray-800: #edf2f7;
   --gray-900: #f7fafc;
-  
+
   /* Dark theme error colors - More visible */
   --error-50: #2d1a1a;
   --error-100: #3d2020;
@@ -235,28 +235,28 @@
   --error-500: #e53e3e;
   --error-600: #f56565;
   --error-700: #fc8181;
-  
+
   /* Dark theme warning colors - More visible */
   --warning-50: #2d2510;
   --warning-100: #3d3115;
   --warning-500: #ecc94b;
-  
+
   /* Dark theme success colors - More visible */
   --success-50: #1c2a1e;
   --success-100: #233026;
   --success-500: #48bb78;
-  
+
   /* Dark theme semantic colors */
   --on-surface: var(--gray-700);
   --on-surface-medium: var(--gray-600);
   --on-surface-disabled: var(--gray-400);
-  
+
   /* Dark theme shadows - More subtle */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
   --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.4);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4), 0 4px 6px -4px rgb(0 0 0 / 0.4);
-  
+
   /* Dark theme button colors */
   .card-btn.copy {
     color: #34d399;
@@ -313,19 +313,19 @@
     background: rgba(239, 68, 68, 0.3);
     border-color: rgba(239, 68, 68, 0.6);
   }
-  
+
   /* Override all text colors in cards */
   .card * {
     color: var(--text-color);
   }
-  
+
   .card pre,
   .card pre *,
   .card code,
   .card code * {
     color: var(--text-color) !important;
   }
-  
+
   .card-content,
   .card-content pre,
   .card-content pre code,
@@ -461,11 +461,11 @@ body {
     padding: 0.75rem;
     gap: 0.5rem;
   }
-  
+
   .nav-group {
     gap: 0.5rem;
   }
-  
+
   .btn-text {
     display: none;
   }
@@ -502,11 +502,11 @@ body {
     padding: 0.75rem;
     gap: 0.5rem;
   }
-  
+
   .nav-group {
     gap: 0.5rem;
   }
-  
+
   .btn-text {
     display: none;
   }
@@ -826,31 +826,31 @@ body {
   transition: all 0.2s ease;
 }
 
-.card-btn.copy { 
+.card-btn.copy {
   color: var(--success-500);
   background: rgba(34, 197, 94, 0.15);
   border-color: var(--success-100);
 }
 
-.card-btn.edit { 
+.card-btn.edit {
   color: var(--warning-500);
   background: rgba(249, 115, 22, 0.15);
   border-color: var(--warning-100);
 }
 
-.card-btn.navigate { 
+.card-btn.navigate {
   color: var(--info-500);
   background: rgba(59, 130, 246, 0.15);
   border-color: var(--info-100);
 }
 
-.card-btn.download { 
+.card-btn.download {
   color: var(--download-500);
   background: rgba(147, 51, 234, 0.15);
   border-color: var(--download-100);
 }
 
-.card-btn.delete { 
+.card-btn.delete {
   color: var(--error-500);
   background: rgba(239, 68, 68, 0.15);
   border-color: var(--error-100);
@@ -913,7 +913,7 @@ body {
   .btn-text {
     display: none;
   }
-  
+
   .danger-btn,
   .primary-btn {
     padding: 0.5rem;
@@ -921,7 +921,7 @@ body {
     height: 2.5rem;
     justify-content: center;
   }
-  
+
   .size-badge {
     display: none;
   }
@@ -932,11 +932,11 @@ body {
     padding: 0.75rem;
     gap: 0.5rem;
   }
-  
+
   .nav-group {
     gap: 0.5rem;
   }
-  
+
   .title {
     font-size: 1.25rem;
   }
@@ -1040,7 +1040,7 @@ body {
   .content-cards.list-view .content-card {
     grid-template-columns: 1fr auto;
   }
-  
+
   .content-cards.list-view .content-card .card-footer {
     display: none;
   }
@@ -1051,7 +1051,7 @@ body {
     grid-template-columns: 1fr;
     padding: 0.5rem;
   }
-  
+
   .content-cards.list-view .content-card .card-buttons {
     display: none;
   }
@@ -1271,6 +1271,12 @@ body {
 
 /* Responsive modal adjustments */
 @media screen and (max-width: 768px) {
+  .new-card-modal-container {
+    width: 95vw;
+    max-width: 95vw;
+    height: 92vh;
+    max-height: 92vh;
+  }
   .modal,
   .edit-modal,
   .new-card-modal,
@@ -1278,7 +1284,7 @@ body {
     width: 95vw;
     max-height: 95vh;
   }
-  
+
   .modal-header,
   .edit-modal .modal-header,
   .new-card-modal .modal-header,
@@ -1286,7 +1292,7 @@ body {
     height: 56px;
     padding: 0.75rem 1rem;
   }
-  
+
   .modal-footer,
   .edit-modal .modal-footer,
   .new-card-modal .modal-footer,
@@ -1305,7 +1311,7 @@ body {
     max-height: 100vh;
     border-radius: 0;
   }
-  
+
   .modal-footer button,
   .edit-modal .modal-footer button,
   .new-card-modal .modal-footer button,
@@ -1314,7 +1320,7 @@ body {
     min-width: 0;
     padding: 0.5rem;
   }
-  
+
   .modal-footer .primary-btn span.material-symbols-rounded,
   .modal-footer .secondary-btn span.material-symbols-rounded {
     margin-right: 0.25rem;
@@ -1992,6 +1998,14 @@ textarea:focus {
 
 /* New Card Modal Styles */
 /* Remove redundant modal styles */
+.new-card-modal-container {
+  /* The New Card dialog is intentionally larger than the other dialogs. */
+  width: min(1100px, 94vw);
+  max-width: 94vw;
+  height: min(900px, 92vh);
+  max-height: 92vh;
+}
+
 .new-card-modal {
   display: flex;
   flex-direction: column;
@@ -1999,6 +2013,30 @@ textarea:focus {
   min-height: 0;
   padding: 1.5rem;
   overflow-y: auto;
+
+  /* Make the modal's main area feel like a proper scrollable page. */
+  scrollbar-width: auto;
+  scrollbar-color: var(--primary-500) var(--surface-hover);
+}
+
+/* A wider, easier-to-grab scrollbar for Chromium/Chrome/Edge. */
+.new-card-modal::-webkit-scrollbar {
+  width: 12px;
+}
+
+.new-card-modal::-webkit-scrollbar-track {
+  background: var(--surface-hover);
+  border-radius: 10px;
+}
+
+.new-card-modal::-webkit-scrollbar-thumb {
+  background: var(--primary-500);
+  border-radius: 10px;
+  border: 3px solid var(--surface-hover);
+}
+
+.new-card-modal::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-600);
 }
 
 .new-card-modal .modal-footer {
@@ -2462,7 +2500,7 @@ textarea:focus {
   .content-cards.list-view .content-card {
     grid-template-columns: 1fr auto;
   }
-  
+
   .content-cards.list-view .content-card .card-footer {
     display: none;
   }
@@ -2473,7 +2511,7 @@ textarea:focus {
     grid-template-columns: 1fr;
     padding: 0.5rem;
   }
-  
+
   .content-cards.list-view .content-card .card-buttons {
     display: none;
   }
@@ -2662,11 +2700,11 @@ textarea:focus {
     padding: 0.75rem;
     gap: 0.5rem;
   }
-  
+
   .nav-group {
     gap: 0.5rem;
   }
-  
+
   .btn-text {
     display: none;
   }
