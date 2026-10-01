@@ -1271,12 +1271,6 @@ body {
 
 /* Responsive modal adjustments */
 @media screen and (max-width: 768px) {
-  .new-card-modal-container {
-    width: 95vw;
-    max-width: 95vw;
-    height: 92vh;
-    max-height: 92vh;
-  }
   .modal,
   .edit-modal,
   .new-card-modal,
@@ -1998,14 +1992,6 @@ textarea:focus {
 
 /* New Card Modal Styles */
 /* Remove redundant modal styles */
-.new-card-modal-container {
-  /* The New Card dialog is intentionally larger than the other dialogs. */
-  width: min(1100px, 94vw);
-  max-width: 94vw;
-  height: min(900px, 92vh);
-  max-height: 92vh;
-}
-
 .new-card-modal {
   display: flex;
   flex-direction: column;
@@ -2013,30 +1999,6 @@ textarea:focus {
   min-height: 0;
   padding: 1.5rem;
   overflow-y: auto;
-
-  /* Make the modal's main area feel like a proper scrollable page. */
-  scrollbar-width: auto;
-  scrollbar-color: var(--primary-500) var(--surface-hover);
-}
-
-/* A wider, easier-to-grab scrollbar for Chromium/Chrome/Edge. */
-.new-card-modal::-webkit-scrollbar {
-  width: 12px;
-}
-
-.new-card-modal::-webkit-scrollbar-track {
-  background: var(--surface-hover);
-  border-radius: 10px;
-}
-
-.new-card-modal::-webkit-scrollbar-thumb {
-  background: var(--primary-500);
-  border-radius: 10px;
-  border: 3px solid var(--surface-hover);
-}
-
-.new-card-modal::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-600);
 }
 
 .new-card-modal .modal-footer {
