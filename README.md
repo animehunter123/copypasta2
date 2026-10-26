@@ -50,4 +50,19 @@ TypeError: require is not a function[Learn More]
 ```
 * host scripts seem to be weird, and running twice launches it correctly - need to use a .env file instead of messing up the bashrc, i dont like this. >> For Now, using a fresh LXC does in fact behave correctly if you use ./1.sh and then ./2.sh for example, al
 
+v2.0 goals (draggable modal)
 * FEATURE REQ: The modal should be draggable and resizable
+
+- when a modal is open, and the user starts typing or uploading a file, if you accidently click out it closes the modal, this should stay open so the user doesnt lose their progress. (I think this happens in many cases). Please check all cases. Handle it appropriately, maybe with a popup modal saying are you sure you want to close this modal before saving changes or something?
+
+- the drag and resize work great, thanks I learned a lot! Now if you resize the modal to be wide the width of the inputtext area of the monaco vscode editor doesnt expand (see attached photo). Can it be wider and expand as the user chooses? Also if you look at the photo the monaco editor looks blue and doesnt look correct/modern, did I do it correctly, or do we need to update the monaco modal to look better?
+
+- Similar to above for the new card modal the Upload File also doesnt expand to the width the user wants.
+
+- Please check all of the buttons in the navbar top to ensure they are all autofocused on a appropriate field as you open then.
+
+- Please make a keyboard escape key handler for every single navbar button behaviour so it closes (or goes to the are you sure you want to close unsaved changes modal behaviour), please check all modals and verify this behaviour for all possible cases.
+
+- The dark mode doesnt seem to easy to see, did I mess up the colors or tailwind? can you clean it up a bit to be clean and easier to see maybe close or similar to material dark? and reduce eye strain
+
+- can a footer be added as well that is always visible and shows the current version of meteor used from the package.json or similar, and keep always visible without dissapearing as many cards appear?
