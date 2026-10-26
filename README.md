@@ -17,7 +17,7 @@ This is a web-based clipboard/note-taking application ("CopyPasta") built with:
 ![Sample Photo of MeteorJS CopyPasta](https://github.com/user-attachments/assets/1c1dfc5d-ad81-4704-b7cd-93354c11460b "A sample photo of the CopyPasta webpage then runs in MeteorJS")
 
 # Quickstart: How to run...
-* Use a Linux Host or Docker/Podman/Lxc Container.
+* Use a Linux Host with Docker/Podman/Lxc installed.
 * Use the bash scripts which use docker commands:
 ```bash
 ./build.sh # <-- this will build the docker container
