@@ -23,6 +23,85 @@ const MAX_PREVIEW_LENGTH = 500;
 // Create a reactive variable for disk space
 const diskSpaceVar = new ReactiveVar(null);
 
+/**
+ * Adds pointer-based dragging to a modal while leaving its native CSS resize
+ * handle available. The modal's header is the drag handle.
+ *
+ * Keep this hook independent of the modal's contents so Monaco and normal
+ * form controls continue to receive their own pointer/keyboard events.
+ */
+function useDraggableModal(modalRef, isOpen) {
+  useEffect(() => {
+    const modal = modalRef.current;
+    if (!isOpen || !modal) return undefined;
+
+    const header = modal.querySelector('.modal-header');
+    if (!header) return undefined;
+
+    let dragState = null;
+
+    const onPointerDown = (event) => {
+      // Only the header starts a drag; don't hijack clicks on its buttons.
+      if (event.button !== 0 || event.target.closest('button, a, input, select, textarea')) {
+        return;
+      }
+
+      const rect = modal.getBoundingClientRect();
+      dragState = {
+        pointerId: event.pointerId,
+        startX: event.clientX,
+        startY: event.clientY,
+        left: rect.left,
+        top: rect.top,
+      };
+
+      // Switch from centered flex layout to fixed coordinates on first drag.
+      modal.style.position = 'fixed';
+      modal.style.left = `${rect.left}px`;
+      modal.style.top = `${rect.top}px`;
+      modal.style.right = 'auto';
+      modal.style.bottom = 'auto';
+      modal.style.width = `${rect.width}px`;
+      modal.style.height = `${rect.height}px`;
+      modal.style.margin = '0';
+      modal.style.transform = 'none';
+
+      header.setPointerCapture?.(event.pointerId);
+      event.preventDefault();
+    };
+
+    const onPointerMove = (event) => {
+      if (!dragState || event.pointerId !== dragState.pointerId) return;
+
+      const maxLeft = Math.max(0, window.innerWidth - modal.offsetWidth);
+      const maxTop = Math.max(0, window.innerHeight - modal.offsetHeight);
+      const nextLeft = Math.min(maxLeft, Math.max(0, dragState.left + event.clientX - dragState.startX));
+      const nextTop = Math.min(maxTop, Math.max(0, dragState.top + event.clientY - dragState.startY));
+
+      modal.style.left = `${nextLeft}px`;
+      modal.style.top = `${nextTop}px`;
+    };
+
+    const stopDragging = (event) => {
+      if (dragState && (event.pointerId === undefined || event.pointerId === dragState.pointerId)) {
+        dragState = null;
+      }
+    };
+
+    header.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('pointermove', onPointerMove);
+    document.addEventListener('pointerup', stopDragging);
+    document.addEventListener('pointercancel', stopDragging);
+
+    return () => {
+      header.removeEventListener('pointerdown', onPointerDown);
+      document.removeEventListener('pointermove', onPointerMove);
+      document.removeEventListener('pointerup', stopDragging);
+      document.removeEventListener('pointercancel', stopDragging);
+    };
+  }, [modalRef, isOpen]);
+}
+
 export default function App() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -55,6 +134,7 @@ export default function App() {
   const textareaRef = useRef(null);
   const modalRef = useRef(null);
   const editModalRef = useRef(null);
+  const helpModalRef = useRef(null);
   const editorRef = useRef(null);
   const deleteModalRef = useRef(null);
   const deleteCloseButtonRef = useRef(null);
@@ -65,6 +145,11 @@ export default function App() {
   const deleteAllCancelButtonRef = useRef(null);
   const deleteAllConfirmButtonRef = useRef(null);
   const fileInputRef = useRef(null);
+
+  // Make the three content-heavy modals movable. CSS provides the resize handle.
+  useDraggableModal(modalRef, modalOpen);
+  useDraggableModal(editModalRef, editModalOpen);
+  useDraggableModal(helpModalRef, helpModalOpen);
 
   // Subscribe to items and get them reactively
   const { items, isLoading } = useTracker(() => {
@@ -1245,7 +1330,7 @@ export default function App() {
 
       {modalOpen && (
         <div className="modal-overlay" onClick={(e) => handleClickOutside(e, modalRef, handleModalClose)}>
-          <div className="modal" ref={modalRef}>
+          <div className="modal draggable-resizable-modal" ref={modalRef}>
             <div className="modal-header">
               <h2>New Card</h2>
               <button className="close-button" onClick={handleModalClose}>
@@ -1291,7 +1376,7 @@ export default function App() {
                 {!isUploadMode ? (
                   <>
                     <Editor
-                      height="300px"
+                      height="100%"
                       defaultLanguage="plaintext"
                       language={language}
                       value={contentInput}
@@ -1590,7 +1675,7 @@ export default function App() {
 
       {helpModalOpen && (
         <div className="modal-overlay" onClick={() => setHelpModalOpen(false)}>
-          <div className="modal help-modal" onClick={e => e.stopPropagation()}>
+          <div className="modal help-modal draggable-resizable-modal" ref={helpModalRef} onClick={e => e.stopPropagation()}>
             <div className="modal-header">
               <h2>Need help on using CopyPasta?</h2>
               <button
@@ -1637,7 +1722,7 @@ export default function App() {
             setEditModalContent({ content: '', language: 'plaintext' });
           }
         }}>
-          <div className="modal edit-modal" ref={editModalRef}>
+          <div className="modal edit-modal draggable-resizable-modal" ref={editModalRef}>
             <div className="modal-header">
               <div className="modal-title">
                 <span className="material-symbols-rounded">
@@ -1660,12 +1745,13 @@ export default function App() {
                 <>
                   <div className="editor-wrapper">
                     <Editor
-                      height="400px"
+                      height="100%"
                       defaultLanguage={editingItem.language || 'plaintext'}
                       value={String(editingItem.content || '')}
                       theme={theme === 'dark' ? 'vs-dark' : 'light'}
                       options={{
                         readOnly: true,
+                        automaticLayout: true,
                         renderValidationDecorations: 'off',
                       }}
                     />
@@ -1674,7 +1760,7 @@ export default function App() {
                 </>
               ) : (
                 <Editor
-                  height="400px"
+                  height="100%"
                   defaultLanguage={editingItem?.language || 'plaintext'}
                   value={String(editModalContent?.content || '')}
                   theme={theme === 'dark' ? 'vs-dark' : 'light'}
