@@ -1,6 +1,7 @@
 /* Import local fonts */
 @import url('/fonts/fonts.css');
 
+
 /* Rest of the CSS */
 :root {
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
