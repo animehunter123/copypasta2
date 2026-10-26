@@ -23,6 +23,139 @@ const MAX_PREVIEW_LENGTH = 500;
 // Create a reactive variable for disk space
 const diskSpaceVar = new ReactiveVar(null);
 
+/**
+ * Adds pointer-based dragging to a modal while leaving its native CSS resize
+ * handle available. The modal's header is the drag handle.
+ *
+ * Keep this hook independent of the modal's contents so Monaco and normal
+ * form controls continue to receive their own pointer/keyboard events.
+ */
+function useDraggableModal(modalRef, isOpen) {
+  useEffect(() => {
+    const modal = modalRef.current;
+    if (!isOpen || !modal) return undefined;
+
+    const header = modal.querySelector('.modal-header');
+    if (!header) return undefined;
+
+    let dragState = null;
+
+    const onPointerDown = (event) => {
+      // Only the header starts a drag; don't hijack clicks on its buttons.
+      if (event.button !== 0 || event.target.closest('button, a, input, select, textarea')) {
+        return;
+      }
+
+      const rect = modal.getBoundingClientRect();
+      dragState = {
+        pointerId: event.pointerId,
+        startX: event.clientX,
+        startY: event.clientY,
+        left: rect.left,
+        top: rect.top,
+      };
+
+      // Switch from centered flex layout to fixed coordinates on first drag.
+      modal.style.position = 'fixed';
+      modal.style.left = `${rect.left}px`;
+      modal.style.top = `${rect.top}px`;
+      modal.style.right = 'auto';
+      modal.style.bottom = 'auto';
+      modal.style.width = `${rect.width}px`;
+      modal.style.height = `${rect.height}px`;
+      modal.style.margin = '0';
+      modal.style.transform = 'none';
+
+      header.setPointerCapture?.(event.pointerId);
+      event.preventDefault();
+    };
+
+    const onPointerMove = (event) => {
+      if (!dragState || event.pointerId !== dragState.pointerId) return;
+
+      const maxLeft = Math.max(0, window.innerWidth - modal.offsetWidth);
+      const maxTop = Math.max(0, window.innerHeight - modal.offsetHeight);
+      const nextLeft = Math.min(maxLeft, Math.max(0, dragState.left + event.clientX - dragState.startX));
+      const nextTop = Math.min(maxTop, Math.max(0, dragState.top + event.clientY - dragState.startY));
+
+      modal.style.left = `${nextLeft}px`;
+      modal.style.top = `${nextTop}px`;
+    };
+
+    const stopDragging = (event) => {
+      if (dragState && (event.pointerId === undefined || event.pointerId === dragState.pointerId)) {
+        dragState = null;
+      }
+    };
+
+    header.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('pointermove', onPointerMove);
+    document.addEventListener('pointerup', stopDragging);
+    document.addEventListener('pointercancel', stopDragging);
+
+    return () => {
+      header.removeEventListener('pointerdown', onPointerDown);
+      document.removeEventListener('pointermove', onPointerMove);
+      document.removeEventListener('pointerup', stopDragging);
+      document.removeEventListener('pointercancel', stopDragging);
+    };
+  }, [modalRef, isOpen]);
+}
+
+// A calmer, lower-contrast palette that matches the app's Material-inspired dark theme.
+function configureMonacoTheme(monaco, theme) {
+  if (!monaco) return;
+  monaco.editor.defineTheme('copypasta-dark', {
+    base: 'vs-dark',
+    inherit: true,
+    rules: [
+      { token: '', foreground: 'D8DEE9', background: '20242B' },
+      { token: 'comment', foreground: '7F8C9A', fontStyle: 'italic' },
+      { token: 'keyword', foreground: 'C792EA' },
+      { token: 'string', foreground: 'A3BE8C' },
+      { token: 'number', foreground: 'D8A657' },
+      { token: 'type', foreground: '88C0D0' },
+    ],
+    colors: {
+      'editor.background': '#20242B',
+      'editor.foreground': '#D8DEE9',
+      'editorLineNumber.foreground': '#657080',
+      'editorLineNumber.activeForeground': '#C8D0DA',
+      'editorCursor.foreground': '#88C0D0',
+      'editor.selectionBackground': '#3A4658',
+      'editor.inactiveSelectionBackground': '#303A49',
+      'editor.lineHighlightBackground': '#272D36',
+      'editorIndentGuide.background1': '#343B46',
+      'editorIndentGuide.activeBackground1': '#4B5868',
+      'editorWidget.background': '#252B34',
+      'editorWidget.border': '#3A424E',
+      'input.background': '#252B34',
+      'input.border': '#414B59',
+      'focusBorder': '#6C9BCF',
+      'scrollbarSlider.background': '#65708055',
+      'scrollbarSlider.hoverBackground': '#7D899A77',
+      'scrollbarSlider.activeBackground': '#93A1B388',
+    },
+  });
+  monaco.editor.defineTheme('copypasta-light', {
+    base: 'vs',
+    inherit: true,
+    rules: [],
+    colors: {
+      'editor.background': '#FAFBFC',
+      'editor.foreground': '#28323D',
+      'editorLineNumber.foreground': '#9AA4AF',
+      'editorLineNumber.activeForeground': '#4D5966',
+      'editor.selectionBackground': '#D7E7F8',
+      'editor.lineHighlightBackground': '#F1F5F8',
+      'editorWidget.background': '#FFFFFF',
+      'editorWidget.border': '#D7DEE5',
+      'focusBorder': '#6C9BCF',
+    },
+  });
+  monaco.editor.setTheme(theme === 'dark' ? 'copypasta-dark' : 'copypasta-light');
+}
+
 export default function App() {
   const [modalOpen, setModalOpen] = useState(false);
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -48,6 +181,8 @@ export default function App() {
   const [isUploading, setIsUploading] = useState(false);
   const [isUploadMode, setIsUploadMode] = useState(false);
   const [helpModalOpen, setHelpModalOpen] = useState(false);
+  // Protect drafts when a user clicks outside a modal or presses Escape.
+  const [closeConfirmation, setCloseConfirmation] = useState({ isOpen: false, target: null });
   const [highlightedCardId, setHighlightedCardId] = useState(null);
 
   // Refs for focus management
@@ -55,6 +190,10 @@ export default function App() {
   const textareaRef = useRef(null);
   const modalRef = useRef(null);
   const editModalRef = useRef(null);
+  const helpModalRef = useRef(null);
+  const helpCloseButtonRef = useRef(null);
+  const closeConfirmationCancelRef = useRef(null);
+  const closeConfirmationDiscardRef = useRef(null);
   const editorRef = useRef(null);
   const deleteModalRef = useRef(null);
   const deleteCloseButtonRef = useRef(null);
@@ -65,6 +204,11 @@ export default function App() {
   const deleteAllCancelButtonRef = useRef(null);
   const deleteAllConfirmButtonRef = useRef(null);
   const fileInputRef = useRef(null);
+
+  // Make the three content-heavy modals movable. CSS provides the resize handle.
+  useDraggableModal(modalRef, modalOpen);
+  useDraggableModal(editModalRef, editModalOpen);
+  useDraggableModal(helpModalRef, helpModalOpen);
 
   // Subscribe to items and get them reactively
   const { items, isLoading } = useTracker(() => {
@@ -212,28 +356,6 @@ export default function App() {
     document.addEventListener('keydown', handleKeyPress);
     return () => document.removeEventListener('keydown', handleKeyPress);
   }, [handleKeyPress]);
-
-  useEffect(() => {
-    const handleEscape = (e) => {
-      if (e.key === 'Escape') {
-        if (modalOpen) {
-          handleModalClose();
-        }
-        if (editModalOpen) {
-          setEditModalOpen(false);
-          setEditingItem(null);
-          setEditModalContent({ content: '', language: 'plaintext' });
-        }
-        // Focus the New Item button
-        if (newItemButtonRef.current) {
-          newItemButtonRef.current.focus();
-        }
-      }
-    };
-
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, [modalOpen, editModalOpen]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -516,6 +638,7 @@ export default function App() {
             alert('File size must be under 50MB');
             event.target.value = ''; // Reset file input
             setFileInput(null);
+            setIsUploadMode(false);
             setIsUploading(false);
             setUploadProgress(0);
             return;
@@ -544,6 +667,7 @@ export default function App() {
             setModalOpen(false);
             setContentInput('');
             setFileInput(null);
+            setIsUploadMode(false);
             setIsUploading(false);
             setUploadProgress(0);
 
@@ -579,6 +703,7 @@ export default function App() {
         setModalOpen(false);
         setContentInput('');
         setFileInput(null);
+        setIsUploadMode(false);
         // Focus the New Item button after successful upload
         if (newItemButtonRef.current) {
           newItemButtonRef.current.focus();
@@ -774,6 +899,7 @@ export default function App() {
   };
 
   const handleEditorMount = (editor, monaco) => {
+    configureMonacoTheme(monaco, theme);
     editorRef.current = editor;
     // Restore autofocus
     editor.focus();
@@ -1032,32 +1158,98 @@ export default function App() {
     return extension ? `${truncatedName}.${extension}` : truncatedName;
   };
 
-  // Handle modal close
+  const hasUnsavedNewCard = () => Boolean(contentInput.trim() || fileInput);
+
+  const hasUnsavedEdit = () => {
+    if (!editingItem) return false;
+    const original = typeof editingItem.content === 'string'
+      ? editingItem.content
+      : String(editingItem.content ?? '');
+    return String(editModalContent.content ?? '') !== original;
+  };
+
+  // Final close functions are only called directly when there is no draft to
+  // protect, or after the user explicitly confirms discarding it.
   const handleModalClose = () => {
     setModalOpen(false);
     setContentInput('');
     setFileInput(null);
-    if (editorRef.current) {
-      editorRef.current.setValue('');
+    setIsUploadMode(false);
+    setUploadProgress(0);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+    if (editorRef.current && !editModalOpen) editorRef.current.setValue('');
+    setTimeout(() => newItemButtonRef.current?.focus(), 0);
+  };
+
+  const finalizeEditClose = () => {
+    setEditModalOpen(false);
+    setEditingItem(null);
+    setEditModalContent({ content: '', language: 'plaintext' });
+    setTimeout(() => newItemButtonRef.current?.focus(), 0);
+  };
+
+  const finalizeModalClose = (target) => {
+    if (target === 'new') handleModalClose();
+    else if (target === 'edit') finalizeEditClose();
+    else if (target === 'help') {
+      setHelpModalOpen(false);
+      setTimeout(() => newItemButtonRef.current?.focus(), 0);
+    } else if (target === 'switch-to-upload') {
+      setContentInput('');
+      setFileInput(null);
+      setIsUploadMode(true);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      setTimeout(() => fileInputRef.current?.click(), 0);
+    } else if (target === 'switch-to-text') {
+      setFileInput(null);
+      setIsUploadMode(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+    setCloseConfirmation({ isOpen: false, target: null });
+  };
+
+  const requestModeSwitch = (target) => {
+    const switchingToUpload = target === 'switch-to-upload';
+    const hasDraftToReplace = switchingToUpload
+      ? Boolean(contentInput.trim() || fileInput)
+      : Boolean(fileInput);
+    if (hasDraftToReplace) {
+      setCloseConfirmation({ isOpen: true, target });
+    } else {
+      finalizeModalClose(target);
     }
   };
 
-  // Handle click outside modal
-  const handleClickOutside = (event, modalRef, closeModal) => {
-    if (modalRef.current && !modalRef.current.contains(event.target)) {
-      handleModalClose();
-      // Return focus to New Item button
-      if (newItemButtonRef.current) {
-        newItemButtonRef.current.focus();
-      }
+  const requestModalClose = (target) => {
+    if (target === 'new' && isUploading) {
+      showToast('Please wait for the upload to finish before closing this modal.', 'error');
+      return;
     }
+    const dirty = target === 'new'
+      ? hasUnsavedNewCard()
+      : target === 'edit'
+        ? hasUnsavedEdit()
+        : false;
+    if (dirty) {
+      setCloseConfirmation({ isOpen: true, target });
+    } else {
+      finalizeModalClose(target);
+    }
+  };
+
+  const confirmDiscardChanges = () => finalizeModalClose(closeConfirmation.target);
+
+  // Small delete-confirmation dialogs have no editable draft, so they can close
+  // directly on an outside click. Content modals use requestModalClose().
+  const handleClickOutside = (event, modalRef, closeModal) => {
+    if (event.target === event.currentTarget) closeModal?.();
   };
 
   useEffect(() => {
     if (deleteConfirmation.isOpen) {
       // Focus the delete button when modal opens
-      if (deleteConfirmButtonRef.current) {
-        deleteConfirmButtonRef.current.focus();
+      if (deleteCancelButtonRef.current) {
+        deleteCancelButtonRef.current.focus();
       }
 
       // Restore focus to new item button when modal closes
@@ -1072,8 +1264,8 @@ export default function App() {
   useEffect(() => {
     if (deleteAllConfirmation) {
       // Focus the delete button when modal opens
-      if (deleteAllConfirmButtonRef.current) {
-        deleteAllConfirmButtonRef.current.focus();
+      if (deleteAllCancelButtonRef.current) {
+        deleteAllCancelButtonRef.current.focus();
       }
 
       // Restore focus to new item button when modal closes
@@ -1090,26 +1282,78 @@ export default function App() {
     localStorage.setItem('viewMode', viewMode);
   }, [viewMode]);
 
+  useEffect(() => {
+    if (helpModalOpen) setTimeout(() => helpCloseButtonRef.current?.focus(), 0);
+  }, [helpModalOpen]);
+
+  useEffect(() => {
+    if (isFilterDropdownOpen) {
+      setTimeout(() => {
+        document.querySelector('.filter-dropdown.open .filter-option.active')?.focus();
+      }, 0);
+    }
+  }, [isFilterDropdownOpen]);
+
+  useEffect(() => {
+    if (helpModalOpen) setTimeout(() => helpCloseButtonRef.current?.focus(), 0);
+  }, [helpModalOpen]);
+
+  useEffect(() => {
+    if (isFilterDropdownOpen) {
+      setTimeout(() => {
+        document.querySelector('.filter-dropdown.open .filter-option.active')?.focus();
+      }, 0);
+    }
+  }, [isFilterDropdownOpen]);
+
   const handleModalKeyDown = useCallback((e) => {
-    if (modalOpen) {
-      if (e.key === 'Escape') {
-        handleModalClose();
-      } else if (e.altKey) {
-        if (e.key === '1') {
-          e.preventDefault();
-          setIsUploadMode(false);
-        } else if (e.key === '2') {
-          e.preventDefault();
-          setIsUploadMode(true);
-        }
+    if (modalOpen && e.altKey) {
+      if (e.key === '1') {
+        e.preventDefault();
+        requestModeSwitch('switch-to-text');
+      } else if (e.key === '2') {
+        e.preventDefault();
+        requestModeSwitch('switch-to-upload');
       }
     }
-  }, [modalOpen]);
+  }, [modalOpen, contentInput, fileInput, isUploadMode]);
 
   useEffect(() => {
     document.addEventListener('keydown', handleModalKeyDown);
     return () => document.removeEventListener('keydown', handleModalKeyDown);
   }, [handleModalKeyDown]);
+
+  // A single Escape handler prevents competing modal handlers from discarding
+  // drafts. The discard prompt itself closes first, leaving the draft untouched.
+  useEffect(() => {
+    const onEscape = (event) => {
+      if (event.key !== 'Escape' || event.defaultPrevented) return;
+      if (closeConfirmation.isOpen) {
+        event.preventDefault();
+        event.stopPropagation();
+        setCloseConfirmation({ isOpen: false, target: null });
+      } else if (deleteConfirmation.isOpen) {
+        event.preventDefault();
+        setDeleteConfirmation({ isOpen: false, item: null });
+      } else if (deleteAllConfirmation) {
+        event.preventDefault();
+        setDeleteAllConfirmation(false);
+      } else if (editModalOpen) {
+        event.preventDefault();
+        requestModalClose('edit');
+      } else if (modalOpen) {
+        event.preventDefault();
+        requestModalClose('new');
+      } else if (helpModalOpen) {
+        event.preventDefault();
+        requestModalClose('help');
+      } else if (isFilterDropdownOpen) {
+        setIsFilterDropdownOpen(false);
+      }
+    };
+    document.addEventListener('keydown', onEscape, true);
+    return () => document.removeEventListener('keydown', onEscape, true);
+  }, [closeConfirmation.isOpen, deleteConfirmation.isOpen, deleteAllConfirmation, editModalOpen, modalOpen, helpModalOpen, isFilterDropdownOpen, contentInput, fileInput, editingItem, editModalContent, isUploading]);
 
   if (isLoading) {
     return (
@@ -1244,11 +1488,13 @@ export default function App() {
       </div>
 
       {modalOpen && (
-        <div className="modal-overlay" onClick={(e) => handleClickOutside(e, modalRef, handleModalClose)}>
-          <div className="modal" ref={modalRef}>
+        <div className="modal-overlay" onMouseDown={(e) => {
+          if (e.target === e.currentTarget) requestModalClose('new');
+        }}>
+          <div className="modal draggable-resizable-modal" ref={modalRef} role="dialog" aria-modal="true" aria-label="New Card">
             <div className="modal-header">
               <h2>New Card</h2>
-              <button className="close-button" onClick={handleModalClose}>
+              <button className="close-button" onClick={() => requestModalClose('new')} aria-label="Close New Card">
                 <span className="material-symbols-rounded">close</span>
               </button>
             </div>
@@ -1257,13 +1503,7 @@ export default function App() {
                 <button
                   type="button"
                   className={`input-type-button ${!isUploadMode ? 'active' : ''}`}
-                  onClick={() => {
-                    setIsUploadMode(false);
-                    setFileInput(null);
-                    if (fileInputRef.current) {
-                      fileInputRef.current.value = '';
-                    }
-                  }}
+                  onClick={() => requestModeSwitch('switch-to-text')}
                   title="Text Note (Alt+1)"
                 >
                   <span className="material-symbols-rounded">edit_note</span>
@@ -1272,14 +1512,7 @@ export default function App() {
                 <button
                   type="button"
                   className={`input-type-button ${isUploadMode ? 'active' : ''}`}
-                  onClick={() => {
-                    setIsUploadMode(true);
-                    setContentInput('');
-                    if (editorRef.current) {
-                      editorRef.current.setValue('');
-                    }
-                    fileInputRef.current?.click();
-                  }}
+                  onClick={() => requestModeSwitch('switch-to-upload')}
                   title="Upload File (Alt+2)"
                 >
                   <span className="material-symbols-rounded">upload_file</span>
@@ -1291,11 +1524,12 @@ export default function App() {
                 {!isUploadMode ? (
                   <>
                     <Editor
-                      height="300px"
+                      height="100%"
                       defaultLanguage="plaintext"
                       language={language}
                       value={contentInput}
-                      theme={theme === 'dark' ? 'vs-dark' : 'light'}
+                      theme={theme === 'dark' ? 'copypasta-dark' : 'copypasta-light'}
+                      beforeMount={(monaco) => configureMonacoTheme(monaco, theme)}
                       onChange={handleEditorChange}
                       onMount={handleEditorMount}
                       options={{
@@ -1379,6 +1613,10 @@ export default function App() {
                           e.stopPropagation();
                           const file = e.dataTransfer.files[0];
                           if (file) {
+                            if (file.size > 50 * 1024 * 1024) {
+                              showToast('File size must be under 50MB', 'error');
+                              return;
+                            }
                             setFileInput(file);
                             setIsUploadMode(true);
                           }
@@ -1396,7 +1634,7 @@ export default function App() {
               </div>
 
               <div className="modal-footer">
-                <button type="button" className="secondary-btn" onClick={handleModalClose}>
+                <button type="button" className="secondary-btn" onClick={() => requestModalClose('new') }>
                   Cancel
                 </button>
                 <button
@@ -1453,9 +1691,6 @@ export default function App() {
                 }
 
                 focusableElements[nextIndex].focus();
-              }
-              if (e.key === 'Escape') {
-                setDeleteConfirmation({ isOpen: false, item: null });
               }
             }}
           >
@@ -1542,9 +1777,6 @@ export default function App() {
 
                 focusableElements[nextIndex].focus();
               }
-              if (e.key === 'Escape') {
-                setDeleteAllConfirmation(false);
-              }
             }}
           >
             <div className="modal-header">
@@ -1589,14 +1821,17 @@ export default function App() {
       )}
 
       {helpModalOpen && (
-        <div className="modal-overlay" onClick={() => setHelpModalOpen(false)}>
-          <div className="modal help-modal" onClick={e => e.stopPropagation()}>
+        <div className="modal-overlay" onMouseDown={(e) => {
+          if (e.target === e.currentTarget) requestModalClose('help');
+        }}>
+          <div className="modal help-modal draggable-resizable-modal" ref={helpModalRef} role="dialog" aria-modal="true" aria-label="Help" onClick={e => e.stopPropagation()}>
             <div className="modal-header">
               <h2>Need help on using CopyPasta?</h2>
               <button
                 className="close-btn"
-                onClick={() => setHelpModalOpen(false)}
-                aria-label="Close"
+                onClick={() => requestModalClose('help')}
+                aria-label="Close Help"
+                ref={helpCloseButtonRef}
               >
                 <span className="material-symbols-rounded">close</span>
               </button>
@@ -1629,15 +1864,10 @@ export default function App() {
       )}
 
       {editModalOpen && (
-        <div className="modal-overlay" onClick={(e) => {
-          // Only close if clicking the overlay itself, not the modal content
-          if (e.target === e.currentTarget) {
-            setEditModalOpen(false);
-            setEditingItem(null);
-            setEditModalContent({ content: '', language: 'plaintext' });
-          }
+        <div className="modal-overlay" onMouseDown={(e) => {
+          if (e.target === e.currentTarget) requestModalClose('edit');
         }}>
-          <div className="modal edit-modal" ref={editModalRef}>
+          <div className="modal edit-modal draggable-resizable-modal" ref={editModalRef} role="dialog" aria-modal="true" aria-label="Edit content">
             <div className="modal-header">
               <div className="modal-title">
                 <span className="material-symbols-rounded">
@@ -1648,7 +1878,7 @@ export default function App() {
               <div className="modal-hint">F1 to Open Command Palette, and Ctrl+Enter to Save</div>
               <button
                 className="close-button"
-                onClick={() => setEditModalOpen(false)}
+                onClick={() => requestModalClose('edit')}
                 title="Close"
               >
                 <span className="material-symbols-rounded">close</span>
@@ -1660,12 +1890,15 @@ export default function App() {
                 <>
                   <div className="editor-wrapper">
                     <Editor
-                      height="400px"
+                      height="100%"
                       defaultLanguage={editingItem.language || 'plaintext'}
                       value={String(editingItem.content || '')}
-                      theme={theme === 'dark' ? 'vs-dark' : 'light'}
+                      theme={theme === 'dark' ? 'copypasta-dark' : 'copypasta-light'}
+                      beforeMount={(monaco) => configureMonacoTheme(monaco, theme)}
+                      onMount={(editor, monaco) => configureMonacoTheme(monaco, theme)}
                       options={{
                         readOnly: true,
+                        automaticLayout: true,
                         renderValidationDecorations: 'off',
                       }}
                     />
@@ -1674,10 +1907,11 @@ export default function App() {
                 </>
               ) : (
                 <Editor
-                  height="400px"
+                  height="100%"
                   defaultLanguage={editingItem?.language || 'plaintext'}
                   value={String(editModalContent?.content || '')}
-                  theme={theme === 'dark' ? 'vs-dark' : 'light'}
+                  theme={theme === 'dark' ? 'copypasta-dark' : 'copypasta-light'}
+                  beforeMount={(monaco) => configureMonacoTheme(monaco, theme)}
                   onChange={(value) => setEditModalContent(prev => ({
                     ...prev,
                     content: value,
@@ -1713,11 +1947,7 @@ export default function App() {
               <button
                 type="button"
                 className="secondary-btn"
-                onClick={() => {
-                  setEditModalOpen(false);
-                  setEditingItem(null);
-                  setEditModalContent({ content: '', language: 'plaintext' });
-                }}
+                onClick={() => requestModalClose('edit')}
               >
                 Cancel
               </button>
@@ -1735,7 +1965,7 @@ export default function App() {
                     a.click();
                     window.URL.revokeObjectURL(url);
                     document.body.removeChild(a);
-                    setEditModalOpen(false);
+                    requestModalClose('edit');
                   }}
                 >
                   <span className="material-symbols-rounded">download</span>
@@ -1751,6 +1981,72 @@ export default function App() {
                   Save Changes
                 </button>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {closeConfirmation.isOpen && (
+        <div
+          className="modal-overlay close-confirmation-overlay"
+          role="presentation"
+          onMouseDown={(event) => {
+            // Outside-clicking this prompt means "keep editing", never discard.
+            if (event.target === event.currentTarget) {
+              setCloseConfirmation({ isOpen: false, target: null });
+            }
+          }}
+        >
+          <div
+            className="modal close-confirmation-modal"
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="close-confirmation-title"
+            aria-describedby="close-confirmation-description"
+            onKeyDown={(event) => {
+              if (event.key === 'Tab') {
+                event.preventDefault();
+                const first = closeConfirmationCancelRef.current;
+                const last = closeConfirmationDiscardRef.current;
+                if (event.shiftKey) {
+                  if (document.activeElement === first) last?.focus();
+                  else first?.focus();
+                } else {
+                  if (document.activeElement === last) first?.focus();
+                  else last?.focus();
+                }
+              }
+            }}
+          >
+            <div className="modal-header">
+              <h2 id="close-confirmation-title">
+                {closeConfirmation.target === 'switch-to-upload' || closeConfirmation.target === 'switch-to-text'
+                  ? 'Switch input mode?'
+                  : 'Discard unsaved changes?'}
+              </h2>
+            </div>
+            <div className="modal-content">
+              <p id="close-confirmation-description">
+                 {closeConfirmation.target === 'switch-to-upload' || closeConfirmation.target === 'switch-to-text'
+                  ? 'Switching input modes will discard the current draft. Do you want to continue?'
+                  : 'You have work in this modal that has not been saved. Close it and lose those changes?'}
+              </p>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="secondary-btn"
+                ref={closeConfirmationCancelRef}
+                autoFocus
+                onClick={() => setCloseConfirmation({ isOpen: false, target: null })}
+              >
+                Keep Editing
+              </button>
+              <button type="button" className="danger-btn" ref={closeConfirmationDiscardRef} onClick={confirmDiscardChanges}>
+                {closeConfirmation.target === 'switch-to-upload' || closeConfirmation.target === 'switch-to-text'
+                  ? 'Discard & Switch'
+                  : 'Discard Changes'}
+              </button>
             </div>
           </div>
         </div>
@@ -1774,6 +2070,11 @@ export default function App() {
           </span>
         )}
       </div>
+      <footer className="app-version-footer">
+        <span>CopyPasta</span>
+        <span className="version-separator" aria-hidden="true">·</span>
+        <span>Meteor {Meteor.release || 'version unavailable'}</span>
+      </footer>
     </div>
   );
 }
