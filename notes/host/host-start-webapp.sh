@@ -17,7 +17,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Ensure that node_modules exists (assuming its valid!), if not installs and creates the directory
 echo "Ensuring that webapp has a ./node_modules..."
-WEBAPP_DIR="$SCRIPT_DIR/../../webapp-meteor"
+WEBAPP_DIR="$SCRIPT_DIR/../../app"
 cd "$WEBAPP_DIR"
 if [ ! -d "./node_modules" ]; then
     echo "ERROR, WEBAPP DIR doesnt have node modules. I.e., you need to install node_modules... (Please see: ./host/host-install-meteorjs.sh and README.md)."

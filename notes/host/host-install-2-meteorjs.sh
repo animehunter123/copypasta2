@@ -55,7 +55,7 @@ popd
 # Its a good idea to ensure that the .node_modules and .meteor are updated, so if you need to fetch the dependencies, uncomment the below...
 pushd .
 echo "Now installing the node dependencies to the ./node_modules directory (and the older version of meteor which runs this webapp)"
-cd ../webapp-meteor
+cd ../app
 npm install        # This populates the ./node_modules directory
 meteor npm install --allow-superuser # This populates the ./node_modules directory and also the .meteor/local directory (I think?)
 popd
