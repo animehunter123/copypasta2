@@ -16,15 +16,26 @@ This is a web-based clipboard/note-taking application ("CopyPasta") built with:
 
 ![Sample Photo of MeteorJS CopyPasta](https://github.com/user-attachments/assets/1c1dfc5d-ad81-4704-b7cd-93354c11460b "A sample photo of the CopyPasta webpage then runs in MeteorJS")
 
-# Quickstart: How to run...
+# Quickstart
+How to run in docker...
 * Use a Linux Host with Docker/Podman/Lxc installed.
 * Use the bash scripts which use docker commands:
 ```bash
-./build.sh # <-- this will build the docker container
-./start.sh # <-- this will start the container
-./logs.sh  # <-- this will `tail -f` the logs for debugging, it will say "App running at: http://localhost:3000" when it is ready!
+./build*.sh # <-- this will build the docker container
+./start*.sh # <-- this will start the container
+./logs*.sh  # <-- this will `tail -f` the logs for debugging, it will say "App running at: http://localhost:3000" when it is ready!
 ```
 * Finally, open a web browser to http://localhost:3000, and upload a file or a note, and it will save those to `./data/files` or `./data/notes`
+
+How to run in bash...
+Alternatively, if you wish to run manually without docker for fast development:
+- Install Linux (x64 required for meteor)
+- Install Node JS
+```bash
+npx meteor # to install meteor
+cd ./app
+COPYPASTA_DATA_DIR="./data" meteor --port 3000 --allow-superuser # To launch it for development only!!!
+```
 
 # Todo's
 * BUG: When a note is open, need a escape or click out CONFIRMATION to close so you dont lose data you already have typed into it.
