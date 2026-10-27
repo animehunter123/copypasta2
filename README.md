@@ -34,6 +34,7 @@ Alternatively, if you wish to run manually without docker for fast development:
 ```bash
 npx meteor # to install meteor
 cd ./app
+meteor npm --no-audit install --save --allow-superuser # To make the ./node_modules
 COPYPASTA_DATA_DIR="./data" meteor --port 3000 --allow-superuser # To launch it for development only!!!
 ```
 
@@ -56,3 +57,11 @@ COPYPASTA_DATA_DIR="./data" meteor --port 3000 --allow-superuser # To launch it 
 * For file cards can the padding inside match the same for looking the same as text note cards
 
 * Hour/Minute Timestamp should be shown on card to allow sorting order to be easier for users (yymmdd hhmmss or something, keep the ui clean)
+
+
+
+* Can we make the favorite toggle always appear at top of card list and grid list
+* Can we fix up the css because all the fields of the cards in both views looks way off now (see the attached photo)
+* Can we make sure all the list view cards are the same height regardless of being a file card or a text card.
+* if the text or filename is too long, ensure that it is truncated and showing a ... at the end?
+* I dont like the yyymmmdd hourminute second current way, can you make it with yyyy/mm//dd instead?
