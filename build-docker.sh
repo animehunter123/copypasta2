@@ -6,7 +6,7 @@
 target="docker-meteorjs-webapp"
 
 pushd .
-cd ./webapp-meteor
+cd ./app
 
 echo "Removing any existing containers..."
 docker rm -f $target 2>/dev/null

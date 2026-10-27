@@ -6,7 +6,7 @@ $erroractionpreference = 0
 
 pushd .
 
-cd ../webapp-meteor -ea 0 | out-null
+cd ../app -ea 0 | out-null
 
 podman build -t docker-meteorjs-webapp . --network=host
 
