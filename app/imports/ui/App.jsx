@@ -2071,9 +2071,9 @@ export default function App() {
         )}
       </div>
       <footer className="app-version-footer">
-        <span>CopyPasta</span>
+        <span>CopyPasta2</span>
         <span className="version-separator" aria-hidden="true">·</span>
-        <span>Meteor {Meteor.release || 'version unavailable'}</span>
+        <span>Built with {Meteor.release.toLowerCase() || 'version unavailable'}</span>
       </footer>
     </div>
   );
