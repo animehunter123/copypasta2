@@ -238,12 +238,23 @@ export default function App() {
     notes: items.filter(item => item.type === 'note').length
   }), [items]);
 
-  // Memoize filtered items
+  // Filter items first, then pin favorites to the top in both Grid and List views.
+  // The sort is stable: items keep their existing order within the favorite and
+  // non-favorite groups, so the user's saved/manual ordering is otherwise preserved.
   const filteredItems = useMemo(() => {
-    if (filter === 'all') return items;
-    return items.filter(item =>
-      filter === 'files' ? item.type === 'file' : item.type === 'note'
-    );
+    const matchingItems = filter === 'all'
+      ? items
+      : items.filter(item =>
+          filter === 'files' ? item.type === 'file' : item.type === 'note'
+        );
+
+    return matchingItems
+      .map((item, originalIndex) => ({ item, originalIndex }))
+      .sort((a, b) => {
+        const favoriteDifference = Number(b.item.favorite === true) - Number(a.item.favorite === true);
+        return favoriteDifference || a.originalIndex - b.originalIndex;
+      })
+      .map(({ item }) => item);
   }, [items, filter]);
 
   // Stats calculation
