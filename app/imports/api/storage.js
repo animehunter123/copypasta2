@@ -46,6 +46,7 @@ export const Storage = {
         originalSize: fileData.originalSize,
         createdAt: fileData.createdAt,
         expiresAt: fileData.expiresAt,
+        favorite: fileData.favorite === true,
         type: fileData.type,
         isText: fileData.isText
       };
@@ -99,6 +100,7 @@ export const Storage = {
         originalSize: noteData.originalSize,
         createdAt: noteData.createdAt,
         expiresAt: noteData.expiresAt,
+        favorite: noteData.favorite === true,
         type: 'note',  // Ensure type is always 'note'
         isText: true   // Always true for notes
       };
@@ -113,7 +115,7 @@ export const Storage = {
       // Insert into MongoDB using async method
       const insertedId = await Items.insertAsync(data);
       // console.log('Saved note with ID:', insertedId, 'Data:', data);
-      
+
       if (!insertedId) {
         throw new Error('Failed to insert note into MongoDB');
       }
@@ -162,10 +164,13 @@ export const Storage = {
   async cleanExpired() {
     try {
       const now = new Date();
-      
+
       // Find expired items using async method
+      // Favorites survive automatic expiry cleanup. Manual deletion remains
+      // available through the explicit Delete action.
       const expiredItems = await Items.find({
-        expiresAt: { $lt: now }
+        expiresAt: { $lt: now },
+        favorite: { $ne: true }
       }).fetchAsync();
 
       // Remove each expired item
@@ -237,3 +242,4 @@ export const Storage = {
     }
   },
 };
+

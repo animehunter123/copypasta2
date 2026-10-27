@@ -392,6 +392,15 @@ export default function App() {
     return `${(bytes / Math.pow(1024, i)).toFixed(1)} ${sizes[i]}`;
   };
 
+  // Compact local timestamp for sorting at a glance: YYMMDD HH:mm:ss.
+  const formatCardTimestamp = (value) => {
+    if (!value) return 'Date unavailable';
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return 'Date unavailable';
+    const pad = (number) => String(number).padStart(2, '0');
+    return `${String(date.getFullYear()).slice(-2)}${pad(date.getMonth() + 1)}${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+  };
+
   useEffect(() => {
     // Set theme on load and when it changes
     document.documentElement.setAttribute('data-theme', theme);
@@ -560,6 +569,22 @@ export default function App() {
     });
     setEditingItem(item);
     setEditModalOpen(true);
+  };
+
+  // Toggle the server-persisted favorite flag. Favorites are excluded from
+  // automatic expiry cleanup, but a user can still explicitly delete one.
+  const handleToggleFavorite = async (item) => {
+    try {
+      const isFavorite = await Meteor.callAsync('items.toggleFavorite', item.id);
+      showToast(
+        isFavorite
+          ? 'Favorited — this item is protected from automatic 14-day cleanup'
+          : 'Favorite removed — this item will expire normally',
+        'success'
+      );
+    } catch (error) {
+      showToast(`Could not update favorite: ${error.message}`, 'error');
+    }
   };
 
   // Delete content
@@ -1033,7 +1058,8 @@ export default function App() {
 
   const renderCard = (item) => {
     const daysRemaining = getDaysRemaining(item.expiresAt);
-    const isExpiring = daysRemaining <= 3;
+    const isFavorite = item.favorite === true;
+    const isExpiring = !isFavorite && daysRemaining <= 3;
 
     const handleCardDoubleClick = (e) => {
       // Don't trigger if clicking on action buttons
@@ -1047,8 +1073,8 @@ export default function App() {
       <div
         key={item._id}
         className={`content-card ${isExpiring ? 'expiring' : ''} ${
-          highlightedCardId === item._id ? 'highlight-copy' : ''
-        }`}
+          isFavorite ? 'favorite-card' : ''
+        } ${highlightedCardId === item._id ? 'highlight-copy' : ''}`}
         draggable="true"
         onDragStart={(e) => handleDragStart(e, item)}
         onDragEnd={handleDragEnd}
@@ -1063,6 +1089,21 @@ export default function App() {
             <span title={item.fileName || 'Note'}>{truncateFileName(item.fileName) || 'Note'}</span>
           </div>
           <div className="card-actions">
+            <button
+              type="button"
+              className={`card-btn favorite-toggle ${isFavorite ? 'is-favorite' : ''}`}
+              onClick={(event) => {
+                event.stopPropagation();
+                handleToggleFavorite(item);
+              }}
+              aria-pressed={isFavorite}
+              title={isFavorite
+                ? 'Unfavorite — automatic 14-day cleanup will apply again'
+                : 'Favorite — protect from automatic 14-day cleanup'}
+              aria-label={isFavorite ? 'Remove favorite' : 'Add favorite'}
+            >
+              <span className="material-symbols-rounded">{isFavorite ? 'star' : 'star_border'}</span>
+            </button>
             {item.type === 'note' && (
               <button
                 className="card-btn navigate"
@@ -1109,17 +1150,23 @@ export default function App() {
             </button>
           </div>
         </div>
+        {isFavorite && (
+          <div className="favorite-protection" title="Favorites are excluded from automatic expiration cleanup">
+            <span className="material-symbols-rounded" aria-hidden="true">verified</span>
+            <span>FAVORITE · Protected from automatic 14-day cleanup</span>
+          </div>
+        )}
         {item.type === 'file' ? (
           <div className="card-content file-content">
-            <div className="filename">
-              {item.fileName}
+            <div className="filename" title={item.fileName}>
+              <span className="filename-text">{item.fileName}</span>
               <div className="file-info">
-                <span className="file-type">{item.fileType}</span>
+                <span className="file-type" title={item.fileType}>{item.fileType}</span>
               </div>
             </div>
           </div>
         ) : (
-          <pre className="card-content">
+          <pre className="card-content" title={item.content}>
             <code className={`language-${item.language}`}>
               {item.content.length > MAX_PREVIEW_LENGTH
                 ? item.content.slice(0, MAX_PREVIEW_LENGTH) + '...'
@@ -1133,13 +1180,23 @@ export default function App() {
               <span className="material-symbols-rounded">folder</span>
               <span>{formatSize(item.originalSize)}</span>
             </div>
-            <div className={`info-group expiration ${isExpiring ? 'expiring' : ''}`}>
-              <span className="material-symbols-rounded">timer</span>
+            <div className={`info-group expiration ${isExpiring ? 'expiring' : ''} ${isFavorite ? 'protected-expiration' : ''}`}>
+              <span className="material-symbols-rounded">{isFavorite ? 'shield' : 'timer'}</span>
               <span>
-                {daysRemaining > 0
-                  ? `${daysRemaining} day${daysRemaining === 1 ? '' : 's'} left`
-                  : 'Expiring soon'}
+                {isFavorite
+                  ? 'Protected'
+                  : daysRemaining > 0
+                    ? `${daysRemaining} day${daysRemaining === 1 ? '' : 's'} left`
+                    : 'Expiring soon'}
               </span>
+            </div>
+            <div className="info-group card-timestamp" title={`Created ${new Date(item.createdAt).toLocaleString()}`}>
+              <span className="material-symbols-rounded">schedule</span>
+              <time dateTime={item.createdAt && !Number.isNaN(new Date(item.createdAt).getTime())
+                ? new Date(item.createdAt).toISOString()
+                : undefined}>
+                {formatCardTimestamp(item.createdAt)}
+              </time>
             </div>
           </div>
         </div>
@@ -2078,3 +2135,4 @@ export default function App() {
     </div>
   );
 }
+

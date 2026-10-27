@@ -63,6 +63,23 @@ Meteor.methods({
     }
   },
 
+  async 'items.toggleFavorite'(itemId) {
+    check(itemId, String);
+
+    const item = await Items.findOneAsync({ id: itemId });
+    if (!item) {
+      throw new Meteor.Error('not-found', 'Item not found');
+    }
+
+    const favorite = item.favorite !== true;
+    await Items.updateAsync(
+      { id: itemId },
+      { $set: { favorite } }
+    );
+
+    return favorite;
+  },
+
   async 'items.edit'(data) {
     try {
       check(data, {
@@ -159,24 +176,24 @@ Meteor.methods({
 
   'system.getDiskSpace'() {
     if (!Meteor.isServer) return;
-    
+
     try {
       const fs = require('fs');
       const path = require('path');
       // Go up one directory from PWD to get to the project root where data directory is
       const projectRoot = path.resolve(process.env.PWD, '..');
       const dataPath = path.join(projectRoot, 'data');
-      
+
       // Create data directory if it doesn't exist
       if (!fs.existsSync(dataPath)) {
         fs.mkdirSync(dataPath, { recursive: true });
       }
-      
+
       const stats = fs.statfsSync(dataPath);
       const total = stats.blocks * stats.bsize;
       const free = stats.bfree * stats.bsize;
       const used = total - free;
-      
+
       return {
         total,
         free,
@@ -189,3 +206,4 @@ Meteor.methods({
     }
   }
 });
+
