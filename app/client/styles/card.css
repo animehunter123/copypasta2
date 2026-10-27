@@ -65,3 +65,47 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* v3 alignment safeguards: keep actions at the top-right and cards consistent. */
+.content-cards .content-card .card-actions {
+  margin-left: auto;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+}
+.content-cards .content-card .card-actions .favorite-toggle { order: -1; }
+.content-cards .content-card .card-type,
+.content-cards .content-card .filename,
+.content-cards .content-card .filename-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.content-cards .content-card pre.card-content code {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.content-cards.grid-view .content-card {
+  box-sizing: border-box;
+  height: 230px;
+  min-height: 230px;
+  max-height: 230px;
+  overflow: hidden;
+}
+.content-cards.list-view .content-card {
+  box-sizing: border-box;
+  height: 190px;
+  min-height: 190px;
+  max-height: 190px;
+  overflow: hidden;
+}
+.content-cards.list-view .content-card .card-content {
+  box-sizing: border-box;
+  min-width: 0;
+  overflow: hidden;
+}
+

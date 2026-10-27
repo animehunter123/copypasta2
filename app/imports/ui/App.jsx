@@ -392,13 +392,13 @@ export default function App() {
     return `${(bytes / Math.pow(1024, i)).toFixed(1)} ${sizes[i]}`;
   };
 
-  // Compact local timestamp for sorting at a glance: YYMMDD HH:mm:ss.
+  // Readable local timestamp: YYYY/MM/DD HH:mm:ss.
   const formatCardTimestamp = (value) => {
     if (!value) return 'Date unavailable';
     const date = new Date(value);
     if (Number.isNaN(date.getTime())) return 'Date unavailable';
     const pad = (number) => String(number).padStart(2, '0');
-    return `${String(date.getFullYear()).slice(-2)}${pad(date.getMonth() + 1)}${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+    return `${date.getFullYear()}/${pad(date.getMonth() + 1)}/${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
   };
 
   useEffect(() => {
@@ -1150,12 +1150,18 @@ export default function App() {
             </button>
           </div>
         </div>
-        {isFavorite && (
-          <div className="favorite-protection" title="Favorites are excluded from automatic expiration cleanup">
-            <span className="material-symbols-rounded" aria-hidden="true">verified</span>
-            <span>FAVORITE · Protected from automatic 14-day cleanup</span>
-          </div>
-        )}
+        <div
+          className={`favorite-protection ${isFavorite ? 'is-visible' : 'is-placeholder'}`}
+          title={isFavorite ? 'Favorites are excluded from automatic expiration cleanup' : undefined}
+          aria-hidden={!isFavorite}
+        >
+          {isFavorite && (
+            <>
+              <span className="material-symbols-rounded" aria-hidden="true">verified</span>
+              <span>FAVORITE · Protected from automatic 14-day cleanup</span>
+            </>
+          )}
+        </div>
         {item.type === 'file' ? (
           <div className="card-content file-content">
             <div className="filename" title={item.fileName}>

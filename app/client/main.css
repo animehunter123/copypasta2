@@ -3023,3 +3023,663 @@ select:focus-visible {
   }
 }
 
+
+
+/* -------------------------------------------------------------------------
+   Favorite protection, compact timestamps, and clearer vertical list cards.
+   These rules intentionally come last so they override older list-view rules.
+   ------------------------------------------------------------------------- */
+
+.content-card {
+  min-width: 0;
+}
+
+.content-card.favorite-card {
+  border-color: #d6a72c;
+  box-shadow: inset 3px 0 0 #d6a72c, var(--shadow-sm);
+}
+
+[data-theme="dark"] .content-card.favorite-card {
+  border-color: #c7a34b;
+  box-shadow: inset 3px 0 0 #c7a34b, 0 1px 3px rgb(0 0 0 / 0.28);
+}
+
+.card-actions .favorite-toggle {
+  color: var(--text-color-secondary);
+  background: var(--surface-hover);
+  border: 1px solid var(--border-color, var(--gray-300));
+}
+
+.card-actions .favorite-toggle:hover {
+  color: #9a6b00;
+  background: #fff4cf;
+  border-color: #d6a72c;
+}
+
+.card-actions .favorite-toggle.is-favorite {
+  color: #8b6200;
+  background: #fff0b8;
+  border-color: #d6a72c;
+}
+
+.card-actions .favorite-toggle.is-favorite .material-symbols-rounded {
+  font-variation-settings: 'FILL' 1;
+}
+
+[data-theme="dark"] .card-actions .favorite-toggle {
+  color: #d0d7e0;
+  background: #272d36;
+  border-color: #414b59;
+}
+
+[data-theme="dark"] .card-actions .favorite-toggle.is-favorite,
+[data-theme="dark"] .card-actions .favorite-toggle:hover {
+  color: #ffdc82;
+  background: #44391f;
+  border-color: #b99542;
+}
+
+.favorite-protection {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 0 0.65rem;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid #e3c45e;
+  border-radius: 999px;
+  background: #fff7d6;
+  color: #6e5200;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.favorite-protection .material-symbols-rounded {
+  flex: 0 0 auto;
+  font-size: 1rem;
+}
+
+[data-theme="dark"] .favorite-protection {
+  color: #ffe6a1;
+  background: #3b321f;
+  border-color: #8e7437;
+}
+
+.card-info {
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.card-timestamp {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.78rem;
+}
+
+.card-timestamp time {
+  font-family: var(--font-mono);
+  letter-spacing: -0.025em;
+}
+
+.protected-expiration {
+  color: #8b6200;
+  font-weight: 600;
+}
+
+[data-theme="dark"] .protected-expiration {
+  color: #ffdc82;
+}
+
+/* List view is a vertical stack of cards, not a compressed horizontal row. */
+.content-cards.list-view {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.85rem;
+}
+
+.content-cards.list-view .content-card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  height: auto;
+  padding: 1rem;
+  margin: 0;
+}
+
+.content-cards.list-view .content-card .card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  margin-bottom: 0.65rem;
+  min-width: 0;
+}
+
+.content-cards.list-view .content-card .card-type {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: none;
+}
+
+.content-cards.list-view .content-card .card-type span:last-child {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.content-cards.list-view .content-card .card-actions {
+  flex: 0 0 auto;
+  max-width: 100%;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.35rem;
+}
+
+.content-cards.list-view .content-card .card-content {
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  margin: 0 0 0.75rem;
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.content-cards.list-view .content-card pre.card-content {
+  display: block;
+  max-height: 5.4em;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  overflow: hidden;
+  line-height: 1.5;
+}
+
+.content-cards.list-view .content-card pre.card-content code {
+  display: -webkit-box;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  text-overflow: ellipsis;
+}
+
+.content-cards.list-view .content-card .card-content.file-content {
+  display: block;
+  padding: 0.85rem 1rem;
+  background: var(--surface-hover);
+  border: 1px solid var(--border-color, var(--gray-200));
+}
+
+.content-cards.list-view .content-card .filename {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  font-weight: 500;
+}
+
+.content-cards.list-view .content-card .filename-text {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.content-cards.list-view .content-card .file-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  margin-top: 0.5rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.content-cards.list-view .content-card .file-type {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.content-cards.list-view .content-card .favorite-protection {
+  margin-bottom: 0.65rem;
+}
+
+.content-cards.list-view .content-card .card-footer {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  margin-top: 0;
+  padding-top: 0.65rem;
+  border-top: 1px solid var(--border-color, var(--gray-200));
+}
+
+.content-cards.list-view .content-card .card-info {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem 1rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.content-cards.list-view .content-card .info-group {
+  min-width: 0;
+}
+
+.content-cards.list-view .content-card .card-timestamp {
+  margin-left: auto;
+}
+
+@media (max-width: 640px) {
+  .content-cards.list-view .content-card {
+    padding: 0.75rem;
+  }
+
+  .content-cards.list-view .content-card .card-header {
+    flex-wrap: wrap;
+  }
+
+  .content-cards.list-view .content-card .card-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .content-cards.list-view .content-card .card-info {
+    gap: 0.5rem 0.75rem;
+  }
+
+  .content-cards.list-view .content-card .card-timestamp {
+    margin-left: 0;
+  }
+
+  .favorite-protection {
+    border-radius: var(--radius);
+  }
+}
+
+/* -------------------------------------------------------------------------
+   CopyPasta card layout refinement (v2)
+   Keep card sections aligned across file/note items and both view modes.
+   ------------------------------------------------------------------------- */
+.content-cards {
+  align-items: stretch;
+  grid-auto-rows: 1fr;
+}
+
+.content-cards .content-card {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-width: 0;
+  height: 100%;
+  min-height: 230px;
+  padding: 1rem;
+  gap: 0;
+  overflow: hidden;
+}
+
+.content-cards .content-card .card-header {
+  flex: 0 0 42px;
+  min-width: 0;
+  width: 100%;
+  margin: 0 0 0.4rem;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.content-cards .content-card .card-type {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: none;
+  overflow: hidden;
+  gap: 0.55rem;
+}
+
+.content-cards .content-card .card-type .material-symbols-rounded {
+  flex: 0 0 auto;
+}
+
+.content-cards .content-card .card-type > span:last-child {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.content-cards .content-card .card-actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+/* The star is always the first action, in both grid and list layouts. */
+.content-cards .content-card .card-actions .favorite-toggle {
+  order: -1;
+  flex: 0 0 2.25rem;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0.4rem;
+  margin: 0;
+}
+
+.content-cards .content-card .favorite-protection {
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 0 28px;
+  align-items: center;
+  min-width: 0;
+  width: 100%;
+  height: 28px;
+  max-height: 28px;
+  margin: 0 0 0.45rem;
+  padding: 0 0.55rem;
+  border-radius: 6px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.content-cards .content-card .favorite-protection.is-placeholder {
+  visibility: hidden;
+  border-color: transparent;
+  background: transparent;
+}
+
+.content-cards .content-card .favorite-protection span:last-child {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.content-cards .content-card .card-content {
+  box-sizing: border-box;
+  display: block;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+  height: 58px;
+  max-height: 58px;
+  margin: 0 0 0.65rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--border-color, var(--gray-200));
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--surface-hover);
+}
+
+.content-cards .content-card pre.card-content {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.4;
+}
+
+.content-cards .content-card pre.card-content code {
+  display: -webkit-box;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  text-overflow: ellipsis;
+}
+
+.content-cards .content-card .filename,
+.content-cards .content-card .filename-text {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.content-cards .content-card .card-content.file-content {
+  display: flex;
+  align-items: center;
+  padding: 0.65rem 0.75rem;
+}
+
+.content-cards .content-card .file-info {
+  display: none;
+}
+
+.content-cards .content-card .card-footer {
+  flex: 0 0 32px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  margin: auto 0 0;
+  padding: 0.45rem 0 0;
+  border-top: 1px solid var(--border-color, var(--gray-200));
+  overflow: hidden;
+}
+
+.content-cards .content-card .card-info {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0.35rem 0.75rem;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.content-cards .content-card .info-group {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 1 auto;
+  min-width: 0;
+  gap: 0.25rem;
+  white-space: nowrap;
+}
+
+.content-cards .content-card .info-group > span:last-child,
+.content-cards .content-card .card-timestamp time {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.content-cards .content-card .card-timestamp {
+  flex: 0 1 auto;
+  margin-left: auto;
+  min-width: 0;
+}
+
+.content-cards .content-card .card-timestamp time {
+  font-family: inherit;
+  letter-spacing: 0;
+  font-size: 0.78rem;
+}
+
+/* List cards use a single consistent height for both files and text notes. */
+.content-cards.list-view {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.75rem;
+}
+
+.content-cards.list-view .content-card {
+  display: flex;
+  flex: 0 0 190px;
+  width: 100%;
+  height: 190px;
+  min-height: 190px;
+  max-height: 190px;
+  padding: 0.85rem 1rem;
+}
+
+.content-cards.list-view .content-card .card-header {
+  flex-basis: 38px;
+}
+
+.content-cards.list-view .content-card .card-content {
+  height: 52px;
+  max-height: 52px;
+  flex-basis: 52px;
+}
+
+.content-cards.list-view .content-card .card-footer {
+  flex-basis: 30px;
+}
+
+@media (max-width: 900px) {
+  .content-cards .content-card .card-actions {
+    gap: 0.2rem;
+  }
+
+  .content-cards .content-card .card-actions .favorite-toggle {
+    flex-basis: 2rem;
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .content-cards .content-card .card-info {
+    gap: 0.25rem 0.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .content-cards .content-card {
+    min-height: 220px;
+    padding: 0.75rem;
+  }
+
+  .content-cards .content-card .card-header {
+    flex-basis: auto;
+    min-height: 38px;
+    align-items: flex-start;
+  }
+
+  .content-cards .content-card .card-actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .content-cards .content-card .favorite-protection {
+    font-size: 0.68rem;
+  }
+
+  .content-cards.list-view .content-card {
+    flex-basis: 190px;
+    height: 190px;
+    min-height: 190px;
+    max-height: 190px;
+  }
+
+  .content-cards .content-card .card-info {
+    flex-wrap: wrap;
+    row-gap: 0.15rem;
+  }
+
+  .content-cards .content-card .card-timestamp {
+    margin-left: 0;
+  }
+}
+
+/* v3 refinement: keep every card action grouped at the far right of the header. */
+.content-cards .content-card .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.content-cards .content-card .card-type {
+  flex: 1 1 auto;
+  width: auto;
+  max-width: none;
+  min-width: 0;
+}
+
+.content-cards .content-card .card-actions {
+  flex: 0 0 auto;
+  margin-left: auto;
+  justify-content: flex-end;
+  align-self: flex-start;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+/* Keep the action buttons on one line; let the title give up space first. */
+.content-cards .content-card .card-actions .card-btn {
+  flex: 0 0 2.25rem;
+}
+
+/* Grid cards, like list cards, have a fixed height so file cards cannot grow
+   taller than short one-line notes just because their markup differs. */
+.content-cards.grid-view {
+  grid-auto-rows: 230px;
+  align-items: stretch;
+}
+
+.content-cards.grid-view .content-card {
+  box-sizing: border-box;
+  height: 230px;
+  min-height: 230px;
+  max-height: 230px;
+  overflow: hidden;
+}
+
+@media (max-width: 900px) {
+  .content-cards .content-card .card-actions .card-btn {
+    flex-basis: 2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .content-cards .content-card .card-header {
+    align-items: flex-start;
+    gap: 0.4rem;
+  }
+
+  .content-cards .content-card .card-actions {
+    flex-wrap: nowrap;
+    gap: 0.15rem;
+  }
+
+  .content-cards .content-card .card-actions .card-btn {
+    flex-basis: 1.8rem;
+    width: 1.8rem;
+    height: 1.8rem;
+    padding: 0.25rem;
+  }
+
+  .content-cards.grid-view .content-card {
+    height: 230px;
+    min-height: 230px;
+    max-height: 230px;
+  }
+}
+
+
