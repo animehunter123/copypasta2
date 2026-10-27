@@ -2749,3 +2749,277 @@ textarea:focus {
     display: none;
   }
 }
+
+/* -------------------------------------------------------------------------
+   Modal safety, responsive Monaco/upload sizing, and visual polish
+   ------------------------------------------------------------------------- */
+
+/* A calmer Material-inspired dark palette: raised surfaces, softer borders,
+   readable secondary text, and less pure-black contrast. */
+[data-theme="dark"] {
+  color-scheme: dark;
+  --surface: #20242b;
+  --surface-hover: #292f38;
+  --surface-active: #343c47;
+  --card-bg: #252b34;
+  --card-hover: #2c333d;
+  --on-surface: #e3e8ef;
+  --on-surface-medium: #b5bec9;
+  --on-surface-disabled: #7d8794;
+  --text-color: #e3e8ef;
+  --text-color-secondary: #aab4c0;
+  --text-primary: #e3e8ef;
+  --text-secondary: #aab4c0;
+  --border-color: #3b444f;
+  --gray-100: #252b34;
+  --gray-200: #303844;
+  --gray-300: #3b444f;
+  --gray-600: #aab4c0;
+  --gray-700: #c2cad4;
+  --gray-800: #d5dbe3;
+  --gray-900: #e3e8ef;
+  --shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.42);
+}
+
+[data-theme="dark"] body,
+[data-theme="dark"] .container {
+  background-color: #171a1f;
+  color: var(--text-color);
+}
+
+[data-theme="dark"] .navbar,
+[data-theme="dark"] .modal,
+[data-theme="dark"] .modal-content,
+[data-theme="dark"] .modal-footer,
+[data-theme="dark"] .modal-header,
+[data-theme="dark"] .new-card-modal,
+[data-theme="dark"] .help-modal {
+  background-color: var(--surface);
+  color: var(--text-color);
+}
+
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select,
+[data-theme="dark"] .filter-dropdown-content {
+  background-color: #191d23;
+  color: var(--text-color);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .modal-overlay {
+  background: rgba(5, 8, 12, 0.72);
+  backdrop-filter: blur(3px);
+}
+
+[data-theme="dark"] .content-card {
+  background: var(--card-bg);
+  border-color: var(--border-color);
+}
+
+[data-theme="dark"] .card-content,
+[data-theme="dark"] pre {
+  background: #1d2229;
+  color: #dbe2ea;
+}
+
+[data-theme="dark"] .upload-area {
+  background: #1b2027;
+  border-color: #566170;
+  color: var(--text-color);
+}
+
+[data-theme="dark"] .upload-area:hover {
+  background: #252d37;
+  border-color: #83a8d5;
+}
+
+[data-theme="dark"] .status-message.info {
+  background: #273342;
+  color: #c6d9ef;
+  border-color: #3b526b;
+}
+
+/* Content-heavy modals are flex columns. Their content area owns all remaining
+   space, so Monaco and the upload drop zone track the user's chosen dimensions. */
+.modal.draggable-resizable-modal {
+  box-sizing: border-box;
+  width: min(800px, calc(100vw - 2rem));
+  height: min(760px, calc(100vh - 2rem));
+  min-width: min(440px, calc(100vw - 1rem));
+  min-height: min(360px, calc(100vh - 1rem));
+  max-width: calc(100vw - 1rem);
+  max-height: calc(100vh - 1rem);
+  resize: both;
+  overflow: hidden;
+  flex: 0 1 auto;
+  margin: 0;
+  contain: layout paint;
+}
+
+.modal.draggable-resizable-modal .modal-header {
+  flex: 0 0 auto;
+  cursor: move;
+  user-select: none;
+  touch-action: none;
+}
+
+.modal.draggable-resizable-modal .modal-header button,
+.modal.draggable-resizable-modal .modal-header input,
+.modal.draggable-resizable-modal .modal-header a {
+  cursor: pointer;
+}
+
+.modal.draggable-resizable-modal .modal-content,
+.modal.draggable-resizable-modal form.new-card-modal {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  max-width: none;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.modal.draggable-resizable-modal .input-area {
+  display: flex;
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  max-width: none;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.modal.draggable-resizable-modal .input-area > div,
+.modal.draggable-resizable-modal .editor-wrapper,
+.modal.draggable-resizable-modal .modal-content > div:has(> .monaco-editor),
+.modal.draggable-resizable-modal .modal-content > div:has(> .editor-wrapper) {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  max-width: none;
+  box-sizing: border-box;
+}
+
+.modal.draggable-resizable-modal .monaco-editor,
+.modal.draggable-resizable-modal .monaco-editor .overflow-guard,
+.modal.draggable-resizable-modal .monaco-editor .monaco-scrollable-element {
+  max-width: 100%;
+}
+
+.modal.draggable-resizable-modal .upload-area,
+.modal.draggable-resizable-modal .file-info {
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+  flex: 1 1 auto;
+}
+
+.modal.draggable-resizable-modal .upload-area {
+  min-height: 0;
+  max-height: none;
+  margin: 0;
+}
+
+.modal.draggable-resizable-modal .modal-footer {
+  flex: 0 0 auto;
+}
+
+.modal.draggable-resizable-modal:focus-within {
+  outline: none;
+}
+
+/* Confirmation overlays sit above the draft they protect. Clicking outside
+   this confirmation cancels the prompt rather than discarding the draft. */
+.close-confirmation-overlay {
+  z-index: 1200;
+  background: rgba(5, 8, 12, 0.78);
+  backdrop-filter: blur(3px);
+}
+
+.close-confirmation-modal {
+  z-index: 1201;
+  width: min(460px, calc(100vw - 2rem));
+  max-width: calc(100vw - 2rem);
+  max-height: calc(100vh - 2rem);
+  resize: none;
+  min-width: 0;
+  height: auto;
+}
+
+.close-confirmation-modal .modal-header {
+  min-height: 0;
+}
+
+.close-confirmation-modal .modal-content {
+  overflow: visible;
+}
+
+.close-confirmation-modal .modal-footer {
+  flex-wrap: wrap;
+}
+
+/* Fixed app footer, independent of the number of cards on screen. */
+.app-version-footer {
+  position: fixed;
+  z-index: 900;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.35rem 1rem;
+  box-sizing: border-box;
+  border-top: 1px solid var(--border-color, #d9dee5);
+  background: var(--surface, #fff);
+  color: var(--text-color-secondary, #657080);
+  font-size: 0.78rem;
+  line-height: 1.25;
+}
+
+.app-version-footer .version-separator {
+  opacity: 0.65;
+}
+
+.container {
+  padding-bottom: 4.25rem;
+}
+
+[data-theme="dark"] .app-version-footer {
+  background: #171a1f;
+  border-top-color: #303844;
+  color: #aab4c0;
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid #7aa7d9;
+  outline-offset: 2px;
+}
+
+@media (max-width: 600px) {
+  .modal.draggable-resizable-modal {
+    min-width: calc(100vw - 1rem);
+    min-height: min(320px, calc(100vh - 1rem));
+    width: calc(100vw - 1rem);
+    height: calc(100vh - 1rem);
+  }
+
+  .app-version-footer {
+    justify-content: center;
+    font-size: 0.72rem;
+  }
+}
+
