@@ -23,7 +23,7 @@ fi
 command -v meteor >/dev/null 2>&1 || { echo >&2 "meteorjs is required but it's not installed.  Aborting."; exit 1; }
 
 # Change into the webapp folder which has ./node_modules which are used for this webapp
-cd "$SCRIPT_DIR/webapp-meteor"
+cd "$SCRIPT_DIR/app"
 
 # Ensure that node_modules exists(assuming its valid!), if not installs and creates the directory
 if [ ! -d "./node_modules" ]; then

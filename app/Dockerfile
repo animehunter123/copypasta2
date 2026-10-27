@@ -19,7 +19,7 @@ ENV ROOT_URL="http://localhost:3000"
 # EVERY MeteorJS WebApp is tied to a SPECIFIC VERSION (see .meteor/release). The OFFICIAL Curl installer 
 # method automatically updates it to the latest version uninstalling the old version (If 
 # you need to UPGRADE THE PROJECT from Meteor 3.0.4 to 3.1.0, THEN IN THIS CASE remember to (ON HOST): 
-# cd webapp-meteor && sudo chmod 777 -R .meteor && sudo chmod 777 -R node_modules && rm -rf node_modules && rm -rf .meteor/local && meteor reset && meteor update --release 3.1 &&  meteor npm install --save
+# cd app && sudo chmod 777 -R .meteor && sudo chmod 777 -R node_modules && rm -rf node_modules && rm -rf .meteor/local && meteor reset && meteor update --release 3.1 &&  meteor npm install --save
 # At this point, the PROJECT is now using Meteor 3.1 for example.
 # Then rebuild the container adjusting the below curl and update to the new version appropriately (based on what the PROJECT version is from above).
 
