@@ -64,8 +64,7 @@ COPYPASTA_DATA_DIR="./data" meteor --port 3000 --allow-superuser # To launch it 
 * Can we fix up the css because all the fields of the cards in both views looks way off now (see the attached photo)
 * Can we make sure all the list view cards are the same height regardless of being a file card or a text card.
 * if the text or filename is too long, ensure that it is truncated and showing a ... at the end?
-* I dont like the yyymmmdd hourminute second current way, can you make it with yyyy/mm//dd instead?
+* I dont like the yyymmmdd hourminute second current way, can you make it with yyyy/mm//dd instead? (Also in some browsers it doesnt show?Z)
 
 
-* the monaco editor seems to default to a width that is larger then the initial modal size, can it be the same width so that the horizontal scrollbar doesnt appear initially. The resizing seems to work ok if you resize it I think otherwise? Please look over to make sure the experiance is clean for a user of the website.
 
