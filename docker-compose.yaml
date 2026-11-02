@@ -9,7 +9,8 @@ services:
     # STUB: use the host's network (e.g., Docker Desktop)
     # network_mode: "host" 
     ports:
-      - '3000:3000'
+      #- '3000:3000'
+      - '80:3000'
 
 # These are settings #1 for using ADDS Reverse Proxy
 #     - '5020:3000'
