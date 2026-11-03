@@ -24,4 +24,5 @@ if ss -H -ltnp 'sport = :80' | grep -q .; then
   exit 1
 fi
 
-COPYPASTA_DATA_DIR="./data" meteor --port 80 --allow-superuser # This is the new MeteorJS webapp with explicit port and superuser access (for development only!!!)
+COPYPASTA_DATA_DIR="./app/data" meteor --port 80 --allow-superuser # This is the new MeteorJS webapp with explicit port and superuser access (for development only!!!)
+#COPYPASTA_DATA_DIR="./data" meteor --port 80 --allow-superuser # This is the new MeteorJS webapp with explicit port and superuser access (for development only!!!)

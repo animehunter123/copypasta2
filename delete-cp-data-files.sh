@@ -19,6 +19,7 @@ rm -rf ./app/data/ 2>&1 1>/dev/null
 rm -rf ./app/node_modules/ 2>&1 1>/dev/null
 
 sudo rm -rf ./app/data/
+sudo rm -rf ./data/
 sudo rm -rf ./app/node_modules/
 
 read -p "Complete. BUT... do you also want to blow away .meteor? This means you need to run *meteor npm i* to rebuild from internet.
