@@ -2,6 +2,8 @@
 
 cd ./app/
 
+echo "IF THE APP FAILS TO START, you may need internet and run... cd ./app; meteor npm i..."
+
 #################################################################
 # This script starts the MeteorJS webapp (Only a utility script!)
 # THIS WILL ERROR with @babel/runtime, if you never got the deps
