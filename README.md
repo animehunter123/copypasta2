@@ -67,4 +67,7 @@ COPYPASTA_DATA_DIR="./data" meteor --port 3000 --allow-superuser # To launch it 
 * I dont like the yyymmmdd hourminute second current way, can you make it with yyyy/mm//dd instead? (Also in some browsers it doesnt show?Z)
 
 
+
+-the initial first card has a yellow hint >> this hint pushes the bottom of the modal out of view, need to fix it. 
+
 -* the monaco editor seems to default to a width that is larger then the initial modal size, can it be the same width so that the horizontal scrollbar doesnt appear initially. The resizing seems to work ok if you resize it I think otherwise? Please look over to make sure the experiance is clean for a user of the website. >>>>>> I NEED TO CHECK THIS AGAIN ON DIFF BROWSERS B/C IN F IT HAPPENED
