@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd ./app/
+
 #################################################################
 # This script starts the MeteorJS webapp (Only a utility script!)
 # THIS WILL ERROR with @babel/runtime, if you never got the deps
