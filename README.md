@@ -70,4 +70,6 @@ COPYPASTA_DATA_DIR="./data" meteor --port 3000 --allow-superuser # To launch it 
 
 -the initial first card has a yellow hint >> this hint pushes the bottom of the modal out of view, need to fix it.  Its a status-message info, i think and it says "Click Save to create your text note", we dont need this
 
--* the monaco editor seems to default to a width that is larger then the initial modal size, can it be the same width so that the horizontal scrollbar doesnt appear initially. The resizing seems to work ok if you resize it I think otherwise? Please look over to make sure the experiance is clean for a user of the website. >>>>>> I NEED TO CHECK THIS AGAIN ON DIFF BROWSERS B/C IN F IT HAPPENED
+- the monaco editor .... when you type aaaaaaaaaaaaa and it eventually gets big a horizontal scrollbar appears but the modal doesnt resize to fit, which is inconvenient. we want it to wordwrap but the modal remaining visible while really long lines can be typed.
+
+- if the first line is empty the card preview shows a \n try to make the preview skip whitespace tot he text when it starts
