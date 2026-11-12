@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# Downing initially then doing a ps process check.
+echo "Stopping docker, then checking if anything else is running on port 80..."
+docker-compose down 2>/dev/null
+docker compose down 2>/dev/null
+
 # Check if TCP port 80 is already occupied
 if ss -H -ltnp 'sport = :80' | grep -q .; then
 
