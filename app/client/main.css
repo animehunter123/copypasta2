@@ -1,6 +1,9 @@
 /* Import local fonts */
 @import url('/fonts/fonts.css');
 
+/* Authoritative card layout (grid + list) – loaded early; final overrides at end of this file win */
+@import url('./styles/card.css');
+
 /* Rest of the CSS */
 :root {
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
@@ -3682,4 +3685,182 @@ select:focus-visible {
   }
 }
 
+/* -------------------------------------------------------------------------
+   CopyPasta card preview alignment refinement (v2)
+   Centre the actual filename/code text inside the fixed preview boxes.
+   ------------------------------------------------------------------------- */
 
+/* The file preview itself is a fixed-height flex row. Stretch the filename
+   wrapper to that full height so its text can be centred within the box. */
+.content-cards .content-card .card-content.file-content {
+  display: flex !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  box-sizing: border-box;
+  min-height: 58px;
+  height: 58px;
+  padding: 0.45rem 0.75rem !important;
+}
+
+.content-cards .content-card .card-content.file-content .filename {
+  display: flex !important;
+  flex: 1 1 auto;
+  align-self: stretch;
+  align-items: center !important;
+  justify-content: flex-start;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  line-height: 1.4;
+}
+
+.content-cards .content-card .card-content.file-content .filename-text {
+  display: block;
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  line-height: 1.4;
+}
+
+/* PRE is the bordered note-preview box. Centre its CODE child as a flex item
+   and remove inline/pre formatting quirks that can make the baseline appear
+   lower than the visual centre. */
+.content-cards .content-card pre.card-content:not(.file-content) {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center !important;
+  align-items: stretch !important;
+  box-sizing: border-box;
+  min-height: 58px;
+  height: 58px;
+  padding: 0.45rem 0.75rem !important;
+  margin: 0 0 0.65rem;
+  line-height: 1.4;
+}
+
+.content-cards .content-card pre.card-content:not(.file-content) code {
+  display: block !important;
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+
+/* ==========================================================================
+   FINAL CARD LAYOUT OVERRIDES (fixes clipping / missing icons)
+   These rules intentionally come last and win over earlier fixed-height rules.
+   Card heights are natural; only the preview text is truncated.
+   ========================================================================== */
+
+.content-cards,
+.content-cards.grid-view,
+.content-cards.list-view {
+  align-items: start !important;
+  grid-auto-rows: auto !important;
+}
+
+.content-cards .content-card,
+.content-cards.grid-view .content-card,
+.content-cards.list-view .content-card {
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
+  padding: 0.85rem 1rem !important;
+}
+
+/* Never force a tiny fixed preview box that clips text + leaves empty space */
+.content-cards .content-card .card-content,
+.content-cards .content-card .card-content.file-content,
+.content-cards .content-card pre.card-content,
+.content-cards .content-card pre.card-content:not(.file-content) {
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: 7.5rem !important;
+  overflow: hidden !important;
+}
+
+.content-cards.list-view .content-card .card-content,
+.content-cards.list-view .content-card pre.card-content {
+  max-height: 4.5rem !important;
+}
+
+.content-cards .content-card .card-header {
+  flex: 0 0 auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.content-cards .content-card .card-actions {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  overflow: visible !important;
+  height: auto !important;
+  min-height: 32px !important;
+}
+
+.content-cards .content-card .card-btn {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  min-height: 32px !important;
+  flex-shrink: 0 !important;
+  overflow: visible !important;
+}
+
+.content-cards .content-card .card-footer {
+  flex: 0 0 auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
+  margin-top: auto !important;
+}
+
+/* Ensure material icons render at a readable size inside buttons */
+.content-cards .content-card .card-btn .material-symbols-rounded,
+.content-cards .content-card .card-type .material-symbols-rounded {
+  font-size: 1.15rem !important;
+  line-height: 1 !important;
+  display: inline-block !important;
+}
+
+/* Dark theme card surface consistency */
+[data-theme="dark"] .content-card {
+  background: var(--card-bg, #1e1e1e);
+  border-color: var(--border-color, rgba(255, 255, 255, 0.12));
+}
+
+[data-theme="dark"] .content-card:hover {
+  background: var(--card-hover, #2c2c2c);
+}
+
+[data-theme="dark"] .content-card .card-content,
+[data-theme="dark"] .content-card pre.card-content {
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--text-color) !important;
+}
+
+[data-theme="dark"] .content-card .card-content code,
+[data-theme="dark"] .content-card pre.card-content code {
+  color: var(--text-color) !important;
+}
