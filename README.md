@@ -73,3 +73,5 @@ COPYPASTA_DATA_DIR="./data" meteor --port 3000 --allow-superuser # To launch it 
 - the monaco editor .... when you type aaaaaaaaaaaaa and it eventually gets big a horizontal scrollbar appears but the modal doesnt resize to fit, which is inconvenient. we want it to wordwrap but the modal remaining visible while really long lines can be typed.
 
 - if the first line is empty the card preview shows a \n try to make the preview skip whitespace tot he text when it starts
+
+- test it on centos6 and centos7 default firefox browsers as there was some backword compat err, try on h first
