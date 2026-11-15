@@ -74,4 +74,4 @@ COPYPASTA_DATA_DIR="./data" meteor --port 3000 --allow-superuser # To launch it 
 
 - if the first line is empty the card preview shows a \n try to make the preview skip whitespace tot he text when it starts
 
-- test it on centos6 and centos7 default firefox browsers as there was some backword compat err, try on h first
+- add workaround hacks... to detect if old browsers like firefox 17esr etc //  that allow the webpage to completely be usable on Firefox v17 ESR at a minimum, if this requires a new source code file dir we need to handle this case, long live CentOS7 for example.
